@@ -50,7 +50,7 @@
     <div id="map"></div>
     <script>
 
-    var mapboxAccessToken = 'pk.eyJ1Ijoia2F0ZW1hcCIsImEiOiJja3A0NWV0ZTkwNjBtMm5vdWxzcXR6dWxjIn0.7rYO_pPmtvwuWUb0cG3QXQ';
+    var mapboxAccessToken = ${{ secrets.SuperSecret }};
     var map = L.map('map').setView([38.8950, -77.0], 12);
 
     L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + mapboxAccessToken, {

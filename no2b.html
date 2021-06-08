@@ -61,7 +61,7 @@
     <script>
 
     // Set an access t`oken to allow the browser to load the map from our account
-    mapboxgl.accessToken = 'pk.eyJ1Ijoia2F0ZW1hcCIsImEiOiJja3A0NWV0ZTkwNjBtMm5vdWxzcXR6dWxjIn0.7rYO_pPmtvwuWUb0cG3QXQ';
+    mapboxgl.accessToken = ${{ secrets.SuperSecret }};
 
     // Instantiate a new Map object to load the map itself
     const map = new mapboxgl.Map({
