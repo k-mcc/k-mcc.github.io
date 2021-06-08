@@ -18,7 +18,7 @@
     <script src="/js/leaflet-0.7.2/leaflet.ajax.min.js"></script>
     <script src="https://k-mcc.github.io/no2WithDemIndex.js"></script>
     <style>
-      .info {
+      /*.info {
           padding: 6px 8px;
           font: 14px/16px Arial, Helvetica, sans-serif;
           background: white;
@@ -29,7 +29,7 @@
       .info h4 {
           margin: 0 0 5px;
           color: #777;
-      }
+      }*/
       body {
         margin: 0;
         padding: 0;
@@ -70,34 +70,21 @@
       center: [-77.0369, 38.9072], // the location to display when the map first loads
       zoom: 11.5 // the zoom level to display when the map first loads
     });
-
-
-      L.geoJson(no2Layer, {style: style}).addTo(map);
-
+    /*var lay = map.getLayer('3D-extrusions');
       function highlightFeature(e) {
           var layer = e.target;
 
           layer.setStyle({
-              weight: 5,
-              color: '#FFFFFF',
-              dashArray: '',
               fillOpacity: 0.7
           });
-
-          if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-              layer.bringToFront();
-          }
 
           info.update(layer.feature.properties);
       }
 
       function resetHighlight(e) {
-          geojson.resetStyle(e.target);
+          map.resetStyle(e.target);
           info.update();
       }
-
-      var geojson;
-      geojson = L.geoJson(map.getLayer('3D-extrusions'));
 
       function zoomToFeature(e) {
         map.fitBounds(e.target.getBounds());
@@ -110,12 +97,6 @@
             click: zoomToFeature
           });
        }
-
-    geojson = L.geoJson(map.getLayer('3D-extrusions'), {
-        style: style,
-        onEachFeature: onEachFeature
-    }).addTo(map);
-
 
     var info = L.control();
 
@@ -132,11 +113,9 @@
             : 'Hover over a census tract');
     };
 
-    info.addTo(map);
+    info.addTo(map);*/
 
-    // Part 4 code will go here
-
-    /*map.on('click', (event) => {
+    map.on('click', (event) => {
       const clickedPoint = [event.lngLat.lng, event.lngLat.lat];
 
       const location = {
@@ -175,7 +154,7 @@
       }
 
       console.log(JSON.stringify(clicked, null, 2));
-    });*/
+    });
 
     map.addControl(
     new MapboxGeocoder({
