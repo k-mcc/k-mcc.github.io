@@ -133,6 +133,8 @@
 
       const clickedFeatures = map.queryRenderedFeatures(event.point, { layers: [ '3D-extrusions']});
 
+      clickedFeatures
+
       if (clickedFeatures.length > 0) {
         clicked.tract = clickedFeatures[0].properties.TRACT;
         clicked.no2 = clickedFeatures[0].properties.no2Perc;
