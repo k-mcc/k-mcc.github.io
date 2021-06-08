@@ -17,7 +17,7 @@
       #map { position: absolute; top: 0; bottom: 0; width: 100%; }
     </style>
     <script src="/js/leaflet-0.7.2/leaflet.ajax.min.js"></script>
-    <script src="https://k-mcc.github.io/no2PercByCensusTract.js"></script>
+    <script src="https://k-mcc.github.io/no2WithDemIndex.js"></script>
     <style>
       .info {
           padding: 6px 8px;
@@ -162,7 +162,7 @@
       // method that we will use to update the control based on feature properties passed
       info.update = function (props) {
           this._div.innerHTML = '<h4>Nitrogen Dioxide Percentiles in D.C.</h4>' +  (props ?
-              '<b>Tract #' + props.TRACT + '</b><br />' + props.no2Perc + ' %ile NO<sub>2</sub>'
+              '<b>Tract #' + props.TRACT + '</b><br />Percentile NO<sub>2</sub>: ' + props.no2Perc + '<br />Demographic Index: ' + props.demographicIndex + ''
               : 'Hover over a census tract');
       };
 
