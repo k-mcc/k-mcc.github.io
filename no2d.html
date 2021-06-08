@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Bivariate Choropleth</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+   crossorigin=""/>
+   <!-- Make sure you put this AFTER Leaflet's CSS -->
+   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+  integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+  crossorigin=""></script>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <!--   <link href="https://api.mapbox.com/mapbox-gl-js/v2.3.0/mapbox-gl.css" rel="stylesheet">-->
+    <style>
+      body { margin: 0; padding: 0; }
+      #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+    </style>
+    <script src="/js/leaflet-0.7.2/leaflet.ajax.min.js"></script>
+    <script src="https://k-mcc.github.io/no2WithDemIndex.js"></script>
+    <style>
+      .info {
+          height: 250px;
+          width: 284px;
+          padding: 6px 8px;
+          font: 14px/16px 'Poppins', Helvetica, sans-serif;
+          /*font-family: 'Poppins', sans-serif;*/
+          background: white;
+          background: rgba(255,255,255,0.8);
+          box-shadow: 0 0 15px rgba(0,0,0,0.2);
+          border-radius: 3px;
+      }
+      .info h2 {
+          margin: 0 0 5px;
+          color: #000000;
+      }
+
+      .img {
+          color: #555;
+          background: white;
+          background: rgba(255,255,255);
+          box-shadow: 0 0 15px rgba(0,0,0,0.2);
+          border-radius: 3px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+
+    var mapboxAccessToken = 'pk.eyJ1Ijoia2F0ZW1hcCIsImEiOiJja3A0NWV0ZTkwNjBtMm5vdWxzcXR6dWxjIn0.7rYO_pPmtvwuWUb0cG3QXQ';
+    var map = L.map('map').setView([38.8950, -77.0], 12);
+
+    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + mapboxAccessToken, {
+        id: 'mapbox/light-v9',
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        tileSize: 512,
+        zoomOffset: -1
+    }).addTo(map);
+
+    L.geoJson(no2Layer).addTo(map);
+
+      function getColor(axisA, axisB) {
+
+        var a1 = '#AED5E9';
+        var b1 = '#72CBC1';
+        var c1 = '#4FBC82';
+        var a2 = '#98ACE6';
+        var b2 = '#63A5BE';
+        var c2 = '#459980';
+        var a3 = '#C06CBA';
+        var b3 = '#7F679A';
+        var c3 = '#365F8D';
+
+        var a = getRange(axisA);
+        var b = getRange(axisB);
+
+        if (a == 1) { //low axisA value
+          if (b == 1) return a1; //low axisB value
+          else if (b == 2) return b1; //mid axisB value
+          else return c1; //high axisB value
+        }
+
+        else if (a == 2) { //mid axisA value
+          if (b == 1) return a2; //low axisB value
+          else if (b == 2) return b2; //mid axisB value
+          else return c2; //high axisB value
+        }
+
+        else if (a == 3) { //high axisA value
+          if (b == 1) return a3; //low axisB value
+          else if (b == 2) return b3; //mid axisB value
+          else return c3; //high axisB value
+        }
+
+      }
+
+      function getRange(x) {
+        return x >= 66.66  ? 3 : //high
+               x >= 33.33  ? 2 : //mid
+                        1; //low
+      }
+
+      function style(feature) {
+        return {
+            fillColor: getColor(feature.properties.no2Perc, feature.properties.demographicIndex),
+            weight: 0.5,
+            opacity: 1,
+            color: 'white',
+            dashArray: '0',
+            smoothFactor: 1,
+            fillOpacity: 0.7
+        };
+      }
+
+      L.geoJson(no2Layer, {style: style}).addTo(map);
+
+      function highlightFeature(e) {
+          var layer = e.target;
+
+          layer.setStyle({
+              weight: 3,
+              //color: getOutlineColor(feature.properties.demographicIndex),
+              fillOpacity: 0.01
+          });
+
+          if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+              layer.bringToFront();
+          }
+
+          info.update(layer.feature.properties);
+      }
+
+      function resetHighlight(e) {
+          geojson.resetStyle(e.target);
+          //info.update();
+      }
+
+      var geojson;
+      geojson = L.geoJson(no2Layer);
+
+      function zoomToFeature(e) {
+          map.fitBounds(e.target.getBounds(), {top: 50000, bottom: 50000, left: 50000, right: 50000});
+      }
+
+      function onEachFeature(feature, layer) {
+          layer.on({
+              mouseover: highlightFeature,
+              mouseout: resetHighlight,
+              click: zoomToFeature
+          });
+      }
+
+      geojson = L.geoJson(no2Layer, {
+          style: style,
+          onEachFeature: onEachFeature
+      }).addTo(map);
+
+      var info = L.control();
+
+      info.onAdd = function (map) {
+          this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+          this.update();
+          return this._div;
+      };
+
+      // method that we will use to update the control based on feature properties passed
+      info.update = function (props) {
+          this._div.innerHTML = '<h2>NO<sub>2</sub> Equality Index</h2>' +  (props ?
+              '<h3>NO<sub>2</sub> Index: ' + props.no2Perc + '</h3><br /><h3>Demographic Index: ' + props.demographicIndex + '</h3><ul><li>' + props.percentMinority + '% Minority</li><li>' + props.percentLowIncome + '% Low Income</li></ul><br /><br /><h3>Tract #' + props.TRACT + '</h3>'
+              : 'Hover over a census tract');
+      };
+
+      info.addTo(map);
+
+      var img = L.control({position: 'bottomright'});
+
+      img.onAdd = function (map) {
+
+        var div = L.DomUtil.create('div', 'img');
+
+        div.innerHTML += '<img src="/Users/katemccarthy/Documents/GitHub/Maps/Published-NO2-Maps/no2dLegend.png" alt="Legend" style="width:300px;height:300px;">';
+
+        return div;
+      }//"#f3f3f3 url('img_tree.png') no-repeat right top";
+
+      img.addTo(map);
+
+    </script>
+
+  </body>
+</html>
