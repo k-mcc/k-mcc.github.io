@@ -87,17 +87,22 @@
     }
   }).error(function() {});*/
       function getColor(x) {
-        return x > 80  ? '#810F7C' :
-               x > 60  ? '#8856A7' :
-               x > 40   ? '#8C96C6' :
-               x > 20   ? '#9EBCDA' :
-               x > 0   ? '#BfD3E6' :
-                        '#EDF8FB';
+        return x >= 90  ? '#4D004B' :
+               x >= 80  ? '#810F7C' :
+               x >= 70  ? '#88419D' :
+               x >= 60  ? '#8C6BB1' :
+               x >= 50  ? '#8C96C6' :
+               x >= 40   ? '#9EBCDA' :
+               x >= 30   ? '#BFD3E6' :
+               x >= 20   ? '#E0ECF4' :
+               x >= 10   ? '#F7FCFD' :
+               x > 0   ? '#FFFFFF' :
+                        '#FFFFFF';
       }
 
       function style(feature) {
           return {
-              fillColor: getColor(feature.properties.no2Perc),
+              fillColor: getColor(feature.properties.comboIndexPercentile),
               weight: 0.5,
               opacity: 1,
               color: 'white',
@@ -174,7 +179,7 @@
       legend.onAdd = function (map) {
 
           var div = L.DomUtil.create('div', 'info legend'),
-              grades = [0, 20, 40, 60, 80],
+              grades = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90],
               labels = [];
 
           // loop through our density intervals and generate a label with a colored square for each interval

@@ -85,31 +85,36 @@
         });
     }
   }).error(function() {});*/
-      function getColor(x) {
-        return x > 80  ? '#810F7C' :
-               x > 60  ? '#8856A7' :
-               x > 40   ? '#8C96C6' :
-               x > 20   ? '#9EBCDA' :
-               x > 0   ? '#BfD3E6' :
-                        '#EDF8FB';
-      }
+  function getColor(x) {
+    return x >= 90  ? '#4D004B' :
+           x >= 80  ? '#810F7C' :
+           x >= 70  ? '#88419D' :
+           x >= 60  ? '#8C6BB1' :
+           x >= 50  ? '#8C96C6' :
+           x >= 40   ? '#9EBCDA' :
+           x >= 30   ? '#BFD3E6' :
+           x >= 20   ? '#E0ECF4' :
+           x >= 10   ? '#F7FCFD' :
+           x > 0   ? '#FFFFFF' :
+                    '#FFFFFF';
+  }
 
       function getOutlineColor(x) {
-        return x >= 80  ? '#FFFC00' :
+        return x >= 90  ? '#FFFC00' :
                           '#FFFFFF';
       }
 
       function getOutlineWeight(x) {
-        return x >= 80  ? 3 :
+        return x >= 90  ? 3 :
                           0.5;
       }
 
       function style(feature) {
         return {
-            fillColor: getColor(feature.properties.no2Perc),
-            weight: getOutlineWeight(feature.properties.demographicIndex),
+            fillColor: getColor(feature.properties.comboIndexPercentile),
+            weight: getOutlineWeight(feature.properties.comboIndexPercentile),
             opacity: 1,
-            color: getOutlineColor(feature.properties.demographicIndex),
+            color: getOutlineColor(feature.properties.comboIndexPercentile),
             dashArray: '0',
             smoothFactor: 1,
             fillOpacity: 0.5
@@ -194,9 +199,7 @@
                   grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
           }
           div.innerHTML += '<br><br><i style="background:' + '#FFFC00' + '"></i> ' +
-          'Tracts with demographic index scores<br>';
-          div.innerHTML += '<i style="background:' + '#FFFC00' + '"></i> ' +
-          'above 80th percentile';
+          'Tracts with combined index scores above 90th percentile';
 
           return div;
       };
