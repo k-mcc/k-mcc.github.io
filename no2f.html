@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Toggle Layers</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+   crossorigin=""/>
+   <!-- Make sure you put this AFTER Leaflet's CSS -->
+   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+  integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+  crossorigin=""></script>
+  <script src="/js/leaflet-0.7.2/leaflet.ajax.min.js"></script>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <!--   <link href="https://api.mapbox.com/mapbox-gl-js/v2.3.0/mapbox-gl.css" rel="stylesheet">-->
+    <style>
+      body { margin: 0; padding: 0; }
+      /*#map { position: absolute; top: 0; bottom: 0; width: 100%; }*/
+    </style>
+    <script src="/js/leaflet-0.7.2/leaflet.ajax.min.js"></script>
+    <script src="https://k-mcc.github.io/no2WithDemIndex.js"></script>
+    <script src="https://k-mcc.github.io/no2WithDemIndexCopy.js"></script>
+    <script src="https://raw.githubusercontent.com/jerroydmoore/leaflet-button/b568e84f4e46167c4a8a8f640e2b192afdc34930/L.Control.Button.js"></script>
+    <style>
+      #map {
+        position: absolute;
+        z-index: 0;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+      }
+      .btn-group {
+        position: absolute;
+        float: right;
+        z-index: 1;
+        bottom: 10px;
+        left: 10px; /*useful alignment strategy*/
+        display: block;
+      }
+      button {
+        background: #FFFFFF;
+        border-radius: 5px;
+        width: 300px;
+        padding: 20px;
+        border: 1px solid '#333333';
+        font: 14px/16px 'Poppins', Helvetica, sans-serif;
+      }
+      h2 {
+          margin: 0 0 5px;
+          color: #000000;
+      }
+      .info {
+          height: 250px;
+          width: 284px;
+          padding: 6px 8px;
+          font: 14px/16px 'Poppins', Helvetica, sans-serif;
+          background: white;
+          background: rgba(255,255,255,0.8);
+          box-shadow: 0 0 15px rgba(0,0,0,0.2);
+          border-radius: 3px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="btn-group">
+      <button onclick="toggleDem();"><h2>Demographic Index</h2></button>
+      <button onclick="toggleNo2();"><h2>Nitrogen Dioxide Index</h2></button>
+    </div>
+    <div id="map"></div>
+    <script>
+
+
+
+    var toggle1;
+    var toggle2;
+    var geojson1;
+    var geojson2;
+    var geojson;
+
+    var mapboxAccessToken = 'pk.eyJ1Ijoia2F0ZW1hcCIsImEiOiJja3A0NWV0ZTkwNjBtMm5vdWxzcXR6dWxjIn0.7rYO_pPmtvwuWUb0cG3QXQ';
+    var map = L.map('map').setView([38.8950, -77.0369], 12);
+
+    function init() {
+      toggle1 = true;
+      toggle2 = false;
+      map.addLayer(layer1);
+      geojson = geojson1;
+    }
+
+    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + mapboxAccessToken, {
+        id: 'mapbox/light-v9',
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        tileSize: 512,
+        zoomOffset: -1
+    }).addTo(map);
+
+    //L.geoJson(no2Layer).addTo(map);
+
+    function getColor(x) {
+      return x >= 80  ? '#08519C' :
+             x >= 60  ? '#3182BD' :
+             x >= 40  ? '#6BAED6' :
+             x >= 20   ? '#BDD7E7' :
+             x >= 0   ? '#EFF3FF' :
+                      '#EFF3FF';
+    }
+
+      function style(feature) {
+          return {
+              fillColor: getColor(feature.properties.demographicIndex),
+              weight: 0.5,
+              opacity: 1,
+              color: 'white',
+              dashArray: '0',
+              smoothFactor: 1,
+              fillOpacity: 0.7
+          };
+      }
+
+      //var layer1 = L.geoJson(no2Layer, {style: style});
+      var layer1 = L.geoJson(no2Layer, {style: style, onEachFeature: onEachFeature});
+      geojson1 = layer1;
+      //L.geoJson(no2Layer, {style: style}).addTo(map);
+
+
+      // additional layer: no2Layer2
+      //L.geoJson(no2Layer2).addTo(map);
+
+        function getColor2(x) {
+          return x >= 80  ? '#A50F15' :
+                 x >= 60  ? '#DE2D26' :
+                 x >= 40  ? '#FB6A4A' :
+                 x >= 20   ? '#FCAE91' :
+                 x >= 0   ? '#FEE5D9' :
+                          '#FEE5D9';
+        }
+
+        function style2(feature) {
+            return {
+                fillColor: getColor2(feature.properties.no2Perc),
+                weight: 0.5,
+                opacity: 1,
+                color: 'white',
+                dashArray: '0',
+                smoothFactor: 1,
+                fillOpacity: 0.7
+            };
+        }
+
+        //var layer2 = L.geoJson(no2Layer2, {style: style2});
+        var layer2 = L.geoJson(no2Layer2, {style: style2, onEachFeature: onEachFeature});
+        geojson2 = layer2;
+
+      //  L.geoJson(no2Layer2, {style: style2}).addTo(map);
+
+      // method that we will use to update the control based on feature properties passed
+
+    function toggleDem() {
+      if(!toggle1) {
+        //L.geoJson(no2Layer, {style: style}).addTo(map);
+        map.addLayer(layer1);
+        geojson = geojson1;
+        if(toggle2) {
+          map.removeLayer(layer2);
+          toggle2 = false;
+        }
+      } else {
+        map.removeLayer(layer1);
+        geojson = geojson2;
+      }
+      toggle1 = !toggle1;
+    }
+
+    function toggleNo2() {
+      if(!toggle2) {
+        map.addLayer(layer2);
+        if(toggle1) {
+          map.removeLayer(layer1);
+          toggle1 = false;
+        }
+        geojson = geojson2;
+      } else {
+        map.removeLayer(layer2);
+        geojson = geojson1;
+      }
+      toggle2 = !toggle2;
+    }
+
+    window.onload = init();
+
+
+    function highlightFeature(e) {
+        var layer = e.target;
+
+        layer.setStyle({
+            weight: 3,
+            //color: '#FFFFF',
+            fillOpacity: 0.8
+        });
+
+        if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+            layer.bringToFront();
+        }
+
+        info.update(layer.feature.properties);
+    }
+
+    function resetHighlight(e) {
+        geojson.resetStyle(e.target);
+        //geojson2.resetStyle(e.target);
+        //info.update();
+    }
+
+    function zoomToFeature(e) {
+        map.fitBounds(e.target.getBounds(), {top: 50000, bottom: 50000, left: 50000, right: 50000});
+    }
+
+    function onEachFeature(feature, layer) {
+        layer.on({
+            mouseover: highlightFeature,
+            mouseout: resetHighlight,
+            click: zoomToFeature
+        });
+    }
+
+    var info = L.control();
+
+    info.onAdd = function (map) {
+        this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+        this.update();
+        return this._div;
+    };
+
+    // method that we will use to update the control based on feature properties passed
+    info.update = function (props) {
+        this._div.innerHTML = '<h2>NO<sub>2</sub> Equality Index</h2>' +  (props ?
+            '<h3>NO<sub>2</sub> Index: ' + props.no2Perc + '</h3><br /><h3>Demographic Index: ' + props.demographicIndex + '</h3><ul><li>' + props.percentMinority + '% Minority</li><li>' + props.percentLowIncome + '% Low Income</li></ul><br /><br /><h3>Tract #' + props.TRACT + '</h3>'
+            : 'Hover over a census tract');
+    };
+
+    info.addTo(map);
+
+    </script>
+
+  </body>
+</html>
