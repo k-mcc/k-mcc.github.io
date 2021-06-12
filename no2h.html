@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Bivariate Choropleth</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+   crossorigin=""/>
+   <!-- Make sure you put this AFTER Leaflet's CSS -->
+   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+  integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+  crossorigin=""></script>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <!--   <link href="https://api.mapbox.com/mapbox-gl-js/v2.3.0/mapbox-gl.css" rel="stylesheet">-->
+    <style>
+      body { margin: 0; padding: 0; }
+      #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+    </style>
+    <script src="/js/leaflet-0.7.2/leaflet.ajax.min.js"></script>
+    <script src="https://k-mcc.github.io/pointsGeojson.js"></script>
+    <style>
+    .map {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+    }
+      .info {
+          height: 300px;
+          width: 300px;
+          padding: 6px 8px;
+          font: 14px/16px 'Poppins', Helvetica, sans-serif;
+          /*font-family: 'Poppins', sans-serif;*/
+          background: white;
+          background: rgba(255,255,255,0.8);
+          box-shadow: 0 0 15px rgba(0,0,0,0.2);
+          border-radius: 3px;
+      }
+      .info h2 {
+          margin: 0 0 5px;
+          color: #000000;
+      }
+      .info h5 {
+          margin: 0 0 5px;
+          color: #000000;
+          line-height: 10px;
+      }
+      .legend {
+          line-height: 20px;
+          color: #555;
+      }
+      .legend i {
+          width: 20px;
+          height: 20px;
+          float: left;
+          margin-right: 8px;
+          opacity: 0.7;
+      }
+      h2 {
+        text-align: center;
+        line-height: 30px;
+      }
+      h5 {
+        text-align: center;
+        line-height: 5px;
+      }
+      p {
+        font-size: 0.85em;
+        text-align: left;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <div class="map-overlay" id="legend"></div>
+    <script>
+
+    var mapboxAccessToken = 'pk.eyJ1Ijoia2F0ZW1hcCIsImEiOiJja3A0NWV0ZTkwNjBtMm5vdWxzcXR6dWxjIn0.7rYO_pPmtvwuWUb0cG3QXQ';
+    var map = L.map('map').setView([38.8950, -77.0], 12);
+
+    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + mapboxAccessToken, {
+        id: 'mapbox/light-v9',
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        tileSize: 512,
+        zoomOffset: -1
+    }).addTo(map);
+
+  //  L.geoJson(no2Layer).addTo(map);
+
+      function getColor(x) {
+        return x >= 90  ? '#A50026' :
+               x >= 80  ? '#D73027' :
+               x >= 70  ? '#F46D43' :
+               x >= 60  ? '#FDAE61' :
+               x >= 50  ? '#FEE090' :
+               x >= 40   ? '#E0F3F8' :
+               x >= 30   ? '#ABD9E9' :
+               x >= 20   ? '#74ADD1' :
+               x >= 10   ? '#4575B4' :
+               x > 0   ? '#313695' :
+                        '#313695';
+      }
+
+      function getOutlineColor(x) {
+        return x >= 90  ? '#6E0019' :
+               x >= 80  ? '#96201A' :
+               x >= 70  ? '#AD4D2F' :
+               x >= 60  ? '#AD7740' :
+               x >= 50  ? '#DBA81F' :
+               x >= 40   ? '#6CA7B8' :
+               x >= 30   ? '#56A5BF' :
+               x >= 20   ? '#3378A3' :
+               x >= 10   ? '#285CA1' :
+               x > 0   ? '#1A1F73' :
+                        '#1A1F73';
+      }
+
+      function getRadius(x) {
+        return x >= 90  ? 20 :
+               x >= 80  ? 18 :
+               x >= 70  ? 16 :
+               x >= 60  ? 14 :
+               x >= 50  ? 12 :
+               x >= 40   ? 10 :
+               x >= 30   ? 8 :
+               x >= 20   ? 6 :
+               x >= 10   ? 4 :
+               x > 0   ? 2 :
+                        2;
+      }
+
+      function paint(feature, latlng) {
+        var r = 3+ 0.5*getRadius(feature.properties.no2Perc);
+          return L.circleMarker(latlng, {
+            fillColor: getColor(feature.properties.demographicIndex),
+			      color: getOutlineColor(feature.properties.demographicIndex),
+				    weight: 1,
+				    fillOpacity: 0.6,
+            radius: r
+				});
+			}
+
+      L.geoJson(no2Layer, {pointToLayer: paint}).addTo(map);
+
+      function highlightFeature(e) {
+          var layer = e.target;
+
+          layer.setStyle({
+              weight: 3,
+              fillOpacity: 0.01
+          });
+
+          if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+              layer.bringToFront();
+          }
+
+          info.update(layer.feature.properties);
+      }
+
+      function resetHighlight(e) {
+          geojson.resetStyle(e.target);
+          //info.update();
+      }
+
+      var geojson;
+      geojson = L.geoJson(no2Layer);
+
+      function zoomToFeature(e) {
+          map.fitBounds(e.target.getBounds(), {top: 50000, bottom: 50000, left: 50000, right: 50000});
+      }
+
+      function onEachFeature(feature, layer) {
+          layer.on({
+              mouseover: highlightFeature,
+              mouseout: resetHighlight,
+              click: zoomToFeature
+          });
+      }
+
+      geojson = L.geoJson(no2Layer, {
+          pointToLayer: paint,
+          onEachFeature: onEachFeature
+      }).addTo(map);
+
+      var info = L.control();
+
+      info.onAdd = function (map) {
+          this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+          this.update();
+          return this._div;
+      };
+
+      // method that we will use to update the control based on feature properties passed
+      info.update = function (props) {
+          this._div.innerHTML = '<h2>NO<sub>2</sub> Equality Index</h2>' +  (props ?
+              '<h3>NO<sub>2</sub> Index: ' + props.no2Perc + '</h3><br /><h3>Demographic Index: ' + props.demographicIndex + '</h3><ul><li>' + props.percentMinority + '% Minority</li><li>' + props.percentLowIncome + '% Low Income</li></ul><br /><br /><h3>Tract #' + props.TRACT + '</h3>'
+              : 'Hover over a census tract');
+      };
+
+      info.addTo(map);
+
+      var legend = L.control({position: 'bottomright'});
+
+      legend.onAdd = function (map) {
+
+          var div = L.DomUtil.create('div', 'info legend'),
+              grades = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90],
+              labels = [];
+
+          div.innerHTML += "<h2>Nitrogen Dioxide Exposure</h2></br><h5>Expressed as a percentile</h5></br> "
+
+          // loop through our density intervals and generate a label with a colored square for each interval
+          for (var i = 0; i < grades.length; i++) {
+              div.innerHTML +=
+                  '<i style="background:' + getColor(grades[i] + 1) + '"></i>' +
+                  grades[i] + '</br>';
+          }
+
+          return div;
+      };
+
+      legend.addTo(map);
+
+    </script>
+
+  </body>
+</html>
