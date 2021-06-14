@@ -213,7 +213,7 @@
           div.innerHTML += "<h2>Socio-demographic Vulnerability</h2></br><h5>Expressed as a percentile</h5></br> "
 
           // loop through our density intervals and generate a label with a colored square for each interval
-          for (var i = 0; i < grades.length; i++) {
+          for (var i = grades.length-1; i > 0; i--) {
               div.innerHTML +=
                   '<i style="background:' + getColor(grades[i] + 1) + '"></i>' +
                   grades[i] + '</br>';
