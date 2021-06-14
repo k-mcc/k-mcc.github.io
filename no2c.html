@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Basic Choropleth</title>
+    <title>Outlined Choropleth</title>
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
@@ -11,6 +11,8 @@
    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
   integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
   crossorigin=""></script>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
   <!--   <link href="https://api.mapbox.com/mapbox-gl-js/v2.3.0/mapbox-gl.css" rel="stylesheet">-->
     <style>
       body { margin: 0; padding: 0; }
@@ -19,29 +21,55 @@
     <script src="/js/leaflet-0.7.2/leaflet.ajax.min.js"></script>
     <script src="https://k-mcc.github.io/no2WithDemIndex.js"></script>
     <style>
-      .info {
-          padding: 6px 8px;
-          font: 14px/16px Optima, Helvetica, sans-serif;
-          background: white;
-          background: rgba(255,255,255,0.8);
-          box-shadow: 0 0 15px rgba(0,0,0,0.2);
-          border-radius: 5px;
-      }
-      .info h4 {
-          margin: 0 0 5px;
-          color: #777;
-      }
-      .legend {
-          line-height: 18px;
-          color: #555;
-      }
-      .legend i {
-          width: 18px;
-          height: 18px;
-          float: left;
-          margin-right: 8px;
-          opacity: 0.7;
-      }
+    .map {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+    }
+    .info {
+        height: 320px;
+        width: 250px;
+        padding: 6px 8px;
+        font: 14px/16px 'Poppins', Helvetica, sans-serif;
+        /*font-family: 'Poppins', sans-serif;*/
+        background: white;
+        background: rgba(255,255,255,0.8);
+        box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        border-radius: 3px;
+    }
+    .info h2 {
+        margin: 0 0 5px;
+        color: #000000;
+    }
+    .info h5 {
+        margin: 0 0 5px;
+        color: #000000;
+        line-height: 10px;
+    }
+    .legend {
+        line-height: 20px;
+        color: #555;
+    }
+    .legend i {
+        width: 20px;
+        height: 20px;
+        float: left;
+        margin-right: 8px;
+        opacity: 0.7;
+    }
+    h2 {
+      text-align: center;
+      line-height: 30px;
+    }
+    h5 {
+      text-align: center;
+      line-height: 5px;
+    }
+    p {
+      font-size: 0.85em;
+      text-align: left;
+    }
     </style>
   </head>
   <body>
@@ -62,7 +90,7 @@
     });*/
 
     var mapboxAccessToken = 'pk.eyJ1Ijoia2F0ZW1hcCIsImEiOiJja3A0NWV0ZTkwNjBtMm5vdWxzcXR6dWxjIn0.7rYO_pPmtvwuWUb0cG3QXQ';
-    var map = L.map('map').setView([38.8950, -77.0369], 12);
+    var map = L.map('map').setView([38.8950, -77.0], 12);
 
     L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + mapboxAccessToken, {
         id: 'mapbox/light-v9',
@@ -175,13 +203,12 @@
 
       // method that we will use to update the control based on feature properties passed
       info.update = function (props) {
-          this._div.innerHTML = '<h4>Nitrogen Dioxide Percentiles in D.C.</h4>' +  (props ?
-              '<b>Tract #' + props.TRACT + '</b><br />Percentile NO<sub>2</sub>: ' + props.no2Perc + '<br />Demographic Index: ' + props.demographicIndex + ''
+          this._div.innerHTML = '<h2>NO<sub>2</sub> Equality Index</h2>' +  (props ?
+              '<h3>NO<sub>2</sub> Index: ' + props.no2Perc + '</h3><br /><h3>Demographic Index: ' + props.demographicIndex + '</h3><ul><li>' + props.percentMinority + '% Minority</li><li>' + props.percentLowIncome + '% Low Income</li></ul><br /><br /><h3>Tract #' + props.TRACT + '</h3>'
               : 'Hover over a census tract');
       };
 
       info.addTo(map);
-
 
       var legend = L.control({position: 'bottomright'});
 
@@ -191,12 +218,13 @@
               grades = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90],
               labels = [];
 
+          div.innerHTML += "<h2>Combined Equality Index</h2></br><h5>Expressed as a percentile</h5></br> "
+
           // loop through our density intervals and generate a label with a colored square for each interval
-          div.innerHTML += '<strong>Nitrogen Dioxide Percentile:</strong><br>';
-          for (var i = 0; i < grades.length; i++) {
+          for (var i = grades.length-1; i > 0; i--) {
               div.innerHTML +=
-                  '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
-                  grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+                  '<i style="background:' + getColor(grades[i] + 1) + '"></i>' +
+                  grades[i] + '</br>';
           }
           div.innerHTML += '<br><br><i style="background:' + '#FFFC00' + '"></i> ' +
           'Tracts with combined index scores above 90th percentile';
