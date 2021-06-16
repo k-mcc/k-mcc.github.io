@@ -37,7 +37,7 @@
       .img {
           color: #555;
 
-          /*for temporary message ---> */
+          /*for temporary message --->
           height: 250px;
           width: 284px;
           padding: 6px 8px;
@@ -49,10 +49,47 @@
           box-shadow: 0 0 15px rgba(0,0,0,0.2);
           border-radius: 3px;
       }
+      /*grid*/
+      .grid-container {
+        display: inline-grid;
+        grid-template-columns: auto auto auto;
+        background-color: #FFFFFF;
+        padding: 30px;
+        margin: 40px 0;
+        position: relative;
+        border-left: 34px solid #FFFFFF;
+        padding-left: 10px;
+      }
+      .grid-item {
+        background-color: #FFFFFF;
+        border: 1px solid #FFFFFF;
+        padding: 20px;
+        font-size: 30px;
+        text-align: center;
+      }
+      .grid-container h3 {
+        font: 14px/16px 'Poppins', Helvetica, sans-serif;
+        font-size: 1.8em;
+        color: #000000;
+        padding: 5px 10px;
+        margin: 0 0 10px 0;
+        line-height: 24px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: none;
+        transform-origin: 0 0;
+        transform: rotate(90deg);
+      }
+      /*.rotate {
+        transform: rotate(-90deg);
+        position: absolute;
+      }*/
     </style>
   </head>
   <body>
-    <div id="map"></div>
+    <div id="map">
+    </div>
     <script>
 
     var mapboxAccessToken = 'pk.eyJ1Ijoia2F0ZW1hcCIsImEiOiJja3A0NWV0ZTkwNjBtMm5vdWxzcXR6dWxjIn0.7rYO_pPmtvwuWUb0cG3QXQ';
@@ -212,7 +249,7 @@
 
       info.addTo(map);
 
-      var img = L.control({position: 'bottomright'});
+      /*var img = L.control({position: 'bottomright'});
 
       img.onAdd = function (map) {
 
@@ -224,7 +261,24 @@
         return div;
       }//"#f3f3f3 url('img_tree.png') no-repeat right top";
 
+      img.addTo(map);*/
+
+      var img = L.control({position: 'bottomright'});
+
+      img.onAdd = function (map) {
+
+        var div = L.DomUtil.create('div', 'grid-container');
+        grades = [1, 40, 80];
+        //div.innerHTML += '<img src="images/no2dLegend.png" alt="Legend" style="width:300px;height:300px;">';
+        div.innerHTML += "<h3>Nitrogen Dioxide Index</h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0]) + "\" >a3</div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1]) + "\" >b3</div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2]) + "\" >c3</div>";
+        div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[0]) + "\" >a2</div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[1]) + "\" >b2</div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[2]) + "\" >c2</div>";
+        div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0]) + "\" >a1</div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1]) + "\" >b1</div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2]) + "\" >c1</div>";
+        return div;
+      }//"#f3f3f3 url('img_tree.png') no-repeat right top";
+
       img.addTo(map);
+
+
 
     </script>
 
