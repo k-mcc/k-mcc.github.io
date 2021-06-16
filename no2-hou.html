@@ -60,7 +60,8 @@
     L.geoJson(no2Layer).addTo(map);
 
       function getColor(axisA, axisB) {
-
+        /*
+        // global superdiversity
         var a1 = '#AED5E9';
         var b1 = '#72CBC1';
         var c1 = '#4FBC82';
@@ -70,6 +71,28 @@
         var a3 = '#C06CBA';
         var b3 = '#7F679A';
         var c3 = '#365F8D';
+
+
+        */
+
+        // global superdiversity
+        var a1 = '#AED5E9';
+        var b1 = '#72CBC1';
+        var c1 = '#4FBC82';
+        var a2 = '#98ACE6';
+        var b2 = '#63A5BE';
+        var c2 = '#459980';
+        var a3 = '#C06CBA';
+        var b3 = '#7F679A';
+        var c3 = '#365F8D';
+
+        /*
+        [ a3 ]  [ b3 ]  [ c3 ]
+
+        [ a2 ]  [ b2 ]  [ c2 ]
+
+        [ a1 ]  [ b1 ]  [ c1 ]
+        */
 
         var a = getRange(axisA);
         var b = getRange(axisB);
@@ -119,8 +142,9 @@
 
           layer.setStyle({
               weight: 3,
-              //color: getOutlineColor(feature.properties.demographicIndex),
-              fillOpacity: 0.01
+              opacity: 1,
+              color: getColor(layer.feature.properties.no2Perc, layer.feature.properties.demographicIndex),
+              fillOpacity: 0.001
           });
 
           if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
