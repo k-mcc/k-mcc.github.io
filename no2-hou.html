@@ -26,7 +26,7 @@
           font: 14px/16px 'Poppins', Helvetica, sans-serif;
           /*font-family: 'Poppins', sans-serif;*/
           background: white;
-          background: rgba(255,255,255,0.8);
+          background: rgba(255,255,255,0.9);
           box-shadow: 0 0 15px rgba(0,0,0,0.2);
           border-radius: 3px;
       }
@@ -57,8 +57,12 @@
         padding: 30px;
         margin: 40px 0;
         position: relative;
-        border-left: 34px solid #FFFFFF;
+        border-left: 50px solid #FFFFFF;
+        border-bottom: 50px solid #FFFFFF;
         padding-left: 10px;
+        padding-bottom: 10px;
+        border-radius: 3px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.2);
       }
       .grid-item {
         background-color: #FFFFFF;
@@ -72,7 +76,7 @@
         font-size: 1.8em;
         color: #000000;
         padding: 5px 10px;
-        margin: 0 0 10px 0;
+        margin: 30px 0 15px 0;
         line-height: 24px;
         position: absolute;
         top: 0;
@@ -80,6 +84,19 @@
         background: none;
         transform-origin: 0 0;
         transform: rotate(90deg);
+      }
+      .grid-container h2 {
+        font: 14px/16px 'Poppins', Helvetica, sans-serif;
+        font-size: 1.8em;
+        color: #000000;
+        padding: 0 10px;
+        margin: 60px 10px 0 0;
+        line-height: 2px;
+        position: absolute;
+        bottom: 0;
+        top: 257px;
+        left: 0;
+        background: none;
       }
       /*.rotate {
         transform: rotate(-90deg);
@@ -263,7 +280,7 @@
 
       img.addTo(map);*/
 
-      var img = L.control({position: 'bottomright'});
+      var img = L.control({position: 'bottomleft'});
 
       img.onAdd = function (map) {
 
@@ -272,7 +289,7 @@
         //div.innerHTML += '<img src="images/no2dLegend.png" alt="Legend" style="width:300px;height:300px;">';
         div.innerHTML += "<h3>Nitrogen Dioxide Index</h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0]) + "\" >a3</div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1]) + "\" >b3</div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2]) + "\" >c3</div>";
         div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[0]) + "\" >a2</div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[1]) + "\" >b2</div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[2]) + "\" >c2</div>";
-        div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0]) + "\" >a1</div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1]) + "\" >b1</div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2]) + "\" >c1</div>";
+        div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0]) + "\" >a1</div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1]) + "\" >b1</div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2]) + "\" >c1</div><h2>Demographic Index</h2>";
         return div;
       }//"#f3f3f3 url('img_tree.png') no-repeat right top";
 
