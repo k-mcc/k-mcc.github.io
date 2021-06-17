@@ -12,6 +12,10 @@
   crossorigin=""></script>
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">
+<script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
+
     <style>
       body { margin: 0; padding: 0; }
       #map { position: absolute; top: 0; bottom: 0; width: 100%; }
@@ -63,6 +67,11 @@
         padding-bottom: 10px;
         border-radius: 3px;
         box-shadow: 0 0 15px rgba(0,0,0,0.2);
+
+        /* collapsible */
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.2s ease-out;
       }
       .grid-item {
         background-color: #FFFFFF;
@@ -98,15 +107,41 @@
         left: 0;
         background: none;
       }
-      /*.rotate {
-        transform: rotate(-90deg);
-        position: absolute;
-      }*/
+
+      /* collapsible */
+      .collapsible {
+        background-color: #eee;
+        color: #444;
+        cursor: pointer;
+        padding: 18px;
+        width: 100%;
+        border: none;
+        text-align: left;
+        outline: none;
+        font-size: 15px;
+      }
+
+      .active, .collapsible:hover {
+        background-color: #ccc;
+      }
+
+      .collapsible:after {
+        content: '\02795'; /* Unicode character for "plus" sign (+) */
+        font-size: 13px;
+        color: white;
+        float: right;
+        margin-left: 5px;
+      }
+
+      .active:after {
+        content: "\2796"; /* Unicode character for "minus" sign (-) */
+      }
     </style>
   </head>
   <body>
     <div id="map">
     </div>
+    <button type="button" class="collapsible">Open Collapsible Legend</button>
     <script>
 
     var mapboxAccessToken = 'pk.eyJ1Ijoia2F0ZW1hcCIsImEiOiJja3A0NWV0ZTkwNjBtMm5vdWxzcXR6dWxjIn0.7rYO_pPmtvwuWUb0cG3QXQ';
@@ -284,6 +319,17 @@
 
       img.onAdd = function (map) {
 
+        /*L.easyButton('<h2>Expand"</h2>', function(btn, map){
+          var p1 = [30.063401, -95.097744];
+          var p2 = [29.530527, -95.754723];
+          var bounds = L.bounds(p1, p2);
+          map.setBounds(bounds);
+        }).addTo(map);*/
+
+
+      //  var container = L.DomUtil.create('input');
+      //  container.type="button";
+
         var div = L.DomUtil.create('div', 'grid-container');
         grades = [1, 40, 80];
         //div.innerHTML += '<img src="images/no2dLegend.png" alt="Legend" style="width:300px;height:300px;">';
@@ -295,7 +341,25 @@
 
       img.addTo(map);
 
+      var coll = document.getElementsByClassName("collapsible");
+      var i;
 
+      for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function() {
+          this.classList.toggle("active");
+          var gridContainer = this.nextElementSibling;
+          if (gridContainer.style.maxHeight){
+            gridContainer.style.maxHeight = null;
+          } else {
+            gridContainer.style.maxHeight = gridContainer.scrollHeight + "px";
+          }
+        });
+      }
+
+      L.easyButton('<img src="images/expand.png" alt="Legend" style="width:22px;height:24px;position:absolute;left: 0; right: 10px;">', function(btn, map){
+          var central = [29.749907, -95.358421];
+          map.setView(central, 10.4);
+      }).addTo(map);
 
     </script>
 
