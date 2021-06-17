@@ -68,15 +68,11 @@
         border-radius: 3px;
         box-shadow: 0 0 15px rgba(0,0,0,0.2);
 
-        /* collapsible */
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.2s ease-out;
       }
       .grid-item {
         background-color: #FFFFFF;
         border: 1px solid #FFFFFF;
-        padding: 20px;
+        padding: 42px;
         font-size: 30px;
         text-align: center;
       }
@@ -108,40 +104,11 @@
         background: none;
       }
 
-      /* collapsible */
-      .collapsible {
-        background-color: #eee;
-        color: #444;
-        cursor: pointer;
-        padding: 18px;
-        width: 100%;
-        border: none;
-        text-align: left;
-        outline: none;
-        font-size: 15px;
-      }
-
-      .active, .collapsible:hover {
-        background-color: #ccc;
-      }
-
-      .collapsible:after {
-        content: '\02795'; /* Unicode character for "plus" sign (+) */
-        font-size: 13px;
-        color: white;
-        float: right;
-        margin-left: 5px;
-      }
-
-      .active:after {
-        content: "\2796"; /* Unicode character for "minus" sign (-) */
-      }
     </style>
   </head>
   <body>
-    <div id="map">
-    </div>
-    <button type="button" class="collapsible">Open Collapsible Legend</button>
+    <div id="map"></div>
+
     <script>
 
     var mapboxAccessToken = 'pk.eyJ1Ijoia2F0ZW1hcCIsImEiOiJja3A0NWV0ZTkwNjBtMm5vdWxzcXR6dWxjIn0.7rYO_pPmtvwuWUb0cG3QXQ';
@@ -317,44 +284,25 @@
 
       var img = L.control({position: 'bottomleft'});
 
+
       img.onAdd = function (map) {
-
-        /*L.easyButton('<h2>Expand"</h2>', function(btn, map){
-          var p1 = [30.063401, -95.097744];
-          var p2 = [29.530527, -95.754723];
-          var bounds = L.bounds(p1, p2);
-          map.setBounds(bounds);
-        }).addTo(map);*/
-
-
-      //  var container = L.DomUtil.create('input');
-      //  container.type="button";
-
         var div = L.DomUtil.create('div', 'grid-container');
+        div.id = "gridContainer";
         grades = [1, 40, 80];
         //div.innerHTML += '<img src="images/no2dLegend.png" alt="Legend" style="width:300px;height:300px;">';
-        div.innerHTML += "<h3>Nitrogen Dioxide Index</h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0]) + "\" >a3</div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1]) + "\" >b3</div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2]) + "\" >c3</div>";
-        div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[0]) + "\" >a2</div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[1]) + "\" >b2</div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[2]) + "\" >c2</div>";
-        div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0]) + "\" >a1</div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1]) + "\" >b1</div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2]) + "\" >c1</div><h2>Demographic Index</h2>";
+        div.innerHTML += "<h3>Nitrogen Dioxide Index</h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0]) + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1]) + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2]) + "\" id:\"c3\" ></div>";
+        div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[0]) + "\" id:\"a2\"></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[1]) + "\" id:\"b2\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[2]) + "\" id:\"c2\" ></div>";
+        div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0]) + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1]) + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2]) + "\" id:\"c1\" ></div><h2>Demographic Index</h2>";
+
+        var draggable = new L.Draggable(div);
+        draggable.enable()
+
         return div;
       }//"#f3f3f3 url('img_tree.png') no-repeat right top";
 
       img.addTo(map);
 
-      var coll = document.getElementsByClassName("collapsible");
-      var i;
 
-      for (i = 0; i < coll.length; i++) {
-        coll[i].addEventListener("click", function() {
-          this.classList.toggle("active");
-          var gridContainer = this.nextElementSibling;
-          if (gridContainer.style.maxHeight){
-            gridContainer.style.maxHeight = null;
-          } else {
-            gridContainer.style.maxHeight = gridContainer.scrollHeight + "px";
-          }
-        });
-      }
 
       L.easyButton('<img src="images/expand.png" alt="Legend" style="width:22px;height:24px;position:absolute;left: 0; right: 10px;">', function(btn, map){
           var central = [29.749907, -95.358421];
