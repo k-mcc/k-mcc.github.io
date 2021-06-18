@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Bivariate Choropleth Houston</title>
+    <title>Houston 2+ Maps</title>
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
@@ -29,7 +29,6 @@
     </style>
     <script src="/js/leaflet-0.7.2/leaflet.ajax.min.js"></script>
     <script src="https://k-mcc.github.io/no2HouData.js"></script>
-    <script src="https://k-mcc.github.io/no2HouData.js"></script>
     <style>
       .info {
           height: 250px;
@@ -48,14 +47,6 @@
       }
       .img {
           color: #555;
-
-          /*for temporary message --->
-          height: 250px;
-          width: 284px;
-          padding: 6px 8px;
-          font: 14px/16px 'Poppins', Helvetica, sans-serif;
-          /* ---> for temporary message*/
-
           background: white;
           background: rgba(255,255,255);
           box-shadow: 0 0 15px rgba(0,0,0,0.2);
@@ -111,63 +102,51 @@
         left: 0;
         background: none;
       }
-      .btn-group {
-        position: absolute;
-        float: right;
-        z-index: 100;
-        bottom: 10px;
-        left: 10px; /*useful alignment strategy*/
-        display: block;
-      }
-      button {
+
+      .button {
+        position: relative;
         background: #FFFFFF;
-        border-radius: 5px;
-        width: 300px;
-        padding: 20px;
-        border: 1px solid '#333333';
+        border-radius: 1px;
+        left: 10px;
+        top: 200px;
+        width: 120px;
+        height: 80px;
+        text-align: left;
+
         font: 14px/16px 'Poppins', Helvetica, sans-serif;
+        color: '#000000';
+        display: block;
+        transition-duration: 0.4s;
+        z-index: 600;
+        line-height: 0px;
+      }
+
+      /*.paletteIcon {
+        position: abosolute;
+        width: 30px;
+        height: 30px;
+        padding: 2px;
+      }*/
+      /*.button:hover {
+        background-color: #D3DBE6;
+      }*/
+
+      i {
+          width: 25px;
+          height: 30px;
+          float: left;
       }
 
     </style>
   </head>
   <body>
-    <div class="btn-group">
-      <button onclick="toggleDem();"><h2>Demographic Index</h2></button>
-      <button onclick="toggleNo2();"><h2>Nitrogen Dioxide Index</h2></button>
-    </div>
+    <button class="button" id="button1" onclick="setPalette(1)"><h2>Palette 1</h2><i id="a0"></i><i id="a1"></i><i id="a2"></i><i id="a3"></i></button>
+    <button class="button" id="button2" onclick="setPalette(2)" ><h2>Palette 2</h2><i id="b0"></i><i id="b1"></i><i id="b2"></i><i id="b3"></i></button>
     <div id="map"></div>
-    <input type="button" id="Btn3" value="Btn3" onclick="setPalette(2)" class="btnStyle span3 leaflet-control" />
-
     <script>
-
+    //<img class="paletteIcon" src="paletteB.png">
     var mapboxAccessToken = 'pk.eyJ1Ijoia2F0ZW1hcCIsImEiOiJja3A0NWV0ZTkwNjBtMm5vdWxzcXR6dWxjIn0.7rYO_pPmtvwuWUb0cG3QXQ';
     var map = L.map('map').setView([29.749907, -95.358421], 12);
-
-    var toggle1;
-    var toggle2;
-
-    function init() {
-      toggle1 = true;
-      toggle2 = false;
-      map.addLayer(layer1);
-      geojson = geojson1;
-    }
-
-    function toggleDem() {
-      if(!toggle1) {
-        //L.geoJson(no2Layer, {style: style}).addTo(map);
-        map.addLayer(layer1);
-        geojson = geojson1;
-        if(toggle2) {
-          map.removeLayer(layer2);
-          toggle2 = false;
-        }
-      } else {
-        map.removeLayer(layer1);
-        geojson = geojson2;
-      }
-      toggle1 = !toggle1;
-    }
 
     var tileL = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + mapboxAccessToken, {
         id: 'mapbox/light-v9',
@@ -176,37 +155,36 @@
         zoomOffset: -1
     }).addTo(map);
 
-    L.geoJson(no2Layer).addTo(map);
+    //select button1
+    document.getElementById("button1").style.backgroundColor = "#5B616B";
+    document.getElementById("button1").style.color = "#FFFFFF";
 
     // Joshua Stevens
     var paletteA = ['#E8E8E8', '#ACE4E4', '#5AC8C8', '#DFB0D6', '#A5ADD3', '#5698B9', '#BE64AC', '#8C62AA', '#3B4994'];
+    for (var i = 0; i < 4; i++) {
+      var corners = [0, 2, 6, 8];
+      var idStr = "a" + i;
+      document.getElementById(idStr).style.background = paletteA[corners[i]];
+    }
     // gridA.png option 2
     var paletteB = ['#F3F3F3', '#B4D3E1', '#509DC2', '#F3E6B3', '#B3B3B3', '#376387', '#F3B300', '#B36600', '#000000'];
+    for (var i = 0; i < 4; i++) {
+      var corners = [0, 2, 6, 8];
+      var idStr = "b" + i;
+      document.getElementById(idStr).style.background = paletteB[corners[i]];
+    }
 
     var colors = paletteA;
 
+    /*
+    [ a3 ]  [ b3 ]  [ c3 ]
+
+    [ a2 ]  [ b2 ]  [ c2 ]
+
+    [ a1 ]  [ b1 ]  [ c1 ]
+    */
+
       function getColor(axisA, axisB) {
-        /*
-        // global superdiversity
-        var a1 = '#AED5E9';
-        var b1 = '#72CBC1';
-        var c1 = '#4FBC82';
-        var a2 = '#98ACE6';
-        var b2 = '#63A5BE';
-        var c2 = '#459980';
-        var a3 = '#C06CBA';
-        var b3 = '#7F679A';
-        var c3 = '#365F8D';
-        */
-
-        /*
-        [ a3 ]  [ b3 ]  [ c3 ]
-
-        [ a2 ]  [ b2 ]  [ c2 ]
-
-        [ a1 ]  [ b1 ]  [ c1 ]
-        */
-
         var a = getRange(axisA);
         var b = getRange(axisB);
 
@@ -227,7 +205,6 @@
           else if (b == 2) return colors[7]; //mid axisB value
           else return colors[8]; //high axisB value
         }
-
       }
 
       function getRange(x) {
@@ -244,22 +221,19 @@
             color: 'white',
             dashArray: '0',
             smoothFactor: 1,
-            fillOpacity: 1
+            fillOpacity: 0.9
         };
       }
-
-      L.geoJson(no2Layer, {style: style}).addTo(map);
 
       function highlightFeature(e) {
           var layer = e.target;
 
           layer.setStyle({
-            weight: 3,
-            //fillColor: '#FFFFFF',
+            weight: 5,
+            color: getColor(layer.feature.properties.no2Perc, layer.feature.properties.demographicIndex),
             //fill: false
-            fillOpacity: 0
             //fillColor: '#FFFFFF'
-            //fillOpacity: -1000000000000000000
+            fillOpacity: 0
           });
 
           if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
@@ -268,7 +242,6 @@
 
           info.update(layer.feature.properties);
       }
-
 
       function resetHighlight(e) {
           geojson.resetStyle(e.target);
@@ -290,10 +263,12 @@
           });
       }
 
-      geojson = L.geoJson(no2Layer, {
+      var violet = L.geoJson(no2Layer, {
           style: style,
           onEachFeature: onEachFeature
       }).addTo(map);
+
+      geojson = violet;
 
       var info = L.control();
 
@@ -372,29 +347,28 @@
 
       L.Control.geocoder({position: 'topleft'}).addTo(map);
 
-      L.easyButton('<h2>B</h2>', function(btn, map){
-        setPalette(2);
-      }).addTo(map);
-
-      /*function setPalette(num) {
-
-        colors = paletteB;
-
-        /*geojson = L.geoJson(no2Layer, {
-            style: style,
-            onEachFeature: onEachFeature
-        }).addTo(map);
+      function setPalette(num) {
+        if (num == 1) {
+          colors = paletteA;
+          //select button1
+          document.getElementById("button1").style.backgroundColor = "#5B616B";
+          document.getElementById("button1").style.color = "#FFFFFF";
+          //deselect button2
+          document.getElementById("button2").style.backgroundColor = "#FFFFFF";
+          document.getElementById("button2").style.color = "#000000";
+        }
+        if (num == 2) {
+          colors = paletteB;
+          //select button2
+          document.getElementById("button2").style.backgroundColor = "#5B616B";
+          document.getElementById("button2").style.color = "#FFFFFF";
+          //deselect button1
+          document.getElementById("button1").style.backgroundColor = "#FFFFFF";
+          document.getElementById("button1").style.color = "#000000";
+        }
 
         updateImg();
         img.addTo(map);
-
-        //map.setPaintProperty(layer.value, 'fill-color', color);
-        /*map.remove(no2Layer);
-
-        geojson = L.geoJson(no2Layer, {
-            style: style,
-            onEachFeature: onEachFeature
-        }).addTo(map);
 
         geojson.eachLayer(function (layer) {
             layer.setStyle({
@@ -404,11 +378,10 @@
               color: 'white',
               dashArray: '0',
               smoothFactor: 1,
-              fillOpacity: 0.2
+              fillOpacity: 0.9
             })
           });
-        }*/
-
+        }
 
     </script>
 
