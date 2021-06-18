@@ -16,16 +16,19 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">
   <script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
 
-  <!--Start Search Bar-->
+  <!--Search Bar-->
   <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
   <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
 
-  <!--End Search Bar-->
+
+  <script src="https://raw.githubusercontent.com/jerroydmoore/leaflet-button/b568e84f4e46167c4a8a8f640e2b192afdc34930/L.Control.Button.js"></script>
+
     <style>
       body { margin: 0; padding: 0; }
       #map { position: absolute; top: 0; bottom: 0; width: 100%; }
     </style>
     <script src="/js/leaflet-0.7.2/leaflet.ajax.min.js"></script>
+    <script src="https://k-mcc.github.io/no2HouData.js"></script>
     <script src="https://k-mcc.github.io/no2HouData.js"></script>
     <style>
       .info {
@@ -108,10 +111,30 @@
         left: 0;
         background: none;
       }
+      .btn-group {
+        position: absolute;
+        float: right;
+        z-index: 100;
+        bottom: 10px;
+        left: 10px; /*useful alignment strategy*/
+        display: block;
+      }
+      button {
+        background: #FFFFFF;
+        border-radius: 5px;
+        width: 300px;
+        padding: 20px;
+        border: 1px solid '#333333';
+        font: 14px/16px 'Poppins', Helvetica, sans-serif;
+      }
 
     </style>
   </head>
   <body>
+    <div class="btn-group">
+      <button onclick="toggleDem();"><h2>Demographic Index</h2></button>
+      <button onclick="toggleNo2();"><h2>Nitrogen Dioxide Index</h2></button>
+    </div>
     <div id="map"></div>
     <input type="button" id="Btn3" value="Btn3" onclick="setPalette(2)" class="btnStyle span3 leaflet-control" />
 
@@ -120,7 +143,33 @@
     var mapboxAccessToken = 'pk.eyJ1Ijoia2F0ZW1hcCIsImEiOiJja3A0NWV0ZTkwNjBtMm5vdWxzcXR6dWxjIn0.7rYO_pPmtvwuWUb0cG3QXQ';
     var map = L.map('map').setView([29.749907, -95.358421], 12);
 
-    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + mapboxAccessToken, {
+    var toggle1;
+    var toggle2;
+
+    function init() {
+      toggle1 = true;
+      toggle2 = false;
+      map.addLayer(layer1);
+      geojson = geojson1;
+    }
+
+    function toggleDem() {
+      if(!toggle1) {
+        //L.geoJson(no2Layer, {style: style}).addTo(map);
+        map.addLayer(layer1);
+        geojson = geojson1;
+        if(toggle2) {
+          map.removeLayer(layer2);
+          toggle2 = false;
+        }
+      } else {
+        map.removeLayer(layer1);
+        geojson = geojson2;
+      }
+      toggle1 = !toggle1;
+    }
+
+    var tileL = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + mapboxAccessToken, {
         id: 'mapbox/light-v9',
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
         tileSize: 512,
@@ -195,7 +244,7 @@
             color: 'white',
             dashArray: '0',
             smoothFactor: 1,
-            fillOpacity: 0.7
+            fillOpacity: 1
         };
       }
 
@@ -204,11 +253,13 @@
       function highlightFeature(e) {
           var layer = e.target;
 
-          var color = getColor(layer.feature.properties.no2Perc, layer.feature.properties.demographicIndex);
-
           layer.setStyle({
             weight: 3,
-            fillOpacity: 0.1
+            //fillColor: '#FFFFFF',
+            //fill: false
+            fillOpacity: 0
+            //fillColor: '#FFFFFF'
+            //fillOpacity: -1000000000000000000
           });
 
           if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
@@ -217,6 +268,7 @@
 
           info.update(layer.feature.properties);
       }
+
 
       function resetHighlight(e) {
           geojson.resetStyle(e.target);
@@ -324,19 +376,26 @@
         setPalette(2);
       }).addTo(map);
 
-      function setPalette(num) {
+      /*function setPalette(num) {
 
         colors = paletteB;
 
         /*geojson = L.geoJson(no2Layer, {
             style: style,
             onEachFeature: onEachFeature
-        }).addTo(map);*/
+        }).addTo(map);
 
         updateImg();
         img.addTo(map);
 
         //map.setPaintProperty(layer.value, 'fill-color', color);
+        /*map.remove(no2Layer);
+
+        geojson = L.geoJson(no2Layer, {
+            style: style,
+            onEachFeature: onEachFeature
+        }).addTo(map);
+
         geojson.eachLayer(function (layer) {
             layer.setStyle({
               fillColor : getColor(layer.feature.properties.no2Perc, layer.feature.properties.demographicIndex),
@@ -345,17 +404,10 @@
               color: 'white',
               dashArray: '0',
               smoothFactor: 1,
-              fillOpacity: 0.7
+              fillOpacity: 0.2
             })
-
-            layer.on({
-                mouseover: highlightFeature,
-                mouseout: resetHighlight,
-                click: zoomToFeature
-            });
-        });
-
-      }
+          });
+        }*/
 
 
     </script>
