@@ -14,8 +14,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">
-<script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
 
+  <!--Start Search Bar-->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+  <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+  <!--End Search Bar-->
     <style>
       body { margin: 0; padding: 0; }
       #map { position: absolute; top: 0; bottom: 0; width: 100%; }
@@ -30,7 +35,7 @@
           font: 14px/16px 'Poppins', Helvetica, sans-serif;
           /*font-family: 'Poppins', sans-serif;*/
           background: white;
-          background: rgba(255,255,255,0.9);
+          background: rgba(255,255,255);
           box-shadow: 0 0 15px rgba(0,0,0,0.2);
           border-radius: 3px;
       }
@@ -256,6 +261,8 @@
       info.onAdd = function (map) {
           this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
           this.update();
+          var draggable = new L.Draggable(this._div);
+          draggable.enable();
           return this._div;
       };
 
@@ -295,7 +302,7 @@
         div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0]) + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1]) + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2]) + "\" id:\"c1\" ></div><h2>Demographic Index</h2>";
 
         var draggable = new L.Draggable(div);
-        draggable.enable()
+        draggable.enable();
 
         return div;
       }//"#f3f3f3 url('img_tree.png') no-repeat right top";
@@ -308,6 +315,8 @@
           var central = [29.749907, -95.358421];
           map.setView(central, 10.4);
       }).addTo(map);
+
+      L.Control.geocoder({position: 'topleft'}).addTo(map);
 
     </script>
 
