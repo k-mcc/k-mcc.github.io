@@ -113,6 +113,7 @@
   </head>
   <body>
     <div id="map"></div>
+    <input type="button" id="Btn3" value="Btn3" onclick="setPalette(2)" class="btnStyle span3 leaflet-control" />
 
     <script>
 
@@ -128,6 +129,13 @@
 
     L.geoJson(no2Layer).addTo(map);
 
+    // Joshua Stevens
+    var paletteA = ['#E8E8E8', '#ACE4E4', '#5AC8C8', '#DFB0D6', '#A5ADD3', '#5698B9', '#BE64AC', '#8C62AA', '#3B4994'];
+    // gridA.png option 2
+    var paletteB = ['#F3F3F3', '#B4D3E1', '#509DC2', '#F3E6B3', '#B3B3B3', '#376387', '#F3B300', '#B36600', '#000000'];
+
+    var colors = paletteA;
+
       function getColor(axisA, axisB) {
         /*
         // global superdiversity
@@ -140,29 +148,7 @@
         var a3 = '#C06CBA';
         var b3 = '#7F679A';
         var c3 = '#365F8D';
-
-        // gridA.png option 2
-        var a1 = '#F3F3F3'; //
-        var b1 = '#B4D3E1'; //
-        var c1 = '#509DC2'; //
-        var a2 = '#F3E6B3'; //
-        var b2 = '#B3B3B3'; //
-        var c2 = '#376387'; //
-        var a3 = '#F3B300'; //
-        var b3 = '#B36600'; //
-        var c3 = '#000000'; //
         */
-
-        // gridA.png option 2
-        var a1 = '#E8E8E8';
-        var b1 = '#ACE4E4';
-        var c1 = '#5AC8C8';
-        var a2 = '#DFB0D6';
-        var b2 = '#A5ADD3';
-        var c2 = '#5698B9';
-        var a3 = '#BE64AC';
-        var b3 = '#8C62AA';
-        var c3 = '#3B4994';
 
         /*
         [ a3 ]  [ b3 ]  [ c3 ]
@@ -176,21 +162,21 @@
         var b = getRange(axisB);
 
         if (a == 1) { //low axisA value
-          if (b == 1) return a1; //low axisB value
-          else if (b == 2) return b1; //mid axisB value
-          else return c1; //high axisB value
+          if (b == 1) return colors[0]; //low axisB value
+          else if (b == 2) return colors[1]; //mid axisB value
+          else return colors[2]; //high axisB value
         }
 
         else if (a == 2) { //mid axisA value
-          if (b == 1) return a2; //low axisB value
-          else if (b == 2) return b2; //mid axisB value
-          else return c2; //high axisB value
+          if (b == 1) return colors[3]; //low axisB value
+          else if (b == 2) return colors[4]; //mid axisB value
+          else return colors[5]; //high axisB value
         }
 
         else if (a == 3) { //high axisA value
-          if (b == 1) return a3; //low axisB value
-          else if (b == 2) return b3; //mid axisB value
-          else return c3; //high axisB value
+          if (b == 1) return colors[6]; //low axisB value
+          else if (b == 2) return colors[7]; //mid axisB value
+          else return colors[8]; //high axisB value
         }
 
       }
@@ -218,10 +204,11 @@
       function highlightFeature(e) {
           var layer = e.target;
 
+          var color = getColor(layer.feature.properties.no2Perc, layer.feature.properties.demographicIndex);
+
           layer.setStyle({
-              weight: 3,
-              //color: getColor(layer.feature.properties.no2Perc, layer.feature.properties.demographicIndex),
-              fillOpacity: 0
+            weight: 3,
+            fillOpacity: 0.1
           });
 
           if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
@@ -289,6 +276,21 @@
 
       img.addTo(map);*/
 
+      function updateImg() {
+        var div = L.DomUtil.create('div', 'grid-container');
+        div.id = "gridContainer";
+        grades = [1, 40, 80];
+        //div.innerHTML += '<img src="images/no2dLegend.png" alt="Legend" style="width:300px;height:300px;">';
+        div.innerHTML += "<h3>Nitrogen Dioxide Index</h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0]) + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1]) + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2]) + "\" id:\"c3\" ></div>";
+        div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[0]) + "\" id:\"a2\"></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[1]) + "\" id:\"b2\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[2]) + "\" id:\"c2\" ></div>";
+        div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0]) + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1]) + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2]) + "\" id:\"c1\" ></div><h2>Demographic Index</h2>";
+
+        var draggable = new L.Draggable(div);
+        draggable.enable();
+
+        return div;
+      }
+
       var img = L.control({position: 'bottomleft'});
 
 
@@ -311,12 +313,50 @@
 
 
 
-      L.easyButton('<img src="images/expand.png" alt="Legend" style="width:22px;height:24px;position:absolute;left: 0; right: 10px;">', function(btn, map){
+      L.easyButton('<img src="images/expand.png" alt="Expand" style="width:22px;height:24px;position:absolute;left: 0; right: 10px;">', function(btn, map){
           var central = [29.749907, -95.358421];
           map.setView(central, 10.4);
       }).addTo(map);
 
       L.Control.geocoder({position: 'topleft'}).addTo(map);
+
+      L.easyButton('<h2>B</h2>', function(btn, map){
+        setPalette(2);
+      }).addTo(map);
+
+      function setPalette(num) {
+
+        colors = paletteB;
+
+        /*geojson = L.geoJson(no2Layer, {
+            style: style,
+            onEachFeature: onEachFeature
+        }).addTo(map);*/
+
+        updateImg();
+        img.addTo(map);
+
+        //map.setPaintProperty(layer.value, 'fill-color', color);
+        geojson.eachLayer(function (layer) {
+            layer.setStyle({
+              fillColor : getColor(layer.feature.properties.no2Perc, layer.feature.properties.demographicIndex),
+              weight: 0.5,
+              opacity: 1,
+              color: 'white',
+              dashArray: '0',
+              smoothFactor: 1,
+              fillOpacity: 0.7
+            })
+
+            layer.on({
+                mouseover: highlightFeature,
+                mouseout: resetHighlight,
+                click: zoomToFeature
+            });
+        });
+
+      }
+
 
     </script>
 
