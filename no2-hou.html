@@ -57,31 +57,28 @@
         /*display: inline-grid;*/
         grid-template-columns: auto auto auto;
         background-color: #FFFFFF;
-        padding: 30px;
+        padding: 30px 18px;
         margin: 40px 0;
+        bottom: 5px;
+        left: 5px
         position: relative;
         border-left: 50px solid #FFFFFF;
         border-bottom: 50px solid #FFFFFF;
-        padding-left: 10px;
-        padding-bottom: 10px;
+        /*padding-left: 10px;*/
+        /*padding-bottom: 10px;*/
         border-radius: 3px;
         box-shadow: 0 0 15px rgba(0,0,0,0.2);
         /* collapsible */
         display: inline-grid;
-        max-height: 0;
-        /*overflow: hidden;*/
-        transition: max-height 0.2s ease-out;
       }
       .grid-item {
         background-color: #FFFFFF;
         border: 1px solid #FFFFFF;
-        padding: 42px;
-        font-size: 30px;
+        padding: 40px;
         text-align: center;
       }
       .grid-container h3 {
         font: 14px/16px 'Poppins', Helvetica, sans-serif;
-        font-size: 1.8em;
         color: #000000;
         padding: 5px 10px;
         margin: 30px 0 15px 0;
@@ -92,10 +89,10 @@
         background: none;
         transform-origin: 0 0;
         transform: rotate(90deg);
+        font-size: 1.8em;
       }
       .grid-container h2 {
         font: 14px/16px 'Poppins', Helvetica, sans-serif;
-        font-size: 1.8em;
         color: #000000;
         padding: 0 10px;
         margin: 60px 10px 0 0;
@@ -105,6 +102,7 @@
         top: 257px;
         left: 0;
         background: none;
+        font-size: 1.8em;
       }
 
       .button {
@@ -140,31 +138,19 @@
           float: left;
       }
 
-      /* collapsible */
-
-      .collapsible {
-        position: relative;
-        background: #FFFFFF;
-        border-radius: 1px;
-        left: 10px;
-        bottom: 100px;
-        width: 120px;
-        height: 80px;
-        text-align: left;
+      .axis {
         font: 14px/16px 'Poppins', Helvetica, sans-serif;
-        color: '#000000';
-        display: block;
-        transition-duration: 0.4s;
-        z-index: 600;
-        line-height: 0px;
+        font-size: 0.001em;
+        color: #FFFFFF;
       }
+
+
 
     </style>
   </head>
   <body>
     <button class="button" id="button1" onclick="setPalette(1)"><h2>Palette 1</h2><i id="a0"></i><i id="a1"></i><i id="a2"></i><i id="a3"></i></button>
     <button class="button" id="button2" onclick="setPalette(2)" ><h2>Palette 2</h2><i id="b0"></i><i id="b1"></i><i id="b2"></i><i id="b3"></i></button>
-    <!-- <button type="button" class="collapsible" id="collapse1" onclick="toggleLegend()"  >Legend</button> -->
     <div id="map"></div>
     <script>
     //<img class="paletteIcon" src="paletteB.png">
@@ -327,13 +313,18 @@
       img.addTo(map);*/
 
       function updateImg() {
+
         var div = L.DomUtil.create('div', 'grid-container');
         div.id = "gridContainer";
         grades = [1, 40, 80];
         //div.innerHTML += '<img src="images/no2dLegend.png" alt="Legend" style="width:300px;height:300px;">';
-        div.innerHTML += "<h3>Nitrogen Dioxide Index</h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0]) + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1]) + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2]) + "\" id:\"c3\" ></div>";
+        div.innerHTML += "<h3 class='axis' >Nitrogen Dioxide Index</h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0]) + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1]) + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2]) + "\" id:\"c3\" ></div>";
         div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[0]) + "\" id:\"a2\"></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[1]) + "\" id:\"b2\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[2]) + "\" id:\"c2\" ></div>";
-        div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0]) + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1]) + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2]) + "\" id:\"c1\" ></div><h2>Demographic Index</h2>";
+        div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0]) + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1]) + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2]) + "\" id:\"c1\" ></div><h2 class='axis' >Demographic Index</h2>";
+
+
+        //<button type=\"button\" class=\"collapsible\" id=\"collapse1\" onclick=\"toggleLegend()\"  >
+
 
         var draggable = new L.Draggable(div);
         draggable.enable();
@@ -349,9 +340,9 @@
         div.id = "gridContainer";
         grades = [1, 40, 80];
         //div.innerHTML += '<img src="images/no2dLegend.png" alt="Legend" style="width:300px;height:300px;">';
-        div.innerHTML += "<h3>Nitrogen Dioxide Index</h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0]) + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1]) + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2]) + "\" id:\"c3\" ></div>";
+        div.innerHTML += "<h3 class='axis'>Nitrogen Dioxide Index</h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0]) + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1]) + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2]) + "\" id:\"c3\" ></div>";
         div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[0]) + "\" id:\"a2\"></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[1]) + "\" id:\"b2\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[2]) + "\" id:\"c2\" ></div>";
-        div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0]) + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1]) + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2]) + "\" id:\"c1\" ></div><h2>Demographic Index</h2>";
+        div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0]) + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1]) + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2]) + "\" id:\"c1\" ></div><h2 class='axis' >Demographic Index</h2>";
 
         var draggable = new L.Draggable(div);
         draggable.enable();
@@ -408,19 +399,16 @@
 
         /* collapsible */
 
-        function toggleLegend() {
+        /*function toggleLegend() {
           var x = document.getElementById("gridContainer");
-          /*if (x.style.display === "none") {
+          if (x.style.display === "none") {
             x.style.display = "inline-grid";
           } else {
             x.style.display = "none";
-          }*/
-          if (x.style.maxHeight){
-            x.style.maxHeight = null;
-          } else {
-            x.style.maxHeight = x.scrollHeight + "px";
           }
-        }
+        }*/
+
+
 
     </script>
 
