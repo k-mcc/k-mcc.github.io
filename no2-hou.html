@@ -23,6 +23,10 @@
 
   <script src="https://raw.githubusercontent.com/jerroydmoore/leaflet-button/b568e84f4e46167c4a8a8f640e2b192afdc34930/L.Control.Button.js"></script>
 
+  <!-- pie chart -->
+  <script src="https://cdn.anychart.com/releases/8.0.1/js/anychart-core.min.js"></script>
+  <script src="https://cdn.anychart.com/releases/8.0.1/js/anychart-pie.min.js"></script>
+
     <style>
       body { margin: 0; padding: 0; }
       #map { position: absolute; top: 0; bottom: 0; width: 100%; }
@@ -31,7 +35,7 @@
     <script src="https://k-mcc.github.io/no2HouData.js"></script>
     <style>
       .info {
-          height: 250px;
+          height: 550px;
           width: 284px;
           padding: 6px 8px;
           font: 14px/16px 'Poppins', Helvetica, sans-serif;
@@ -283,6 +287,7 @@
 
       info.onAdd = function (map) {
           this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+          //this._div.id = "infoBox";
           this.update();
           var draggable = new L.Draggable(this._div);
           draggable.enable();
@@ -294,6 +299,32 @@
           this._div.innerHTML = '<h2>NO<sub>2</sub> Equality Index</h2>' +  (props ?
               '<h3>NO<sub>2</sub> Index: ' + props.no2Perc + '</h3><br /><h3>Demographic Index: ' + props.demographicIndex + '</h3><br /><br /><h3>Tract #' + props.TRACT + '</h3>'
               : 'Hover over a census tract');
+
+              this._div.innerHTML += '<div id="infoBox" style="height: 300px" ><br /></div>';
+
+              var data = [
+                  {x: "White", value: (props ? props.pWhite : 0)},
+                  {x: "Black or African American", value: (props ? props.pBlackOrAfrAmer : 0)},
+                  {x: "American Indian and Alaska Native", value: (props ? props.pNativeAmer : 0)},
+                  {x: "Asian", value: (props ? props.pAsian : 0)},
+                  {x: "Hispanic", value: (props ? props.pHispanic : 0)}
+              ];
+
+              //this._div.innerHTML += (props ? props.pWhite : 'hi');
+
+              // create the chart
+              var chart = anychart.pie();
+
+              // set the chart title
+              chart.title("Population by Race");
+
+              // add the data
+              chart.data(data);
+
+              // display the chart in the container
+              chart.container('infoBox');
+              chart.draw();
+
       };
 
       info.addTo(map);
