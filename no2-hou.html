@@ -253,7 +253,7 @@
               layer.bringToFront();
           }
 
-          info.update(layer.feature.properties);
+          //info.update(layer.feature.properties);
       }
 
       function resetHighlight(e) {
@@ -265,7 +265,9 @@
       geojson = L.geoJson(no2Layer);
 
       function zoomToFeature(e) {
+          var layer = e.target;
           map.fitBounds(e.target.getBounds(), {top: 50000, bottom: 50000, left: 50000, right: 50000});
+          info.update(layer.feature.properties);
       }
 
       function onEachFeature(feature, layer) {
@@ -298,7 +300,7 @@
       info.update = function (props) {
           this._div.innerHTML = '<h2>NO<sub>2</sub> Equality Index</h2>' +  (props ?
               '<h3>NO<sub>2</sub> Index: ' + props.no2Perc + '</h3><br /><h3>Demographic Index: ' + props.demographicIndex + '</h3><br /><br /><h3>Tract #' + props.TRACT + '</h3>'
-              : 'Hover over a census tract');
+              : 'Click on a census tract');
 
               this._div.innerHTML += '<div id="infoBox" style="height: 300px" ><br /></div>';
 
