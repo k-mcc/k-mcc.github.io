@@ -54,7 +54,7 @@
       }
       /*grid*/
       .grid-container {
-        display: inline-grid;
+        /*display: inline-grid;*/
         grid-template-columns: auto auto auto;
         background-color: #FFFFFF;
         padding: 30px;
@@ -66,7 +66,11 @@
         padding-bottom: 10px;
         border-radius: 3px;
         box-shadow: 0 0 15px rgba(0,0,0,0.2);
-
+        /* collapsible */
+        display: inline-grid;
+        max-height: 0;
+        /*overflow: hidden;*/
+        transition: max-height 0.2s ease-out;
       }
       .grid-item {
         background-color: #FFFFFF;
@@ -112,7 +116,6 @@
         width: 120px;
         height: 80px;
         text-align: left;
-
         font: 14px/16px 'Poppins', Helvetica, sans-serif;
         color: '#000000';
         display: block;
@@ -137,11 +140,31 @@
           float: left;
       }
 
+      /* collapsible */
+
+      .collapsible {
+        position: relative;
+        background: #FFFFFF;
+        border-radius: 1px;
+        left: 10px;
+        bottom: 100px;
+        width: 120px;
+        height: 80px;
+        text-align: left;
+        font: 14px/16px 'Poppins', Helvetica, sans-serif;
+        color: '#000000';
+        display: block;
+        transition-duration: 0.4s;
+        z-index: 600;
+        line-height: 0px;
+      }
+
     </style>
   </head>
   <body>
     <button class="button" id="button1" onclick="setPalette(1)"><h2>Palette 1</h2><i id="a0"></i><i id="a1"></i><i id="a2"></i><i id="a3"></i></button>
     <button class="button" id="button2" onclick="setPalette(2)" ><h2>Palette 2</h2><i id="b0"></i><i id="b1"></i><i id="b2"></i><i id="b3"></i></button>
+    <!-- <button type="button" class="collapsible" id="collapse1" onclick="toggleLegend()"  >Legend</button> -->
     <div id="map"></div>
     <script>
     //<img class="paletteIcon" src="paletteB.png">
@@ -263,12 +286,12 @@
           });
       }
 
-      var violet = L.geoJson(no2Layer, {
+      var layer = L.geoJson(no2Layer, {
           style: style,
           onEachFeature: onEachFeature
       }).addTo(map);
 
-      geojson = violet;
+      geojson = layer;
 
       var info = L.control();
 
@@ -381,6 +404,22 @@
               fillOpacity: 0.9
             })
           });
+        }
+
+        /* collapsible */
+
+        function toggleLegend() {
+          var x = document.getElementById("gridContainer");
+          /*if (x.style.display === "none") {
+            x.style.display = "inline-grid";
+          } else {
+            x.style.display = "none";
+          }*/
+          if (x.style.maxHeight){
+            x.style.maxHeight = null;
+          } else {
+            x.style.maxHeight = x.scrollHeight + "px";
+          }
         }
 
     </script>
