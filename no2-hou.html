@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Houston 2+ Maps</title>
+    <title>Houston's NO2 Equality Index</title>
     <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
@@ -241,17 +241,43 @@
       function highlightFeature(e) {
           var layer = e.target;
 
-          /*layer.setStyle({
-            weight: 5,
-            color: getColor(layer.feature.properties.no2Perc, layer.feature.properties.demographicIndex),
-            //fill: false
-            //fillColor: '#FFFFFF'
-            fillOpacity: 0.5
-          });
+          if ((layer.feature.properties.GEOID) != (clickedTract)) { //if not a clicked tract
 
-          if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-              layer.bringToFront();
-          }*/
+            layer.setStyle({
+              weight: 5,
+              color: getColor(layer.feature.properties.no2Perc, layer.feature.properties.demographicIndex),
+              //fill: false
+              //fillColor: '#FFFFFF'
+              fillOpacity: 0.5
+            });
+
+            if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+                layer.bringToFront();
+            }
+
+          }
+          //info.update(layer.feature.properties);
+      }
+
+      function resetHighlight(e) {
+        var layer = e.target;
+        if ((layer.feature.properties.GEOID) != (clickedTract)) {
+          geojson.resetStyle(e.target);
+        }
+        //info.update();
+      }
+
+      var geojson;
+      geojson = L.geoJson(no2Layer);
+
+      var clickedTract = "";
+      var previousTarget = "";
+
+      function zoomToFeature(e) {
+          var layer = e.target;
+
+          map.fitBounds(e.target.getBounds(), {top: 50000000000000000000000, bottom: 50000000000000000000000, left: 50000000000000000000000, right: 50000000000000000000000});
+
 
           layer.setStyle({
             weight: 5,
@@ -266,20 +292,12 @@
           }
 
           info.update(layer.feature.properties);
-      }
 
-      function resetHighlight(e) {
-          geojson.resetStyle(e.target);
-          //info.update();
-      }
+          clickedTract = layer.feature.properties.GEOID;
 
-      var geojson;
-      geojson = L.geoJson(no2Layer);
+          if ((previousTarget != "") && (previousTarget != e)) resetHighlight(previousTarget);
 
-      function zoomToFeature(e) {
-          //var layer = e.target;
-          map.fitBounds(e.target.getBounds(), {top: 50000, bottom: 50000, left: 50000, right: 50000});
-          //info.update(layer.feature.properties);
+          previousTarget = e;
 
       }
 
@@ -402,7 +420,7 @@
 
       L.easyButton('<img src="images/expand.png" alt="Expand" style="width:22px;height:24px;position:absolute;left: 0; right: 10px;">', function(btn, map){
           var central = [29.749907, -95.358421];
-          map.setView(central, 10.4);
+          map.setView(map.getCenter(), 12);
       }).addTo(map);
 
       L.Control.geocoder({position: 'topleft'}).addTo(map);
