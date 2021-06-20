@@ -241,7 +241,7 @@
       function highlightFeature(e) {
           var layer = e.target;
 
-          layer.setStyle({
+          /*layer.setStyle({
             weight: 5,
             color: getColor(layer.feature.properties.no2Perc, layer.feature.properties.demographicIndex),
             //fill: false
@@ -251,24 +251,7 @@
 
           if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
               layer.bringToFront();
-          }
-
-          //info.update(layer.feature.properties);
-      }
-
-      function resetHighlight(e) {
-          geojson.resetStyle(e.target);
-          //info.update();
-      }
-
-      var geojson;
-      geojson = L.geoJson(no2Layer);
-
-      function zoomToFeature(e) {
-          var layer = e.target;
-          map.fitBounds(e.target.getBounds(), {top: 50000, bottom: 50000, left: 50000, right: 50000});
-          info.update(layer.feature.properties);
-
+          }*/
 
           layer.setStyle({
             weight: 5,
@@ -281,6 +264,22 @@
           if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
               layer.bringToFront();
           }
+
+          info.update(layer.feature.properties);
+      }
+
+      function resetHighlight(e) {
+          geojson.resetStyle(e.target);
+          //info.update();
+      }
+
+      var geojson;
+      geojson = L.geoJson(no2Layer);
+
+      function zoomToFeature(e) {
+          //var layer = e.target;
+          map.fitBounds(e.target.getBounds(), {top: 50000, bottom: 50000, left: 50000, right: 50000});
+          //info.update(layer.feature.properties);
 
       }
 
