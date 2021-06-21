@@ -35,7 +35,7 @@
     <script src="https://k-mcc.github.io/no2HouData.js"></script>
     <style>
       .info {
-          height: 550px;
+          height: 700px;
           width: 284px;
           padding: 6px 8px;
           font: 14px/16px 'Poppins', Helvetica, sans-serif;
@@ -330,10 +330,10 @@
       // method that we will use to update the control based on feature properties passed
       info.update = function (props) {
           this._div.innerHTML = '<h2>NO<sub>2</sub> Equality Index</h2>' +  (props ?
-              '<h3>NO<sub>2</sub> Index: ' + props.no2Perc + '</h3><br /><h3>Demographic Index: ' + props.demographicIndex + '</h3><br /><br /><h3>Tract #' + props.TRACT + '</h3>'
+              '<h3>NO<sub>2</sub> Index: ' + props.no2Perc + '</h3><br /><h3>Demographic Index: ' + props.demographicIndex + '</h3><br /><br /><h3>Tract #' + props.TRACT + '</h3><br /><h3>Population by Race</h3>'
               : 'Click on a census tract');
 
-              this._div.innerHTML += '<div id="infoBox" style="height: 300px" ><br /></div>';
+              this._div.innerHTML += '<div id="infoBox" style="height: 400px" ><br /></div>';
 
               var data = [
                   {x: "White", value: (props ? props.popWhite : 0)},
@@ -348,15 +348,14 @@
               // create the chart
               var chart = anychart.pie();
 
-              // set the chart title
-              chart.title("Population by Race");
-
               // add the data
               chart.data(data);
 
               // display the chart in the container
               chart.container('infoBox');
               chart.draw();
+              chart.legend().itemsLayout("vertical");
+              //chart.sort("desc");
 
       };
 
