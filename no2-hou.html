@@ -226,12 +226,18 @@
                         1; //low
       }
 
+      function getOutlineColor(x) {
+        return x >= 90  ? '#FFFC00' :
+                          '#FFFFFF';
+      }
+
       function style(feature) {
+
         return {
             fillColor: getColor(feature.properties.no2Perc, feature.properties.demographicIndex),
             weight: 0.5,
             opacity: 1,
-            color: 'white',
+            color: 'white', // outline color
             dashArray: '0',
             smoothFactor: 1,
             fillOpacity: 0.9
