@@ -272,11 +272,15 @@
 
       var clickedTract = "";
       var previousTarget = "";
+      var clickEvent = "";
 
       function zoomToFeature(e) {
           var layer = e.target;
+          clickEvent = e;
 
-          map.fitBounds(e.target.getBounds(), {top: 50000000000000000000000, bottom: 50000000000000000000000, left: 50000000000000000000000, right: 50000000000000000000000});
+          //map.fitBounds(e.target.getBounds(), {top: 50000000000000000000000, bottom: 50000000000000000000000, left: 50000000000000000000000, right: 50000000000000000000000});
+          //map.fitBounds(bounds, {padding: []})
+          map.fitBounds(e.target.getBounds(), {padding: [100, 100]});
 
 
           layer.setStyle({
@@ -330,7 +334,7 @@
       // method that we will use to update the control based on feature properties passed
       info.update = function (props) {
           this._div.innerHTML = '<h2>NO<sub>2</sub> Equality Index</h2>' +  (props ?
-              '<h3>NO<sub>2</sub> Index: ' + props.no2Perc + '</h3><br /><h3>Demographic Index: ' + props.demographicIndex + '</h3><br /><br /><h3>Tract #' + props.TRACT + '</h3><br /><h3>Population by Race</h3>'
+              '<h3>NO<sub>2</sub> Index: ' + props.no2Perc + '</h3><br /><h3>Demographic Index: ' + props.demographicIndex + '</h3><br /><h3>Tract #' + props.TRACT + '</h3><br /><h3>Population by Race</h3>'
               : 'Click on a census tract');
 
               this._div.innerHTML += '<div id="infoBox" style="height: 400px" ><br /></div>';
@@ -360,20 +364,6 @@
       };
 
       info.addTo(map);
-
-      /*var img = L.control({position: 'bottomright'});
-
-      img.onAdd = function (map) {
-
-        var div = L.DomUtil.create('div', 'img');
-
-        //div.innerHTML += '<img src="images/no2dLegend.png" alt="Legend" style="width:300px;height:300px;">';
-        div.innerHTML += "<h2>Legend coming soon</h2><br /><br />Color palette is temporary";
-
-        return div;
-      }//"#f3f3f3 url('img_tree.png') no-repeat right top";
-
-      img.addTo(map);*/
 
       function updateImg() {
 
@@ -458,6 +448,9 @@
               fillOpacity: 0.9
             })
           });
+
+          zoomToFeature(clickEvent);
+
         }
 
         /* collapsible */
