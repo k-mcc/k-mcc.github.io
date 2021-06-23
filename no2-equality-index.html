@@ -231,13 +231,13 @@ crossorigin=""></script>
   var clickEvent;
   var img = L.control({position: 'bottomleft'});;
   var info = L.control();
-  var expandButton = L.easyButton('<img src="images/expand.png" alt="Expand" style="width:22px;height:24px;position:absolute;left: 0; right: 10px;">', function(btn, map){
+  var expandButton = L.easyButton('<img src="images/expand.png" alt="Expand" style="width:22px;height:24px;position:absolute;left: -1; right: -3px; top: 1px;">', function(btn, map){
       var central = [29.749907, -95.358421];
       map.setView(map.getCenter(), 12);
   });
   var searchBar = L.Control.geocoder({position: 'topleft'});
   searchBar.addTo(map);
-  var countryViewButton = L.easyButton('<img src="images/countryView.png" alt="Zoom out to country" style="width:24px;height:20px;position:absolute;left: -1; right: -3px; top: 2px;">', function(btn, map){
+  var countryViewButton = L.easyButton('<img src="images/countryView.png" alt="Zoom out to country" style="width:24px;height:20px;position:absolute;left: -1; right: -3px; top: 4px; bottom: 0px;">', function(btn, map){
       var central = ([38.449907, -98.358421]);
       map.options.minZoom = countryMin;
       map.options.maxZoom = countryMax;
@@ -261,6 +261,8 @@ crossorigin=""></script>
     document.getElementById("button2").style.display = "block";
     document.getElementById("button1").style.backgroundColor = "#5B616B";
     document.getElementById("button1").style.color = "#FFFFFF";
+    document.getElementById("button2").style.backgroundColor = "#FFFFFF";
+    document.getElementById("button2").style.color = "#000000";
 
     expandButton.addTo(map);
     countryViewButton.addTo(map);
@@ -491,6 +493,7 @@ crossorigin=""></script>
         //map.fitBounds(e.target.getBounds(), {top: 50000000000000000000000, bottom: 50000000000000000000000, left: 50000000000000000000000, right: 50000000000000000000000});
         //map.fitBounds(bounds, {padding: []})
         if (zoom == true) map.fitBounds(e.target.getBounds(), {padding: [100, 100]});
+        zoom = true;
 
 
         layer.setStyle({
