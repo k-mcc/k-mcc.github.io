@@ -59,6 +59,23 @@ crossorigin=""></script>
         margin: 0 0 5px;
         color: #000000;
     }
+
+    .donut-legend {
+      position: absolute;
+      left: 10px;
+      bottom: 10px;
+      width: 300px;
+      height: 200px;
+      font: 14px/16px 'Poppins', Helvetica, sans-serif;
+      color: '#000000';
+      z-index: 700;
+      padding: 5px;
+      display: block;
+      background: rgba(255,255,255);
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      border-radius: 3px;
+    }
+
     .img {
         color: #555;
         background: white;
@@ -126,7 +143,6 @@ crossorigin=""></script>
       text-align: left;
       font: 14px/16px 'Poppins', Helvetica, sans-serif;
       color: '#000000';
-
       transition-duration: 0.4s;
       z-index: 600;
       line-height: 0px;
@@ -148,6 +164,7 @@ crossorigin=""></script>
   </style>
 </head>
 <body>
+  <div class="donut-legend" id="donutLegend"><h2>Donut Legend</h2></div>
   <button class="button" id="button1" onclick="setPalette(1)"><h2>Palette 1</h2><i id="a0"></i><i id="a1"></i><i id="a2"></i><i id="a3"></i></button>
   <button class="button" id="button2" onclick="setPalette(2)" ><h2>Palette 2</h2><i id="b0"></i><i id="b1"></i><i id="b2"></i><i id="b3"></i></button>
   <div id="map"></div>
@@ -173,6 +190,7 @@ crossorigin=""></script>
   var wdcName = "Washington, D.C.";
   var hou = addCityMarker(houName, [29.749907, -95.358421], 161,247,278,154,840); //plots Houston's city marker
   var wdc = addCityMarker(wdcName, [38.8950, -77.0], 16,76,69,18,179); //plots DC's city marker
+
   //var cities = L.layerGroup(hou, wdc);
 
   function addCityMarker(name, coords, r1, r2, r3, r4, numTracts) { // plots a clickable marker, given a city's name and central coordinates. -- Could also specify min zoom level if needed.
@@ -229,7 +247,7 @@ crossorigin=""></script>
   var clickedTract;
   var previousTarget;
   var clickEvent;
-  var img = L.control({position: 'bottomleft'});;
+  var img = L.control({position: 'bottomleft'});
   var info = L.control();
   var expandButton = L.easyButton('<img src="images/expand.png" alt="Expand" style="width:22px;height:24px;position:absolute;left: -1; right: -3px; top: 1px;">', function(btn, map){
       var central = [29.749907, -95.358421];
@@ -263,6 +281,7 @@ crossorigin=""></script>
     document.getElementById("button1").style.color = "#FFFFFF";
     document.getElementById("button2").style.backgroundColor = "#FFFFFF";
     document.getElementById("button2").style.color = "#000000";
+    document.getElementById("donutLegend").style.display = "none";
 
     expandButton.addTo(map);
     countryViewButton.addTo(map);
@@ -327,6 +346,7 @@ crossorigin=""></script>
         map.removeLayer(dc);
         dcIsOn = false;
       }
+      document.getElementById("donutLegend").style.display = "block";
       document.getElementById("button1").style.display = "none";
       document.getElementById("button2").style.display = "none";
 
