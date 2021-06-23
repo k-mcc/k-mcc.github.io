@@ -120,7 +120,7 @@ crossorigin=""></script>
       background: #FFFFFF;
       border-radius: 1px;
       left: 10px;
-      top: 200px;
+      top: 230px;
       width: 120px;
       height: 80px;
       text-align: left;
@@ -139,6 +139,12 @@ crossorigin=""></script>
         float: left;
     }
 
+    .axis {
+        font: 14px/16px 'Poppins', Helvetica, sans-serif;
+        font-size: 0.001em;
+        color: #FFFFFF;
+      }
+
   </style>
 </head>
 <body>
@@ -149,6 +155,11 @@ crossorigin=""></script>
 
   var mapboxAccessToken = 'pk.eyJ1Ijoia2F0ZW1hcCIsImEiOiJja3A0NWV0ZTkwNjBtMm5vdWxzcXR6dWxjIn0.7rYO_pPmtvwuWUb0cG3QXQ';
   var map = L.map('map').setView([38.449907, -98.358421], 4.5);
+  // set initial zoom limits for country view
+  var countryMin = 0;
+  var countryMax = 7;
+  map.options.minZoom = countryMin;
+  map.options.maxZoom = countryMax;
 
   var tileL = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + mapboxAccessToken, {
       id: 'mapbox/light-v9',
@@ -158,9 +169,10 @@ crossorigin=""></script>
   }).addTo(map);
 
   // city markers
-
-  var hou = addCityMarker("Houston", [29.749907, -95.358421], 161,247,278,154,840); //plots Houston's city marker
-  var wdc = addCityMarker("Washington, D.C.", [38.8950, -77.0], 16,76,69,18,179); //plots DC's city marker
+  var houName = "Houston";
+  var wdcName = "Washington, D.C.";
+  var hou = addCityMarker(houName, [29.749907, -95.358421], 161,247,278,154,840); //plots Houston's city marker
+  var wdc = addCityMarker(wdcName, [38.8950, -77.0], 16,76,69,18,179); //plots DC's city marker
   //var cities = L.layerGroup(hou, wdc);
 
   function addCityMarker(name, coords, r1, r2, r3, r4, numTracts) { // plots a clickable marker, given a city's name and central coordinates. -- Could also specify min zoom level if needed.
@@ -184,11 +196,12 @@ crossorigin=""></script>
 
     var city = L.marker(coords, {
        icon: donutIcon,
-       title: name,
-       maxZoom: 12
+       title: name
     }).addTo(map);
 
     city.on('click', function(e){
+        map.options.minZoom = 10;
+        map.options.maxZoom = 30;
         map.setView(e.latlng, 12);
         addChoropleth(name);
     });
@@ -199,14 +212,13 @@ crossorigin=""></script>
 
   // set zoom levels
   map.on('zoom', function () {
-    if (map.getZoom() < 12) { // display city markers
+    if (map.getZoom() < 10) { // display city markers
       map.addLayer(hou);
       map.addLayer(wdc);
     }
     else { // display bivariate choropleths
       map.removeLayer(hou);
       map.removeLayer(wdc);
-      map.removeLayer(houLayer);
     }
   });
 
@@ -219,33 +231,51 @@ crossorigin=""></script>
   var clickEvent;
   var img = L.control({position: 'bottomleft'});;
   var info = L.control();
+  var expandButton = L.easyButton('<img src="images/expand.png" alt="Expand" style="width:22px;height:24px;position:absolute;left: 0; right: 10px;">', function(btn, map){
+      var central = [29.749907, -95.358421];
+      map.setView(map.getCenter(), 12);
+  });
+  var searchBar = L.Control.geocoder({position: 'topleft'});
+  searchBar.addTo(map);
+  var countryViewButton = L.easyButton('<img src="images/countryView.png" alt="Zoom out to country" style="width:24px;height:20px;position:absolute;left: -1; right: -3px; top: 2px;">', function(btn, map){
+      var central = ([38.449907, -98.358421]);
+      map.options.minZoom = countryMin;
+      map.options.maxZoom = countryMax;
+      map.setView(central, 4.5);
+      removeChoroplethControls();
+  });
+  var zoom = true;
+  var houston; // Houston's choropleth layer
+  var dc; // D.C.'s choropleth layer
+  var houstonIsOn;
+  var dcIsOn;
 
   function addChoropleth(cityName) {
     clickedTract = "";
     previousTarget = "";
     clickEvent = "";
-
-    colors  = paletteA;
+    zoom = true;
+    colors = paletteA;
 
     document.getElementById("button1").style.display = "block";
     document.getElementById("button2").style.display = "block";
     document.getElementById("button1").style.backgroundColor = "#5B616B";
     document.getElementById("button1").style.color = "#FFFFFF";
 
-    L.easyButton('<img src="images/expand.png" alt="Expand" style="width:22px;height:24px;position:absolute;left: 0; right: 10px;">', function(btn, map){
-        var central = [29.749907, -95.358421];
-        map.setView(map.getCenter(), 12);
-    }).addTo(map);
-    L.Control.geocoder({position: 'topleft'}).addTo(map);
+    expandButton.addTo(map);
+    countryViewButton.addTo(map);
 
     if (cityName == "Houston") { // Add Houston layer
+      houstonIsOn = true;
 
       geojson = L.geoJson(houLayer);
 
-      var layer = L.geoJson(houLayer, {
+      houston = L.geoJson(houLayer, {
           style: style,
           onEachFeature: onEachFeature
-      }).addTo(map);
+      });
+
+      var layer = houston.addTo(map);
 
       geojson = layer;
 
@@ -254,18 +284,50 @@ crossorigin=""></script>
 
     }
     else if (cityName == "Washington, D.C.") {  // Add DC layer
+      dcIsOn = true;
+
       geojson = L.geoJson(dcLayer);
 
-      var layer = L.geoJson(dcLayer, {
+      dc = L.geoJson(dcLayer, {
           style: style,
           onEachFeature: onEachFeature
-      }).addTo(map);
+      });
+      var layer = dc.addTo(map);
 
       geojson = layer;
 
       img.addTo(map);
       info.addTo(map);
     }
+  }
+
+  function removeChoroplethControls() {
+      map.removeControl(expandButton);
+      map.removeControl(countryViewButton);
+      var legend =document.getElementById("gridContainer");
+      legend.style.display = "none";
+      //legend.style.maxHeight = null;
+      var squares = document.getElementsByClassName("grid-item");
+      for (i = 0; i < squares.length; i++) {
+        squares[i].style.display = "none";
+      }
+      var axes = document.getElementsByClassName("axis");
+      for (i = 0; i < axes.length; i++) {
+        axes[i].style.display = "none";
+      }
+      var infoBoxDiv =document.getElementById("info");
+      infoBoxDiv.style.display = "none";
+      if (houstonIsOn) { // Remove Houston layer
+        map.removeLayer(houston);
+        houstonIsOn = false;
+      }
+      if (dcIsOn) { // Remove DC layer
+        map.removeLayer(dc);
+        dcIsOn = false;
+      }
+      document.getElementById("button1").style.display = "none";
+      document.getElementById("button2").style.display = "none";
+
   }
 
   // Joshua Stevens
@@ -286,6 +348,7 @@ crossorigin=""></script>
   img.onAdd = function (map) {
     var div = L.DomUtil.create('div', 'grid-container');
     div.id = "gridContainer";
+    div.style.display = "inline-grid";
     grades = [1, 40, 80];
     //div.innerHTML += '<img src="images/no2dLegend.png" alt="Legend" style="width:300px;height:300px;">';
     div.innerHTML += "<h3 class='axis'>Nitrogen Dioxide Index</h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0]) + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1]) + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2]) + "\" id:\"c3\" ></div>";
@@ -300,7 +363,7 @@ crossorigin=""></script>
 
   info.onAdd = function (map) {
       this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
-      //this._div.id = "infoBox";
+      this._div.id = "info";
       this.update();
       var draggable = new L.Draggable(this._div);
       draggable.enable();
@@ -427,7 +490,7 @@ crossorigin=""></script>
 
         //map.fitBounds(e.target.getBounds(), {top: 50000000000000000000000, bottom: 50000000000000000000000, left: 50000000000000000000000, right: 50000000000000000000000});
         //map.fitBounds(bounds, {padding: []})
-        map.fitBounds(e.target.getBounds(), {padding: [100, 100]});
+        if (zoom == true) map.fitBounds(e.target.getBounds(), {padding: [100, 100]});
 
 
         layer.setStyle({
@@ -470,7 +533,7 @@ crossorigin=""></script>
     function updateImg() {
 
       var div = L.DomUtil.create('div', 'grid-container');
-      div.id = "gridContainer";
+      div.id = "inline-grid";
       grades = [1, 40, 80];
       //div.innerHTML += '<img src="images/no2dLegend.png" alt="Legend" style="width:300px;height:300px;">';
       div.innerHTML += "<h3 class='axis' >Nitrogen Dioxide Index</h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0]) + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1]) + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2]) + "\" id:\"c3\" ></div>";
@@ -536,9 +599,9 @@ crossorigin=""></script>
             fillOpacity: 0.9
           })
         });
-
+        zoom = false;
         zoomToFeature(clickEvent);
-
+        zoom = true;
   }
 
 </script>
