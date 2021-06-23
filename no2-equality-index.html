@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Nitrogen Dioxide Equality Index</title>
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+ integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+ crossorigin=""/>
+ <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+crossorigin=""></script>
+<!-- bivariate choropleths -->
+<!-- font -->
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+<!-- easy button -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">
+<script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
+<!-- search Bar -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+<!-- L.Control.Button -->
+<script src="https://raw.githubusercontent.com/jerroydmoore/leaflet-button/b568e84f4e46167c4a8a8f640e2b192afdc34930/L.Control.Button.js"></script>
+<!-- data files -->
+<script src="https://k-mcc.github.io/no2HouData.js"></script> <!-- Houston data -->
+<script src="https://k-mcc.github.io/no2WithDemIndex.js"></script> <!-- D.C. data -->
+<!-- pie chart -->
+<script src="https://cdn.anychart.com/releases/8.0.1/js/anychart-core.min.js"></script>
+<script src="https://cdn.anychart.com/releases/8.0.1/js/anychart-pie.min.js"></script>
+
+  <style>
+    body { margin: 0; padding: 0; }
+    #map {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+    }
+    /* city markers */
+    .cityMarker {
+      position: absolute;
+    }
+
+    /* bivariate choropleths */
+
+    .info {
+        height: 700px;
+        width: 284px;
+        padding: 6px 8px;
+        font: 14px/16px 'Poppins', Helvetica, sans-serif;
+        /*font-family: 'Poppins', sans-serif;*/
+        background: white;
+        background: rgba(255,255,255);
+        box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        border-radius: 3px;
+    }
+    .info h2 {
+        margin: 0 0 5px;
+        color: #000000;
+    }
+    .img {
+        color: #555;
+        background: white;
+        background: rgba(255,255,255);
+        box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        border-radius: 3px;
+    }
+    /*grid*/
+    .grid-container {
+      grid-template-columns: auto auto auto;
+      background-color: #FFFFFF;
+      padding: 30px 18px;
+      margin: 40px 0;
+      bottom: 5px;
+      left: 5px
+      position: relative;
+      border-left: 50px solid #FFFFFF;
+      border-bottom: 50px solid #FFFFFF;
+      border-radius: 3px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      display: inline-grid;
+    }
+    .grid-item {
+      background-color: #FFFFFF;
+      border: 1px solid #FFFFFF;
+      padding: 40px;
+      text-align: center;
+    }
+    .grid-container h3 {
+      font: 14px/16px 'Poppins', Helvetica, sans-serif;
+      color: #000000;
+      padding: 5px 10px;
+      margin: 30px 0 15px 0;
+      line-height: 24px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background: none;
+      transform-origin: 0 0;
+      transform: rotate(90deg);
+      font-size: 1.8em;
+    }
+    .grid-container h2 {
+      font: 14px/16px 'Poppins', Helvetica, sans-serif;
+      color: #000000;
+      padding: 0 10px;
+      margin: 60px 10px 0 0;
+      line-height: 2px;
+      position: absolute;
+      bottom: 0;
+      top: 257px;
+      left: 0;
+      background: none;
+      font-size: 1.8em;
+    }
+
+    .button {
+      position: relative;
+      background: #FFFFFF;
+      border-radius: 1px;
+      left: 10px;
+      top: 200px;
+      width: 120px;
+      height: 80px;
+      text-align: left;
+      font: 14px/16px 'Poppins', Helvetica, sans-serif;
+      color: '#000000';
+
+      transition-duration: 0.4s;
+      z-index: 600;
+      line-height: 0px;
+      display: none;
+    }
+
+    i {
+        width: 25px;
+        height: 30px;
+        float: left;
+    }
+
+  </style>
+</head>
+<body>
+  <button class="button" id="button1" onclick="setPalette(1)"><h2>Palette 1</h2><i id="a0"></i><i id="a1"></i><i id="a2"></i><i id="a3"></i></button>
+  <button class="button" id="button2" onclick="setPalette(2)" ><h2>Palette 2</h2><i id="b0"></i><i id="b1"></i><i id="b2"></i><i id="b3"></i></button>
+  <div id="map"></div>
+<script>
+
+  var mapboxAccessToken = 'pk.eyJ1Ijoia2F0ZW1hcCIsImEiOiJja3A0NWV0ZTkwNjBtMm5vdWxzcXR6dWxjIn0.7rYO_pPmtvwuWUb0cG3QXQ';
+  var map = L.map('map').setView([38.449907, -98.358421], 4.5);
+
+  var tileL = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + mapboxAccessToken, {
+      id: 'mapbox/light-v9',
+      attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+      tileSize: 512,
+      zoomOffset: -1
+  }).addTo(map);
+
+  // city markers
+
+  var hou = addCityMarker("Houston", [29.749907, -95.358421], 161,247,278,154,840); //plots Houston's city marker
+  var wdc = addCityMarker("Washington, D.C.", [38.8950, -77.0], 16,76,69,18,179); //plots DC's city marker
+  //var cities = L.layerGroup(hou, wdc);
+
+  function addCityMarker(name, coords, r1, r2, r3, r4, numTracts) { // plots a clickable marker, given a city's name and central coordinates. -- Could also specify min zoom level if needed.
+    var sizeFactor = numTracts*3;
+    var styleStr = "";
+    styleStr += "height: " + (r1/sizeFactor)*100 + "px; ";
+    styleStr += "width: " + (r1/sizeFactor)*100 + "px; ";
+    styleStr += "border-radius: 50%; background-color: #E81D26; ";
+    styleStr += "border: " + (r2/sizeFactor)*100 + "px solid #FFF81F; ";
+    var boxShadow = "box-shadow: 0 0 0 ";
+    boxShadow += (r3/sizeFactor)*100 + "px #5EC2EF, 0 0 0 ";
+    boxShadow += ((r3/sizeFactor)*100 + (r4/sizeFactor)*100) + "px #0FB223; \"";
+    styleStr += boxShadow;
+
+    var htmlStr = "<div id='donut' style='" + styleStr + "' ></div>";
+
+    var donutIcon = L.divIcon({
+      className: 'cityMarker',
+      html: htmlStr
+    });
+
+    var city = L.marker(coords, {
+       icon: donutIcon,
+       title: name,
+       maxZoom: 12
+    }).addTo(map);
+
+    city.on('click', function(e){
+        map.setView(e.latlng, 12);
+        addChoropleth(name);
+    });
+
+    return city;
+
+  }
+
+  // set zoom levels
+  map.on('zoom', function () {
+    if (map.getZoom() < 12) { // display city markers
+      map.addLayer(hou);
+      map.addLayer(wdc);
+    }
+    else { // display bivariate choropleths
+      map.removeLayer(hou);
+      map.removeLayer(wdc);
+      map.removeLayer(houLayer);
+    }
+  });
+
+  // bivariate choropleths
+
+  var colors;
+  var geojson;
+  var clickedTract;
+  var previousTarget;
+  var clickEvent;
+  var img = L.control({position: 'bottomleft'});;
+  var info = L.control();
+
+  function addChoropleth(cityName) {
+    clickedTract = "";
+    previousTarget = "";
+    clickEvent = "";
+
+    colors  = paletteA;
+
+    document.getElementById("button1").style.display = "block";
+    document.getElementById("button2").style.display = "block";
+    document.getElementById("button1").style.backgroundColor = "#5B616B";
+    document.getElementById("button1").style.color = "#FFFFFF";
+
+    L.easyButton('<img src="images/expand.png" alt="Expand" style="width:22px;height:24px;position:absolute;left: 0; right: 10px;">', function(btn, map){
+        var central = [29.749907, -95.358421];
+        map.setView(map.getCenter(), 12);
+    }).addTo(map);
+    L.Control.geocoder({position: 'topleft'}).addTo(map);
+
+    if (cityName == "Houston") { // Add Houston layer
+
+      geojson = L.geoJson(houLayer);
+
+      var layer = L.geoJson(houLayer, {
+          style: style,
+          onEachFeature: onEachFeature
+      }).addTo(map);
+
+      geojson = layer;
+
+      img.addTo(map);
+      info.addTo(map);
+
+    }
+    else if (cityName == "Washington, D.C.") {  // Add DC layer
+      geojson = L.geoJson(dcLayer);
+
+      var layer = L.geoJson(dcLayer, {
+          style: style,
+          onEachFeature: onEachFeature
+      }).addTo(map);
+
+      geojson = layer;
+
+      img.addTo(map);
+      info.addTo(map);
+    }
+  }
+
+  // Joshua Stevens
+  var paletteA = ['#E8E8E8', '#ACE4E4', '#5AC8C8', '#DFB0D6', '#A5ADD3', '#5698B9', '#BE64AC', '#8C62AA', '#3B4994'];
+  for (var i = 0; i < 4; i++) {
+    var corners = [0, 2, 6, 8];
+    var idStr = "a" + i;
+    document.getElementById(idStr).style.background = paletteA[corners[i]];
+  }
+  // gridA.png option 2
+  var paletteB = ['#F3F3F3', '#B4D3E1', '#509DC2', '#F3E6B3', '#B3B3B3', '#376387', '#F3B300', '#B36600', '#000000'];
+  for (var i = 0; i < 4; i++) {
+    var corners = [0, 2, 6, 8];
+    var idStr = "b" + i;
+    document.getElementById(idStr).style.background = paletteB[corners[i]];
+  }
+
+  img.onAdd = function (map) {
+    var div = L.DomUtil.create('div', 'grid-container');
+    div.id = "gridContainer";
+    grades = [1, 40, 80];
+    //div.innerHTML += '<img src="images/no2dLegend.png" alt="Legend" style="width:300px;height:300px;">';
+    div.innerHTML += "<h3 class='axis'>Nitrogen Dioxide Index</h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0]) + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1]) + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2]) + "\" id:\"c3\" ></div>";
+    div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[0]) + "\" id:\"a2\"></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[1]) + "\" id:\"b2\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[2]) + "\" id:\"c2\" ></div>";
+    div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0]) + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1]) + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2]) + "\" id:\"c1\" ></div><h2 class='axis' >Demographic Index</h2>";
+
+    var draggable = new L.Draggable(div);
+    draggable.enable();
+
+    return div;
+  }//"#f3f3f3 url('img_tree.png') no-repeat right top";
+
+  info.onAdd = function (map) {
+      this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+      //this._div.id = "infoBox";
+      this.update();
+      var draggable = new L.Draggable(this._div);
+      draggable.enable();
+      return this._div;
+  };
+
+  info.update = function (props) {
+      this._div.innerHTML = '<h2>NO<sub>2</sub> Equality Index</h2>' +  (props ?
+          '<h3>NO<sub>2</sub> Index: ' + props.no2Perc + '</h3><br /><h3>Demographic Index: ' + props.demographicIndex + '</h3><br /><h3>Tract #' + props.TRACT + '</h3><br />'
+          : 'Click on a census tract');
+
+          this._div.innerHTML += '<div id="infoBox" style="height: 400px" ><br /></div>';
+
+          var data = [
+              {x: "White", value: (props ? props.popWhite : 0)},
+              {x: "Black or African American", value: (props ? props.popBlackOrAfrAmer : 0)},
+              {x: "American Indian and Alaska Native", value: (props ? props.popNativeAmer : 0)},
+              {x: "Asian", value: (props ? props.popAsian : 0)},
+              {x: "Hispanic", value: (props ? props.popHispanic : 0)}
+          ];
+
+          //this._div.innerHTML += (props ? props.pWhite : 'hi');
+
+          // create the chart
+          var chart = anychart.pie();
+
+          // add the data
+          chart.data(data);
+
+          // display the chart in the container
+          chart.container('infoBox');
+          chart.draw();
+          chart.legend().itemsLayout("vertical");
+          //chart.sort("desc");
+  };
+
+  /*
+  [ a3 ]  [ b3 ]  [ c3 ]
+
+  [ a2 ]  [ b2 ]  [ c2 ]
+
+  [ a1 ]  [ b1 ]  [ c1 ]
+  */
+
+    function getColor(axisA, axisB) {
+      var a = getRange(axisA);
+      var b = getRange(axisB);
+
+      if (a == 1) { //low axisA value
+        if (b == 1) return colors[0]; //low axisB value
+        else if (b == 2) return colors[1]; //mid axisB value
+        else return colors[2]; //high axisB value
+      }
+
+      else if (a == 2) { //mid axisA value
+        if (b == 1) return colors[3]; //low axisB value
+        else if (b == 2) return colors[4]; //mid axisB value
+        else return colors[5]; //high axisB value
+      }
+
+      else if (a == 3) { //high axisA value
+        if (b == 1) return colors[6]; //low axisB value
+        else if (b == 2) return colors[7]; //mid axisB value
+        else return colors[8]; //high axisB value
+      }
+    }
+
+    function getRange(x) {
+      return x >= 66.66  ? 3 : //high
+             x >= 33.33  ? 2 : //mid
+                      1; //low
+    }
+
+    function getOutlineColor(x) {
+      return x >= 90  ? '#FFFC00' :
+                        '#FFFFFF';
+    }
+
+    function style(feature) {
+
+      return {
+          fillColor: getColor(feature.properties.no2Perc, feature.properties.demographicIndex),
+          weight: 0.5,
+          opacity: 1,
+          color: 'white', // outline color
+          dashArray: '0',
+          smoothFactor: 1,
+          fillOpacity: 0.9
+      };
+    }
+
+    function highlightFeature(e) {
+        var layer = e.target;
+
+        if ((layer.feature.properties.GEOID) != (clickedTract)) { //if not a clicked tract
+
+          layer.setStyle({
+            weight: 5,
+            color: getColor(layer.feature.properties.no2Perc, layer.feature.properties.demographicIndex),
+            //fill: false
+            //fillColor: '#FFFFFF'
+            fillOpacity: 0.5
+          });
+
+          if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+              layer.bringToFront();
+          }
+
+        }
+        //info.update(layer.feature.properties);
+    }
+
+    function resetHighlight(e) {
+      var layer = e.target;
+      if ((layer.feature.properties.GEOID) != (clickedTract)) {
+        geojson.resetStyle(e.target);
+      }
+      //info.update();
+    }
+
+    function zoomToFeature(e) {
+        var layer = e.target;
+        clickEvent = e;
+
+        //map.fitBounds(e.target.getBounds(), {top: 50000000000000000000000, bottom: 50000000000000000000000, left: 50000000000000000000000, right: 50000000000000000000000});
+        //map.fitBounds(bounds, {padding: []})
+        map.fitBounds(e.target.getBounds(), {padding: [100, 100]});
+
+
+        layer.setStyle({
+          weight: 5,
+          color: getColor(layer.feature.properties.no2Perc, layer.feature.properties.demographicIndex),
+          //fill: false
+          //fillColor: '#FFFFFF'
+          fillOpacity: 0
+        });
+
+        if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+            layer.bringToFront();
+        }
+
+        info.update(layer.feature.properties);
+
+        clickedTract = layer.feature.properties.GEOID;
+
+        if ((previousTarget != "") && (previousTarget != e)) resetHighlight(previousTarget);
+
+        previousTarget = e;
+
+    }
+
+    function onEachFeature(feature, layer) {
+        layer.on({
+            mouseover: highlightFeature,
+            mouseout: resetHighlight,
+            click: zoomToFeature
+        });
+    }
+
+    // method that we will use to update the control based on feature properties passed
+    /*info.update = function (props) {
+        this._div.innerHTML = '<h2>NO<sub>2</sub> Equality Index</h2>' +  (props ?
+            '<h3>NO<sub>2</sub> Index: ' + props.no2Perc + '</h3><br /><h3>Demographic Index: ' + props.demographicIndex + '</h3><br /><h3>Tract #' + props.TRACT + '</h3><br />'
+            : 'Click on a census tract');
+    };*/
+
+    function updateImg() {
+
+      var div = L.DomUtil.create('div', 'grid-container');
+      div.id = "gridContainer";
+      grades = [1, 40, 80];
+      //div.innerHTML += '<img src="images/no2dLegend.png" alt="Legend" style="width:300px;height:300px;">';
+      div.innerHTML += "<h3 class='axis' >Nitrogen Dioxide Index</h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0]) + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1]) + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2]) + "\" id:\"c3\" ></div>";
+      div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[0]) + "\" id:\"a2\"></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[1]) + "\" id:\"b2\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[2]) + "\" id:\"c2\" ></div>";
+      div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0]) + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1]) + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2]) + "\" id:\"c1\" ></div><h2 class='axis' >Demographic Index</h2>";
+
+
+      //<button type=\"button\" class=\"collapsible\" id=\"collapse1\" onclick=\"toggleLegend()\"  >
+
+
+      var draggable = new L.Draggable(div);
+      draggable.enable();
+
+      return div;
+    }
+
+    /*img.onAdd = function (map) {
+      var div = L.DomUtil.create('div', 'grid-container');
+      div.id = "gridContainer";
+      grades = [1, 40, 80];
+      //div.innerHTML += '<img src="images/no2dLegend.png" alt="Legend" style="width:300px;height:300px;">';
+      div.innerHTML += "<h3 class='axis'>Nitrogen Dioxide Index</h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0]) + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1]) + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2]) + "\" id:\"c3\" ></div>";
+      div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[0]) + "\" id:\"a2\"></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[1]) + "\" id:\"b2\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[2]) + "\" id:\"c2\" ></div>";
+      div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0]) + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1]) + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2]) + "\" id:\"c1\" ></div><h2 class='axis' >Demographic Index</h2>";
+
+      var draggable = new L.Draggable(div);
+      draggable.enable();
+
+      return div;
+    }//"#f3f3f3 url('img_tree.png') no-repeat right top";*/
+
+    function setPalette(num) {
+      if (num == 1) {
+        colors = paletteA;
+        //select button1
+        document.getElementById("button1").style.backgroundColor = "#5B616B";
+        document.getElementById("button1").style.color = "#FFFFFF";
+        //deselect button2
+        document.getElementById("button2").style.backgroundColor = "#FFFFFF";
+        document.getElementById("button2").style.color = "#000000";
+      }
+      if (num == 2) {
+        colors = paletteB;
+        //select button2
+        document.getElementById("button2").style.backgroundColor = "#5B616B";
+        document.getElementById("button2").style.color = "#FFFFFF";
+        //deselect button1
+        document.getElementById("button1").style.backgroundColor = "#FFFFFF";
+        document.getElementById("button1").style.color = "#000000";
+      }
+
+      updateImg();
+      img.addTo(map);
+
+      geojson.eachLayer(function (layer) {
+          layer.setStyle({
+            fillColor : getColor(layer.feature.properties.no2Perc, layer.feature.properties.demographicIndex),
+            weight: 0.5,
+            opacity: 1,
+            color: 'white',
+            dashArray: '0',
+            smoothFactor: 1,
+            fillOpacity: 0.9
+          })
+        });
+
+        zoomToFeature(clickEvent);
+
+  }
+
+</script>
+</body>
+</html>
