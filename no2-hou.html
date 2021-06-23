@@ -274,7 +274,7 @@
       }
 
       var geojson;
-      geojson = L.geoJson(no2Layer);
+      geojson = L.geoJson(houLayer);
 
       var clickedTract = "";
       var previousTarget = "";
@@ -319,7 +319,7 @@
           });
       }
 
-      var layer = L.geoJson(no2Layer, {
+      var layer = L.geoJson(houLayer, {
           style: style,
           onEachFeature: onEachFeature
       }).addTo(map);

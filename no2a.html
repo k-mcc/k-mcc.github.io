@@ -100,7 +100,7 @@
         zoomOffset: -1
     }).addTo(map);
 
-    L.geoJson(no2Layer).addTo(map);
+    L.geoJson(dcLayer).addTo(map);
 
     /*var no2 = new L.geoJson();
     no2.addTo(map);
@@ -140,7 +140,7 @@
           };
       }
 
-      L.geoJson(no2Layer, {style: style}).addTo(map);
+      L.geoJson(dcLayer, {style: style}).addTo(map);
 
       function highlightFeature(e) {
           var layer = e.target;
@@ -165,7 +165,7 @@
       }
 
       var geojson;
-      geojson = L.geoJson(no2Layer);
+      geojson = L.geoJson(dcLayer);
 
       function zoomToFeature(e) {
           map.fitBounds(e.target.getBounds());
@@ -179,7 +179,7 @@
           });
       }
 
-      geojson = L.geoJson(no2Layer, {
+      geojson = L.geoJson(dcLayer, {
           style: style,
           onEachFeature: onEachFeature
       }).addTo(map);

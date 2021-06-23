@@ -95,7 +95,7 @@
         zoomOffset: -1
     }).addTo(map);
 
-    //L.geoJson(no2Layer).addTo(map);
+    //L.geoJson(dcLayer).addTo(map);
 
     function getColor(x) {
       return x >= 80  ? '#08519C' :
@@ -118,14 +118,14 @@
           };
       }
 
-      //var layer1 = L.geoJson(no2Layer, {style: style});
-      var layer1 = L.geoJson(no2Layer, {style: style, onEachFeature: onEachFeature});
+      //var layer1 = L.geoJson(dcLayer, {style: style});
+      var layer1 = L.geoJson(dcLayer, {style: style, onEachFeature: onEachFeature});
       geojson1 = layer1;
-      //L.geoJson(no2Layer, {style: style}).addTo(map);
+      //L.geoJson(dcLayer, {style: style}).addTo(map);
 
 
-      // additional layer: no2Layer2
-      //L.geoJson(no2Layer2).addTo(map);
+      // additional layer: dcLayer2
+      //L.geoJson(dcLayer2).addTo(map);
 
         function getColor2(x) {
           return x >= 80  ? '#A50F15' :
@@ -148,17 +148,17 @@
             };
         }
 
-        //var layer2 = L.geoJson(no2Layer2, {style: style2});
-        var layer2 = L.geoJson(no2Layer2, {style: style2, onEachFeature: onEachFeature});
+        //var layer2 = L.geoJson(dcLayer2, {style: style2});
+        var layer2 = L.geoJson(dcLayer2, {style: style2, onEachFeature: onEachFeature});
         geojson2 = layer2;
 
-      //  L.geoJson(no2Layer2, {style: style2}).addTo(map);
+      //  L.geoJson(dcLayer2, {style: style2}).addTo(map);
 
       // method that we will use to update the control based on feature properties passed
 
     function toggleDem() {
       if(!toggle1) {
-        //L.geoJson(no2Layer, {style: style}).addTo(map);
+        //L.geoJson(dcLayer, {style: style}).addTo(map);
         map.addLayer(layer1);
         geojson = geojson1;
       } else {
