@@ -262,6 +262,29 @@ crossorigin=""></script>
       padding: 0;
     }
 
+    .xButton {
+      position: absolute;
+      display: inline-block;
+      cursor: pointer;
+      right: 5px;
+      top: -8px;
+      z-index: 850;
+      font: 14px/16px 'Poppins', Helvetica, sans-serif;
+      color: #FF0000;
+    }
+
+    .xButton h2 {
+      position: absolute;
+      display: inline-block;
+      cursor: pointer;
+      right: 0px;
+      top: -8px;
+      z-index: 850;
+      font: 14px/16px 'Poppins', Helvetica, sans-serif;
+      color: #FF0000;
+      font-size: 1.8em;
+    }
+
     .popup {
       position: absolute;
       display: inline-block;
@@ -320,9 +343,29 @@ crossorigin=""></script>
       to {opacity:1 ;}
     }
 
+    .showLegendButton {
+      font: 14px/16px 'Poppins', Helvetica, sans-serif;
+      color: #000000;
+      background: #FFFFFF;
+      position: absolute;
+      border: 5px solid #FFFFFF;
+      border-radius: 3px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      padding: 5px;
+      left: 30px;
+      bottom: -1px;
+      z-index: 800;
+      display: none;
+      width: 100;
+      height: 100;
+      cursor: pointer;
+    }
+
   </style>
 </head>
 <body>
+  <div class='showLegendButton' id='donutLegendButton' ><h2>Legend</h2></div>
+  <div class='showLegendButton' id='gridContainerButton' ><h2>Legend</h2></div>
   <div class="donut-legend" id="donutLegend"><button class="piecon" id="pieButton" onclick="changeCityMarkerIcon('pie')"></button><button class="targetIconHolder" onclick="changeCityMarkerIcon('target')" ><div class="targetIcon" id="targetButton" ></div></button></div>
   <button class="button" id="button1" onclick="setPalette(1)"><h2>Palette 1</h2><i id="a0"></i><i id="a1"></i><i id="a2"></i><i id="a3"></i></button>
   <button class="button" id="button2" onclick="setPalette(2)" ><h2>Palette 2</h2><i id="b0"></i><i id="b1"></i><i id="b2"></i><i id="b3"></i></button>
@@ -351,6 +394,8 @@ crossorigin=""></script>
   var hou = addCityMarker(houName, 'pie'); //plots Houston's city marker
   var wdc = addCityMarker(wdcName, 'pie'); //plots DC's city marker
   var currentCityMarkerType;
+  var gridContainerID = "gridContainer";
+  var donutLegendID = "donutLegend";
   //var cities = L.layerGroup(hou, wdc);
 
   function addCityMarker(name, cityMarkerType) { // plots a clickable marker, given a city's name and central coordinates. -- Could also specify min zoom level if needed.
@@ -419,12 +464,38 @@ crossorigin=""></script>
     return percent;
   }
 
-  document.getElementById("donutLegend").innerHTML += "<p>Each chart represents the proportional nitrogen dioxide inequity in a city.</br></br>Symbol: </br></p>"; //combined NO<sub>2</sub> density and socio-demographic vulnerability in a city
-  document.getElementById("donutLegend").innerHTML += "<div class='donutColorLegend'><p>Color   |   Combined Index Score <div class='popup' onclick='popItUp()'><img src='images/info.png' style='width:30px;height:30px;'></img><span class='popuptext' id='myPopup'><p><strong>Combined Index Score: </strong></br>The average of the nitrogen dioxide burden and socio-demographic vulnerability in each census tract.</p></span></div></p></br></br><div class='donut-legend-scale' ><p><i style='background: #E81D26'></i>75-100</br></br><i style='background: #FFF81F'></i>50-75</br></br><i style='background: #5EC2EF'></i>25-50</br></br><i style='background: #0FB223'></i>0-25</p></div></div>";
+  document.getElementById("donutLegend").innerHTML += "<div class='xButton' onclick='xButton(\"donutLegend\", \"block\")' ><h2>✕</h2></div><p>Each chart represents the proportional nitrogen dioxide inequity in a city.</br></br>Symbol: </br></p>"; //combined NO<sub>2</sub> density and socio-demographic vulnerability in a city
+  document.getElementById("donutLegend").innerHTML += "<div class='donutColorLegend'><p>Color   |   Combined Index Score <div class='popup' onclick='popItUp(\"comboIndexPopup\")'><img src='images/info.png' style='width:30px;height:30px;'></img><span class='popuptext' id='comboIndexPopup'><p><strong>Combined Index Score: </strong></br>The average of the nitrogen dioxide burden and socio-demographic vulnerability in each census tract.</p></span></div></p></br></br><div class='donut-legend-scale' ><p><i style='background: #E81D26'></i>75-100</br></br><i style='background: #FFF81F'></i>50-75</br></br><i style='background: #5EC2EF'></i>25-50</br></br><i style='background: #0FB223'></i>0-25</p></div></div>";
 
-  function popItUp() {
-    var popup = document.getElementById("myPopup");
-    popup.classList.toggle("show");
+  function popItUp(elementID) { // displays popup element
+    var popup = document.getElementById(elementID);
+    if (popup != null) popup.classList.toggle("show");
+  }
+
+  function xButton(elementID, defaultDisplay) { // sets element display to none
+    var ele = document.getElementById(elementID);
+    if (ele != null) {
+      ele.style.display = "none";
+      makeShowLegendButton(elementID, defaultDisplay);
+    }
+  }
+
+  function showLegend(legendID, defaultDisplay) {
+    var legend = document.getElementById(legendID);
+    if (legend != null) legend.style.display = defaultDisplay;
+    var button = document.getElementById(legendID + 'Button');
+    button.style.display = "none";
+    var index = hiddenLegends.indexOf(legendID);
+    hiddenLegends.splice(index, 1);
+  }
+
+  function makeShowLegendButton(legendID, defaultDisplay) {
+    var button = document.getElementById(legendID + "Button");
+    button.onclick = function() {
+      showLegend(legendID, defaultDisplay)
+    };
+    button.style.display = "block";
+    hiddenLegends.push(legendID);
   }
 
   function changeCityMarkerIcon(icon) {
@@ -502,6 +573,7 @@ crossorigin=""></script>
   var houstonIsOn;
   var dcIsOn;
   var countCityClicks = 0;
+  var hiddenLegends = [];
 
   function addChoropleth(cityName) {
     clickedTract = "";
@@ -511,7 +583,8 @@ crossorigin=""></script>
 
     document.getElementById("button1").style.display = "block";
     document.getElementById("button2").style.display = "block";
-    document.getElementById("donutLegend").style.display = "none";
+    document.getElementById(donutLegendID).style.display = "none";
+    document.getElementById(donutLegendID + "Button").style.display = "none";
     if (countCityClicks == 1) {
       colors = paletteA;
       document.getElementById("button1").style.backgroundColor = "#5B616B";
@@ -538,6 +611,11 @@ crossorigin=""></script>
       geojson = layer;
 
       img.addTo(map);
+
+      if (hiddenLegends.includes(gridContainerID)) {
+        document.getElementById(gridContainerID).style.display = "none";
+        document.getElementById(gridContainerID + "Button").style.display = "block";
+      }
       info.addTo(map);
 
     }
@@ -555,6 +633,12 @@ crossorigin=""></script>
       geojson = layer;
 
       img.addTo(map);
+
+      if (hiddenLegends.includes(gridContainerID)) {
+        document.getElementById(gridContainerID).style.display = "none";
+        document.getElementById(gridContainerID + "Button").style.display = "block";
+      }
+
       info.addTo(map);
     }
   }
@@ -562,8 +646,9 @@ crossorigin=""></script>
   function removeChoroplethControls() {
       map.removeControl(expandButton);
       map.removeControl(countryViewButton);
-      var legend =document.getElementById("gridContainer");
-      legend.style.display = "none";
+
+      document.getElementById(gridContainerID).style.display = "none";
+      document.getElementById(gridContainerID + "Button").style.display = "none";
       //legend.style.maxHeight = null;
       var squares = document.getElementsByClassName("grid-item");
       for (i = 0; i < squares.length; i++) {
@@ -583,9 +668,16 @@ crossorigin=""></script>
         map.removeLayer(dc);
         dcIsOn = false;
       }
-      document.getElementById("donutLegend").style.display = "block";
+
+      document.getElementById(donutLegendID).style.display = "block";
+      document.getElementById(donutLegendID + "Button").style.display = "none";
       document.getElementById("button1").style.display = "none";
       document.getElementById("button2").style.display = "none";
+
+      if (hiddenLegends.includes(donutLegendID)) {
+        document.getElementById(donutLegendID).style.display = "none";
+        document.getElementById(donutLegendID + "Button").style.display = "inline-grid";
+      }
 
   }
 
@@ -610,7 +702,7 @@ crossorigin=""></script>
     div.style.display = "inline-grid";
     grades = [1, 40, 80];
     //div.innerHTML += '<img src="images/no2dLegend.png" alt="Legend" style="width:300px;height:300px;">';
-    div.innerHTML += "<h3 class='axis'>Nitrogen Dioxide Index</h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0]) + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1]) + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2]) + "\" id:\"c3\" ></div>";
+    div.innerHTML += "<div class='xButton' onclick='xButton(\"gridContainer\", \"inline-grid\")' ><h2 style='top: -47px; left: -26px'>✕</h2></div><h3 class='axis'>Nitrogen Dioxide Index</h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0]) + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1]) + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2]) + "\" id:\"c3\" ></div>";
     div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[0]) + "\" id:\"a2\"></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[1]) + "\" id:\"b2\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[2]) + "\" id:\"c2\" ></div>";
     div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0]) + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1]) + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2]) + "\" id:\"c1\" ></div><h2 class='axis' >Demographic Index</h2>";
 
@@ -793,10 +885,10 @@ crossorigin=""></script>
     function updateImg() {
 
       var div = L.DomUtil.create('div', 'grid-container');
-      div.id = "inline-grid";
+      div.id = "gridContainer";
       grades = [1, 40, 80];
       //div.innerHTML += '<img src="images/no2dLegend.png" alt="Legend" style="width:300px;height:300px;">';
-      div.innerHTML += "<h3 class='axis' >Nitrogen Dioxide Index</h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0]) + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1]) + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2]) + "\" id:\"c3\" ></div>";
+      div.innerHTML += "<div class='xButton' onclick='xButton(\"gridContainer\", \"inline-grid\")' ><h2>✕</h2></div><h3 class='axis' >Nitrogen Dioxide Index</h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0]) + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1]) + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2]) + "\" id:\"c3\" ></div>";
       div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[0]) + "\" id:\"a2\"></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[1]) + "\" id:\"b2\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[2]) + "\" id:\"c2\" ></div>";
       div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0]) + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1]) + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2]) + "\" id:\"c1\" ></div><h2 class='axis' >Demographic Index</h2>";
 
@@ -847,6 +939,9 @@ crossorigin=""></script>
 
       updateImg();
       img.addTo(map);
+      if (hiddenLegends.includes(gridContainerID)) {
+        document.getElementById(gridContainerID + "Button").style.display = "none";
+      }
 
       geojson.eachLayer(function (layer) {
           layer.setStyle({
