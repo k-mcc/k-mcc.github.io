@@ -274,18 +274,19 @@ crossorigin=""></script>
     /* The actual popup (appears on top) */
     .popup .popuptext {
       visibility: hidden;
-      width: 300px;
-      background-color: rgba(0,0,0,.90);
-      color: #fff;
+      width: 320px;
+      background-color: #212121;
+      color: #ffffff;
       text-align: center;
       border-radius: 6px;
-      border: 2px rgba(0,0,0,.90);
-      /*padding: 8px 0;*/
+      border: 2px solid #212121;
+      padding: 8px 0;
       position: absolute;
       z-index: 900;
       bottom: 125%;
+      /*box-shadow: 0 0 15px rgba(0,0,0,0.2);*/
       /*left: 50%;*/
-      margin-left: -165px;
+      margin-left: -177px;
     }
 
     /* Popup arrow */
@@ -297,7 +298,8 @@ crossorigin=""></script>
       margin-left: -5px;
       border-width: 5px;
       border-style: solid;
-      border-color: #000000 transparent transparent transparent;
+      border-color:  #212121 transparent transparent transparent;
+      /*box-shadow: 0 0 15px rgba(0,0,0,0.2);*/
     }
 
     /* Toggle this class when clicking on the popup container (hide and show the popup) */
@@ -404,6 +406,7 @@ crossorigin=""></script>
         map.options.minZoom = 10;
         map.options.maxZoom = 30;
         map.setView(e.latlng, 12);
+        countCityClicks++;
         addChoropleth(name);
     });
 
@@ -417,7 +420,7 @@ crossorigin=""></script>
   }
 
   document.getElementById("donutLegend").innerHTML += "<p>Each chart represents the proportional nitrogen dioxide inequity in a city.</br></br>Symbol: </br></p>"; //combined NO<sub>2</sub> density and socio-demographic vulnerability in a city
-  document.getElementById("donutLegend").innerHTML += "<div class='donutColorLegend'><p>Color   |   Combined Index Score <div class='popup' onclick='popItUp()'><img src='images/info.png' style='width:30px;height:30px;'></img><span class='popuptext' id='myPopup'><p><strong>Combined Index Score: </strong></br>The average of nitrogen dioxide burden and socio-demographic vulnerability</p></span></div></p></br></br><div class='donut-legend-scale' ><p><i style='background: #E81D26'></i>75-100</br></br><i style='background: #FFF81F'></i>50-75</br></br><i style='background: #5EC2EF'></i>25-50</br></br><i style='background: #0FB223'></i>0-25</p></div></div>";
+  document.getElementById("donutLegend").innerHTML += "<div class='donutColorLegend'><p>Color   |   Combined Index Score <div class='popup' onclick='popItUp()'><img src='images/info.png' style='width:30px;height:30px;'></img><span class='popuptext' id='myPopup'><p><strong>Combined Index Score: </strong></br>The average of the nitrogen dioxide burden and socio-demographic vulnerability in each census tract.</p></span></div></p></br></br><div class='donut-legend-scale' ><p><i style='background: #E81D26'></i>75-100</br></br><i style='background: #FFF81F'></i>50-75</br></br><i style='background: #5EC2EF'></i>25-50</br></br><i style='background: #0FB223'></i>0-25</p></div></div>";
 
   function popItUp() {
     var popup = document.getElementById("myPopup");
@@ -498,21 +501,24 @@ crossorigin=""></script>
   var dc; // D.C.'s choropleth layer
   var houstonIsOn;
   var dcIsOn;
+  var countCityClicks = 0;
 
   function addChoropleth(cityName) {
     clickedTract = "";
     previousTarget = "";
     clickEvent = "";
     zoom = true;
-    colors = paletteA;
 
     document.getElementById("button1").style.display = "block";
     document.getElementById("button2").style.display = "block";
-    document.getElementById("button1").style.backgroundColor = "#5B616B";
-    document.getElementById("button1").style.color = "#FFFFFF";
-    document.getElementById("button2").style.backgroundColor = "#FFFFFF";
-    document.getElementById("button2").style.color = "#000000";
     document.getElementById("donutLegend").style.display = "none";
+    if (countCityClicks == 1) {
+      colors = paletteA;
+      document.getElementById("button1").style.backgroundColor = "#5B616B";
+      document.getElementById("button1").style.color = "#FFFFFF";
+      document.getElementById("button2").style.backgroundColor = "#FFFFFF";
+      document.getElementById("button2").style.color = "#000000";
+    }
 
     expandButton.addTo(map);
     countryViewButton.addTo(map);
