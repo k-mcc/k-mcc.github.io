@@ -334,6 +334,7 @@ crossorigin=""></script>
   var countryMax = 7;
   map.options.minZoom = countryMin;
   map.options.maxZoom = countryMax;
+  map.doubleClickZoom.disable();
 
   var tileL = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + mapboxAccessToken, {
       id: 'mapbox/light-v9',
