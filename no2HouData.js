@@ -91,8 +91,7 @@ var houLayer = { "type": "FeatureCollection", "features": [ { "type": "Feature",
     ]
   },
   "properties" : {
-    "GEOID" : "48201210100",
-    "popTotal": 7363, "comboIndexPercentile": 0, "popWhite": 1282, "popNativeAmer": 0, "popHispanic": 1962, "popAsian": 8, "popBlackOrAfrAmer": 4043, "demographicIndex": 0, "no2Perc": 0
+    "TRACT" : "210100", "GEOID" : "48201210100", "popTotal": 7363, "comboIndexPercentile": 0, "popWhite": 1282, "popNativeAmer": 0, "popHispanic": 1962, "popAsian": 8, "popBlackOrAfrAmer": 4043, "demographicIndex": 0, "no2Perc": 0
   }
 },
 {
@@ -203,7 +202,7 @@ var houLayer = { "type": "FeatureCollection", "features": [ { "type": "Feature",
     ]
   },
   "properties" : {
-    "GEOID" : "48201210400", "popTotal": 4422, "comboIndexPercentile": 0, "popWhite": 318, "popNativeAmer": 0, "popHispanic": 3236, "popAsian": 0, "popBlackOrAfrAmer": 784, "demographicIndex": 0, "no2Perc": 0
+    "TRACT" : "210400", "GEOID" : "48201210400", "popTotal": 4422, "comboIndexPercentile": 0, "popWhite": 318, "popNativeAmer": 0, "popHispanic": 3236, "popAsian": 0, "popBlackOrAfrAmer": 784, "demographicIndex": 0, "no2Perc": 0
   }
 },
 {
@@ -322,7 +321,7 @@ var houLayer = { "type": "FeatureCollection", "features": [ { "type": "Feature",
     ]
   },
   "properties" : {
-    "GEOID" : "48201310100", "popTotal": 5346, "comboIndexPercentile": 0, "popWhite": 1201, "popNativeAmer": 3, "popHispanic": 1958, "popAsian": 208, "popBlackOrAfrAmer": 1860, "demographicIndex": 0, "no2Perc": 0
+    "TRACT" : "310100", "GEOID" : "48201310100", "popTotal": 5346, "comboIndexPercentile": 0, "popWhite": 1201, "popNativeAmer": 3, "popHispanic": 1958, "popAsian": 208, "popBlackOrAfrAmer": 1860, "demographicIndex": 0, "no2Perc": 0
   }
 },
 {
@@ -387,7 +386,7 @@ var houLayer = { "type": "FeatureCollection", "features": [ { "type": "Feature",
     ]
   },
   "properties" : {
-    "GEOID" : "48201310200", "popTotal": 1912, "comboIndexPercentile": 0, "popWhite": 829, "popNativeAmer": 7, "popHispanic": 466, "popAsian": 183, "popBlackOrAfrAmer": 315, "demographicIndex": 0, "no2Perc": 0
+    "TRACT" : "310200", "GEOID" : "48201310200", "popTotal": 1912, "comboIndexPercentile": 0, "popWhite": 829, "popNativeAmer": 7, "popHispanic": 466, "popAsian": 183, "popBlackOrAfrAmer": 315, "demographicIndex": 0, "no2Perc": 0
   }
 },
 {
@@ -472,7 +471,7 @@ var houLayer = { "type": "FeatureCollection", "features": [ { "type": "Feature",
     ]
   },
   "properties" : {
-    "GEOID" : "48201310300", "popTotal": 4840, "comboIndexPercentile": 0, "popWhite": 1066, "popNativeAmer": 0, "popHispanic": 3510, "popAsian": 28, "popBlackOrAfrAmer": 227, "demographicIndex": 0, "no2Perc": 0
+    "TRACT" : "310300", "GEOID" : "48201310300", "popTotal": 4840, "comboIndexPercentile": 0, "popWhite": 1066, "popNativeAmer": 0, "popHispanic": 3510, "popAsian": 28, "popBlackOrAfrAmer": 227, "demographicIndex": 0, "no2Perc": 0
   }
 },
 
