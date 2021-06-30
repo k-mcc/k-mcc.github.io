@@ -431,6 +431,15 @@ crossorigin=""></script>
     }
     .show {display:block;}
 
+    .legend-key {
+      display: inline-block;
+      border-radius: 20%;
+      width: 20px;
+      height: 20px;
+      margin-right: 5px;
+      opacity: 0.8;
+    }
+
   </style>
 </head>
 <body>
@@ -735,6 +744,8 @@ crossorigin=""></script>
 
       singleLayerOn = propName;
       addChoropleth(propName);
+
+      uniLegend();
     }
 
     else {
@@ -742,6 +753,7 @@ crossorigin=""></script>
       document.getElementById("returnBtn").style.color = "#000000";
       singleLayerOn = propName;
       addChoropleth(propName);
+      uniLegend();
     }
 
   }
@@ -797,7 +809,7 @@ crossorigin=""></script>
     var div = L.DomUtil.create('div', 'grid-container');
     div.id = "gridContainer";
     div.style.display = "inline-grid";
-    grades = [1, 40, 80];
+    var grades = [1, 40, 80];
     //<div class='popup' onclick='popItUp(\"no2AxisPopup\")' style='bottom:5px; left:5px;'><img src='images/info.png' style='width:30px;height:30px;'></img><span class='popuptext' id='no2AxisPopup'><p><strong>Title: </strong></br>Description</p></span></div>
     //div.innerHTML += '<img src="images/no2dLegend.png" alt="Legend" style="width:300px;height:300px;">';
     div.innerHTML += "<div class='xButton' onclick='xButton(\"gridContainer\", \"inline-grid\")' ><h2 style='top: -47px; left: -26px'>✕</h2></div><h3 class='axis'>Nitrogen Dioxide Index</h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0],"") + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1],"") + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2],"") + "\" id:\"c3\" ></div>";
@@ -998,7 +1010,7 @@ crossorigin=""></script>
 
       var div = L.DomUtil.create('div', 'grid-container');
       div.id = "gridContainer";
-      grades = [1, 40, 80];
+      var grades = [1, 40, 80];
       //<div class='popup' onclick='popItUp(\"no2AxisPopup\")' style='bottom:5px; left:5px;' ><img src='images/info.png' style='width:30px;height:30px;'></img><span class='popuptext' id='no2AxisPopup'><p><strong>Title: </strong></br>Description</p></span></div>
       //div.innerHTML += '<img src="images/no2dLegend.png" alt="Legend" style="width:300px;height:300px;">';
       div.innerHTML += "<div class='xButton' onclick='xButton(\"gridContainer\", \"inline-grid\")' ><h2>✕</h2></div><h3 class='axis' >Nitrogen Dioxide Index</h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0],"") + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1],"") + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2],"") + "\" id:\"c3\" ></div>";
@@ -1101,6 +1113,25 @@ crossorigin=""></script>
         zoom = false;
         zoomToFeature(clickEvent);
         zoom = true;
+  }
+
+  // univariate choropleth legend
+  function uniLegend() {
+
+    var div = document.getElementById("gridContainer");
+    var grades = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90];
+    //<div class='popup' onclick='popItUp(\"no2AxisPopup\")' style='bottom:5px; left:5px;' ><img src='images/info.png' style='width:30px;height:30px;'></img><span class='popuptext' id='no2AxisPopup'><p><strong>Title: </strong></br>Description</p></span></div>
+    //div.innerHTML += '<img src="images/no2dLegend.png" alt="Legend" style="width:300px;height:300px;">';
+
+    div.innerHTML = "";
+
+    for (var i = grades.length-1; i > 0; i--) {
+        div.innerHTML +=
+            '<i style="background:' + getColor(grades[i] + 1) + '"></i>' +
+            grades[i] + '</br>';
+    }
+
+    return div;
   }
 
 </script>
