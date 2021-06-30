@@ -922,12 +922,21 @@ crossorigin=""></script>
     function style(feature) {
       return {
           fillColor: getColor(feature.properties.no2Perc, feature.properties.demographicIndex, ((feature.properties[singleVariable] / feature.properties.popTotal)*100)),
+<<<<<<< HEAD
           weight: 3,
           opacity: 0.9,
           color: getColor(feature.properties.no2Perc, feature.properties.demographicIndex, ((feature.properties[singleVariable] / feature.properties.popTotal)*100)), // outline color
           dashArray: '0',
           smoothFactor: 1,
           fillOpacity: 0.1
+=======
+          weight: 0.5,
+          opacity: 1,
+          color: 'white', // outline color
+          dashArray: '0',
+          smoothFactor: 1,
+          fillOpacity: 0.9
+>>>>>>> 268c9f3dbe7a57919238c4d22833f49084518f92
       };
     }
 
