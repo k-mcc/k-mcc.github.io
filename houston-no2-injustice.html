@@ -158,6 +158,14 @@ crossorigin=""></script>
       font-size: 1.8em;
     }
 
+    .grid-container i {
+      width: 20px;
+      height: 20px;
+      float: left;
+      margin-right: 8px;
+      opacity: 0.7;
+    }
+
     .button {
       position: relative;
       background: #FFFFFF;
@@ -449,10 +457,10 @@ crossorigin=""></script>
     <button onclick="toggleChorDropdown()" class="dropbtn">Maps ▽</button>
     <div id="myDropdown" class="dropdown-content">
       <div class='chorOption' id='returnBtn' onclick = "returnToBivariate()">NO<sub>2</sub> Equality Index (Default)</div>
-      <div class='chorOption' id='popAsianBtn' onclick = "toggleUnivariateChoropleth('popAsian')">Asian</div>
-      <div class='chorOption' id='popBlackOrAfrAmerBtn' onclick = "toggleUnivariateChoropleth('popBlackOrAfrAmer')">Black or African American</div>
-      <div class='chorOption' id='popHispanicBtn' onclick = "toggleUnivariateChoropleth('popHispanic')">Hispanic</div>
-      <div class='chorOption' id='popWhiteBtn' onclick = "toggleUnivariateChoropleth('popWhite')">White</div>
+      <div class='chorOption' id='popAsianBtn' onclick = "showUniChoropleth('popAsian',2)">Asian</div>
+      <div class='chorOption' id='popBlackOrAfrAmerBtn' onclick = "showUniChoropleth('popBlackOrAfrAmer',3)">Black or African American</div>
+      <div class='chorOption' id='popHispanicBtn' onclick = "showUniChoropleth('popHispanic',4)">Hispanic or Latino</div>
+      <div class='chorOption' id='popWhiteBtn' onclick = "showUniChoropleth('popWhite',5)">White (Non-Hispanic)</div>
     </div>
   </div>
   <button class="button" id="button1" onclick="setPalette(1)"><h2>Palette 1</h2><i id="a0"></i><i id="a1"></i><i id="a2"></i><i id="a3"></i></button>
@@ -487,6 +495,7 @@ crossorigin=""></script>
   //var wdc = addCityMarker(wdcName, 'pie'); //plots DC's city marker
   var currentCityMarkerType;
   var gridContainerID = "gridContainer";
+  var explodedPieSect = 0;
   //var donutLegendID = "donutLegend";
   //var cities = L.layerGroup(hou, wdc);
 
@@ -496,11 +505,17 @@ crossorigin=""></script>
 
   function returnToBivariate() {
     if (singleLayerOn != "") {
+      explodedPieSect = 0;
       toggleUnivariateChoropleth(singleVariable);
       document.getElementById("returnBtn").style.background = "#000000";
       document.getElementById("returnBtn").style.color = "#FFFFFF";
       singleVariable = "";
     }
+  }
+
+  function showUniChoropleth(race, sectionNum) {
+    explodedPieSect = sectionNum;
+    toggleUnivariateChoropleth(race);
   }
 
 /*  function returnToBivariate(specialCase) {
@@ -614,6 +629,7 @@ crossorigin=""></script>
       //univariateButton.addTo(map);
       //countryViewButton.addTo(map);
       singleLayerOn = "";
+      firstTimeInCity = false;
     }
 
     if (cityName == "Houston") { // Add Houston layer
@@ -807,7 +823,7 @@ crossorigin=""></script>
 
   img.onAdd = function (map) {
     var div = L.DomUtil.create('div', 'grid-container');
-    div.id = "gridContainer";
+    div.id = gridContainerID;
     div.style.display = "inline-grid";
     var grades = [1, 40, 80];
     //<div class='popup' onclick='popItUp(\"no2AxisPopup\")' style='bottom:5px; left:5px;'><img src='images/info.png' style='width:30px;height:30px;'></img><span class='popuptext' id='no2AxisPopup'><p><strong>Title: </strong></br>Description</p></span></div>
@@ -839,11 +855,11 @@ crossorigin=""></script>
           this._div.innerHTML += '<div id="infoBox" style="height: 400px" ><br /></div>';
 
           var data = [
-              {x: "American Indian and Alaska Native", value: (props ? props.popNativeAmer : 0)},
+              {x: "American Indian/Alaska Native", value: (props ? props.popNativeAmer : 0)},
               {x: "Asian", value: (props ? props.popAsian : 0)},
               {x: "Black or African American", value: (props ? props.popBlackOrAfrAmer : 0)},
-              {x: "Hispanic", value: (props ? props.popHispanic : 0)},
-              {x: "White", value: (props ? props.popWhite : 0)}
+              {x: "Hispanic or Latino", value: (props ? props.popHispanic : 0)},
+              {x: "White (Non-Hispanic)", value: (props ? props.popWhite : 0)}
           ];
 
           //this._div.innerHTML += (props ? props.pWhite : 'hi');
@@ -853,6 +869,8 @@ crossorigin=""></script>
 
           // add the data
           chart.data(data);
+
+          //if (explodedPieSect != 0) chart.select([explodedPieSect]);
 
           // display the chart in the container
           chart.container('infoBox');
@@ -1009,7 +1027,7 @@ crossorigin=""></script>
     function updateImg() {
 
       var div = L.DomUtil.create('div', 'grid-container');
-      div.id = "gridContainer";
+      div.id = gridContainerID;
       var grades = [1, 40, 80];
       //<div class='popup' onclick='popItUp(\"no2AxisPopup\")' style='bottom:5px; left:5px;' ><img src='images/info.png' style='width:30px;height:30px;'></img><span class='popuptext' id='no2AxisPopup'><p><strong>Title: </strong></br>Description</p></span></div>
       //div.innerHTML += '<img src="images/no2dLegend.png" alt="Legend" style="width:300px;height:300px;">';
@@ -1019,6 +1037,7 @@ crossorigin=""></script>
 
       //<button type=\"button\" class=\"collapsible\" id=\"collapse1\" onclick=\"toggleLegend()\"  >
 
+      div.style.display = "inline-grid";
 
       var draggable = new L.Draggable(div);
       draggable.enable();
@@ -1118,18 +1137,23 @@ crossorigin=""></script>
   // univariate choropleth legend
   function uniLegend() {
 
-    var div = document.getElementById("gridContainer");
+    var div = document.getElementById(gridContainerID);
     var grades = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90];
     //<div class='popup' onclick='popItUp(\"no2AxisPopup\")' style='bottom:5px; left:5px;' ><img src='images/info.png' style='width:30px;height:30px;'></img><span class='popuptext' id='no2AxisPopup'><p><strong>Title: </strong></br>Description</p></span></div>
     //div.innerHTML += '<img src="images/no2dLegend.png" alt="Legend" style="width:300px;height:300px;">';
 
-    div.innerHTML = "";
-
-    for (var i = grades.length-1; i > 0; i--) {
+    div.innerHTML = '<img src="images/uniLegend.png" alt="Legend" style="width:200px;height:370px;margin-right:50px;margin-top:30px;"></img>';
+    //<div class="xButton" onclick="xButton(\"gridContainer\", \"inline-grid\")" style="right:35px;top:-43px;"><h2>✕</h2></div>
+    /*for (var i = grades.length-1; i > 0; i--) {
         div.innerHTML +=
-            '<i style="background:' + getColor(grades[i] + 1) + '"></i>' +
-            grades[i] + '</br>';
-    }
+            '<h4>' + grades[i] + '<i style="background:' + getColor(0,0,grades[i] + 1) + '"></i></h4>' +
+            '</br>';
+    }*/
+
+    div.style.display = "inline-block";
+    //div.style.lineHeight = '0px';
+    div.style.padding = "0px";
+    div.style.lineHeight = "20px";
 
     return div;
   }
