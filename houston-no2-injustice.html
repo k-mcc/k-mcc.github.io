@@ -23,7 +23,7 @@ crossorigin=""></script>
 <!-- L.Control.Button -->
 <script src="https://raw.githubusercontent.com/jerroydmoore/leaflet-button/b568e84f4e46167c4a8a8f640e2b192afdc34930/L.Control.Button.js"></script>
 <!-- data files -->
-<script src="https://k-mcc.github.io/no2HouData.js"></script> <!-- Houston data -->
+<script src="https://k-mcc.github.io/no2HouData2.js"></script> <!-- Houston data -->
 <script src="https://k-mcc.github.io/no2WithDemIndex.js"></script> <!-- D.C. data -->
 <!-- pie chart -->
 <script src="https://cdn.anychart.com/releases/8.0.1/js/anychart-core.min.js"></script>
@@ -922,12 +922,12 @@ crossorigin=""></script>
     function style(feature) {
       return {
           fillColor: getColor(feature.properties.no2Perc, feature.properties.demographicIndex, ((feature.properties[singleVariable] / feature.properties.popTotal)*100)),
-          weight: 0.5,
-          opacity: 1,
-          color: 'white', // outline color
+          weight: 3,
+          opacity: 0.9,
+          color: getColor(feature.properties.no2Perc, feature.properties.demographicIndex, ((feature.properties[singleVariable] / feature.properties.popTotal)*100)), // outline color
           dashArray: '0',
           smoothFactor: 1,
-          fillOpacity: 0.9
+          fillOpacity: 0.1
       };
     }
 
