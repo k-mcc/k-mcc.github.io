@@ -46,7 +46,7 @@ crossorigin=""></script>
 
     .info {
         height: 700px;
-        width: 284px;
+        width: 400px;
         padding: 6px 8px;
         font: 14px/16px 'Poppins', Helvetica, sans-serif;
         /*font-family: 'Poppins', sans-serif;*/
@@ -849,7 +849,7 @@ crossorigin=""></script>
 
   info.update = function (props) {
       this._div.innerHTML = '<h2>NO<sub>2</sub> Equality Index</h2>' +  (props ?
-          '<h3>NO<sub>2</sub> Index: ' + props.no2Perc + '</h3><br /><h3>Demographic Index: ' + props.demographicIndex + '</h3><br /><h3>Tract #' + props.TRACT + '</h3><br />'
+          '<h3>NO<sub>2</sub> Percentile: ' + props.no2Perc + '</h3><h3><br /><h3>Average NO<sub>2</sub> Vertical Column Density: ' + expo(props.no2Actual, 4) + 'molecules/cm<sup>2</sup></h3></br><h3>Socio-Demographic Percentile: ' + props.demographicIndex + '</h3><br /><h3>Tract #' + props.TRACT + '</h3><br />'
           : 'Click on a census tract');
 
           this._div.innerHTML += '<div id="infoBox" style="height: 400px" ><br /></div>';
@@ -878,6 +878,11 @@ crossorigin=""></script>
           chart.legend().itemsLayout("vertical");
           //chart.sort("desc");
   };
+
+  function expo(x, f) {
+    return Number.parseFloat(x).toExponential(f);
+  }
+
 
   /*
   [ a3 ]  [ b3 ]  [ c3 ]
@@ -1031,9 +1036,9 @@ crossorigin=""></script>
       var grades = [1, 40, 80];
       //<div class='popup' onclick='popItUp(\"no2AxisPopup\")' style='bottom:5px; left:5px;' ><img src='images/info.png' style='width:30px;height:30px;'></img><span class='popuptext' id='no2AxisPopup'><p><strong>Title: </strong></br>Description</p></span></div>
       //div.innerHTML += '<img src="images/no2dLegend.png" alt="Legend" style="width:300px;height:300px;">';
-      div.innerHTML += "<div class='xButton' onclick='xButton(\"gridContainer\", \"inline-grid\")' ><h2>✕</h2></div><h3 class='axis' >Nitrogen Dioxide Index</h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0],"") + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1],"") + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2],"") + "\" id:\"c3\" ></div>";
+      div.innerHTML += "<div class='xButton' onclick='xButton(\"gridContainer\", \"inline-grid\")' ><h2>✕</h2></div><h3 class='axis' >Nitrogen Dioxide Percentile}</h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0],"") + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1],"") + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2],"") + "\" id:\"c3\" ></div>";
       div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[0],"") + "\" id:\"a2\"></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[1],"") + "\" id:\"b2\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[2],"") + "\" id:\"c2\" ></div>";
-      div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0],"") + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1],"") + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2],"") + "\" id:\"c1\" ></div><h2 class='axis' >Demographic Index</h2>";
+      div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0],"") + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1],"") + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2],"") + "\" id:\"c1\" ></div><h2 class='axis' >Socio-Demographic Percentile</h2>";
 
       //<button type=\"button\" class=\"collapsible\" id=\"collapse1\" onclick=\"toggleLegend()\"  >
 
