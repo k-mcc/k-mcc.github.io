@@ -440,7 +440,6 @@ crossorigin=""></script>
     <button onclick="toggleChorDropdown()" class="dropbtn">Maps ▽</button>
     <div id="myDropdown" class="dropdown-content">
       <div class='chorOption' id='returnBtn' onclick = "returnToBivariate()">NO<sub>2</sub> Equality Index (Default)</div>
-      <div class='chorOption' id='popNativeAmerBtn' onclick = "toggleUnivariateChoropleth('popNativeAmer')">American Indian and Alaska Native</div>
       <div class='chorOption' id='popAsianBtn' onclick = "toggleUnivariateChoropleth('popAsian')">Asian</div>
       <div class='chorOption' id='popBlackOrAfrAmerBtn' onclick = "toggleUnivariateChoropleth('popBlackOrAfrAmer')">Black or African American</div>
       <div class='chorOption' id='popHispanicBtn' onclick = "toggleUnivariateChoropleth('popHispanic')">Hispanic</div>
@@ -699,19 +698,6 @@ crossorigin=""></script>
 
         geojson = layer;
       }
-      if (dcIsOn) { // Remove DC layer
-        map.removeLayer(dc);
-
-        geojson = L.geoJson(dcLayer);
-
-        univariateChoropleth = L.geoJson(dcLayer, {
-            style: style,
-            onEachFeature: onEachFeature
-        });
-        var layer = univariateChoropleth.addTo(map);
-
-        geojson = layer;
-      }
 
       if (hiddenLegends.includes(gridContainerID)) {
         document.getElementById(gridContainerID).style.display = "none";
@@ -744,6 +730,8 @@ crossorigin=""></script>
       document.getElementById(singleVariable + "Btn").style.color = "#000000";
       document.getElementById("returnBtn").style.background = "#FFFFFF";
       document.getElementById("returnBtn").style.color = "#000000";
+
+      map.removeLayer(univariateChoropleth);
 
       singleLayerOn = propName;
       addChoropleth(propName);
