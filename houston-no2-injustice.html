@@ -440,7 +440,6 @@ crossorigin=""></script>
       color: #000000;
       min-width: 300px;
       box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-      z-index: 800;
       top: 70px;
       left: 100px;
       z-index: 801;
@@ -572,15 +571,13 @@ crossorigin=""></script>
   </div>
   <div class="designMenu" id="designMenu">
     <button onclick="toggleChorDropdown('designDropdown')" class="dropbtn" style="top:100px;">View Options ▽</button>
-    <div id="designDropdown" class="dropdown-content" style="left:500px;top:70px;">
+    <div id="designDropdown" class="dropdown-content" style="left:100px;top:160px;z-index:800;">
       <div class='chorOption' id='fillBtn' onclick = "toggleOpacity('fill')">Fill</div>
       <div class='chorOption' id='outlineBtn' onclick = "toggleOpacity('outline')">Outline</div>
     </div>
   </div>
   <button class="button" id="button1" onclick="setPalette(1)"><h2>Palette 1</h2><i id="a0"></i><i id="a1"></i><i id="a2"></i><i id="a3"></i></button>
   <button class="button" id="button2" onclick="setPalette(2)" ><h2>Palette 2</h2><i id="b0"></i><i id="b1"></i><i id="b2"></i><i id="b3"></i></button>
-  <button class="button" id="fillBtn" onclick="toggleOpacity('fill')"><h2>Fill</h2></button>
-  <button class="button" id="outlineBtn" onclick="toggleOpacity('outline')" ><h2>Outline</h2></button>
   <div id="map"></div>
   <div id="myModal" class="modal">
 
@@ -696,8 +693,20 @@ crossorigin=""></script>
   //var donutLegendID = "donutLegend";
   //var cities = L.layerGroup(hou, wdc);
 
+  var dropdownIDs = ["myDropdown", "designDropdown"];
+  var dropdownShowing = "";
+
   function toggleChorDropdown(id) {
     document.getElementById(id).classList.toggle("show");
+    /*for (var i = 0; i < dropdownIDs.length; i++) {
+      if (dropdownIDs[i] == id) {
+        document.getElementById(id).classList.toggle("show");
+      }
+      /else if (dropdownIDs[i] == dropdownShowing) {
+        document.getElementById(dropdownShowing).classList.toggle("show");
+      }
+    }
+    dropdownShowing = id;*/
   }
 
   function returnToBivariate() {
