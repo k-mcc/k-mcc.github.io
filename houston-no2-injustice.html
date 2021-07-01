@@ -54,12 +54,26 @@ crossorigin=""></script>
         background: rgba(255,255,255);
         box-shadow: 0 0 15px rgba(0,0,0,0.2);
         border-radius: 3px;
+        display: "inline-block";
     }
     .info h2 {
         margin: 0 0 5px;
         color: #000000;
+        text-align: center;
     }
-
+    .littleDiv {
+      text-align: center;
+    }
+    .info h3 {
+        margin: 0 0 5px;
+        font-size: 1.2em;
+        color: #000000;
+    }
+    .info h4 {
+        margin: 0 0 5px;
+        font-size: 1.2em;
+        color: #000000;
+    }
     .donut-legend {
       position: absolute;
       left: 10px;
@@ -518,6 +532,10 @@ crossorigin=""></script>
     toggleUnivariateChoropleth(race);
   }
 
+  function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
 /*  function returnToBivariate(specialCase) {
     if (singleLayerOn != "") {
       map.removeLayer(univariateChoropleth);
@@ -849,7 +867,14 @@ crossorigin=""></script>
 
   info.update = function (props) {
       this._div.innerHTML = '<h2>NO<sub>2</sub> Equality Index</h2>' +  (props ?
-          '<h3>NO<sub>2</sub> Percentile: ' + props.no2Perc + '</h3><h3><br /><h3>Average NO<sub>2</sub> Vertical Column Density: ' + expo(props.no2Actual, 4) + 'molecules/cm<sup>2</sup></h3></br><h3>Socio-Demographic Percentile: ' + props.demographicIndex + '</h3><br /><h3>Tract #' + props.TRACT + '</h3><br />'
+          /*'<h4>NO<sub>2</sub> Percentile: ' + props.no2Perc + '</h4><br /><h4>Average NO<sub>2</sub> Vertical Column Density: ' + expo(props.no2Actual, 4) + ' molecules/cm<sup>2</sup></h4></br><h4>Socio-Demographic Percentile: ' + props.demographicIndex + '</h4><br /><h4>Tract #' + props.TRACT + '</h4></br><h4> $' + numberWithCommas(props.medianHHIncome) + '</h4></br>'
+          : 'Click on a census tract');*/
+
+          /*'</br><div style="column-count:2;"><h4 style="font-size:3em; color:' + adjustColor(props.no2Perc, 0) + ';column-span: 1;bottom:0px;padding:10px;">' + props.no2Perc + '</h4><h4 style="font-size:3em; color:' + adjustColor(0, props.demographicIndex) + ';column-span: 1;top:0;padding:0px;">' + props.demographicIndex + '</h4></div><h4>NO<sub>2</sub> Percentile:</h4></br><h4>Average NO<sub>2</sub> Vertical Column Density: ' + expo(props.no2Actual, 4) + ' molecules/cm<sup>2</sup></h4></br><h4>Socio-Demographic Percentile: <h4 style="font-size:3em; color:' + adjustColor(0, props.demographicIndex) + ';">' + props.demographicIndex + '</h4><br /><h4>Tract #' + props.TRACT + '</h4></br><h4> $' + numberWithCommas(props.medianHHIncome) + '</h4></br>'
+          : 'Click on a census tract');*/
+
+          '<div style="display: inline-grid;grid-template-columns: auto auto; height:3em;padding-right:0px;"><div class=\"grid-item\" style="padding-left:0px;text-align:center;width=150px;max-width: 100%;min-width: 100%;"><h4 style="font-size:3em; color:' + adjustColor(props.no2Perc, 0) + ';">' + props.no2Perc + '</br></h4><h4>NO<sub>2</sub> Percentile</h4></div><div class=\"grid-item\" style="text-align:center;width=150px;max-width: 100%;min-width: 100%;padding-left:0px;"><h4 style="font-size:3em; color:' + adjustColor(0, props.demographicIndex) + ';">' + props.demographicIndex + '</h4><h4>Socio-Demographic Percentile</h4></div></div>' +
+          '</br></br></br></br><h4>Average NO<sub>2</sub> Vertical Column Density: ' + expo(props.no2Actual, 4) + ' molecules/cm<sup>2</sup></h4></br><h4>Socio-Demographic Percentile: <br /><h4>Tract #' + props.TRACT + '</h4></br><h4> $' + numberWithCommas(props.medianHHIncome) + '</h4></br>'
           : 'Click on a census tract');
 
           this._div.innerHTML += '<div id="infoBox" style="height: 400px" ><br /></div>';
@@ -878,6 +903,53 @@ crossorigin=""></script>
           chart.legend().itemsLayout("vertical");
           //chart.sort("desc");
   };
+
+  function adjustColor(prop1, prop2) {
+    var suggestedColor = getColor(prop1,prop2,"");
+    if (suggestedColor == colors[0] || suggestedColor == colors[1] || suggestedColor == colors[3]) { // if too light for a white background, change to black text.
+      return LightenDarkenColor(suggestedColor, -50);
+    }
+    else return suggestedColor;
+  }
+
+  function LightenDarkenColor(colorCode, amount) {
+    var usePound = false;
+
+    if (colorCode[0] == "#") {
+        colorCode = colorCode.slice(1);
+        usePound = true;
+    }
+
+    var num = parseInt(colorCode, 16);
+
+    var r = (num >> 16) + amount;
+
+    if (r > 255) {
+        r = 255;
+    } else if (r < 0) {
+        r = 0;
+    }
+
+    var b = ((num >> 8) & 0x00FF) + amount;
+
+    if (b > 255) {
+        b = 255;
+    } else if (b < 0) {
+        b = 0;
+    }
+
+    var g = (num & 0x0000FF) + amount;
+
+    if (g > 255) {
+        g = 255;
+    } else if (g < 0) {
+        g = 0;
+    }
+
+    return (usePound ? "#" : "") + (g | (b << 8) | (r << 16)).toString(16);
+}
+
+
 
   function expo(x, f) {
     return Number.parseFloat(x).toExponential(f);
