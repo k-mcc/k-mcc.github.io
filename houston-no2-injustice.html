@@ -455,7 +455,13 @@ crossorigin=""></script>
       /*cursor: pointer;*/
     }
     .chorOption:hover {
-      background-color: #ddd
+      background-color: #ddd;
+    }
+    .chorOption:visited {
+      background-color: #FFFFFF;
+    }
+    .chorOption:focus {
+      background-color: #000000;
     }
     .show {display:block;}
 
@@ -466,6 +472,12 @@ crossorigin=""></script>
       height: 20px;
       margin-right: 5px;
       opacity: 0.8;
+    }
+    .designMenu {
+      display: block;
+      top: 10px;
+      margin-left: 100px;
+      z-index: 800;
     }
 
     .modal {
@@ -549,7 +561,7 @@ crossorigin=""></script>
   <body onload="load()">
   <div class='showLegendButton' id='gridContainerButton' ><h2>Legend</h2></div>
   <div class="chorMenu" id="chorMenu">
-    <button onclick="toggleChorDropdown()" class="dropbtn">Maps ▽</button>
+    <button onclick="toggleChorDropdown('myDropdown')" class="dropbtn">Maps ▽</button>
     <div id="myDropdown" class="dropdown-content">
       <div class='chorOption' id='returnBtn' onclick = "returnToBivariate()">NO<sub>2</sub> Equality Index (Default)</div>
       <div class='chorOption' id='popAsianBtn' onclick = "showUniChoropleth('popAsian',2)">Asian</div>
@@ -558,8 +570,17 @@ crossorigin=""></script>
       <div class='chorOption' id='popWhiteBtn' onclick = "showUniChoropleth('popWhite',5)">White (Non-Hispanic)</div>
     </div>
   </div>
+  <div class="designMenu" id="designMenu">
+    <button onclick="toggleChorDropdown('designDropdown')" class="dropbtn" style="top:100px;">View Options ▽</button>
+    <div id="designDropdown" class="dropdown-content" style="left:500px;top:70px;">
+      <div class='chorOption' id='fillBtn' onclick = "toggleOpacity('fill')">Fill</div>
+      <div class='chorOption' id='outlineBtn' onclick = "toggleOpacity('outline')">Outline</div>
+    </div>
+  </div>
   <button class="button" id="button1" onclick="setPalette(1)"><h2>Palette 1</h2><i id="a0"></i><i id="a1"></i><i id="a2"></i><i id="a3"></i></button>
   <button class="button" id="button2" onclick="setPalette(2)" ><h2>Palette 2</h2><i id="b0"></i><i id="b1"></i><i id="b2"></i><i id="b3"></i></button>
+  <button class="button" id="fillBtn" onclick="toggleOpacity('fill')"><h2>Fill</h2></button>
+  <button class="button" id="outlineBtn" onclick="toggleOpacity('outline')" ><h2>Outline</h2></button>
   <div id="map"></div>
   <div id="myModal" class="modal">
 
@@ -586,17 +607,41 @@ crossorigin=""></script>
     addChoropleth("Houston");
     modal.style.display = "block";
     opacitySetting = opacityFills;
+    currentOpacity = "";
+    toggleOpacity("fill");
     //document.getElementById("gridContainer").style.display = "none";
   }
 
 //var settingName = [fillOpacity, outlineWeight, outlineColor]
-  var opacityFills = [0.9];
-  var opacityOutlines = [0.1];
+  var opacityFills = [0.9, 0.5, "white"];
+  var opacityOutlines = [0.1, 3, 0];
   var opacitySetting;
-  function toggleOpacity() {
+  var currentOpacity;
+  function toggleOpacity(setting) {
+    if (setting == "outline") {
+      if (currentOpacity == "outline") return "";
+      opacitySetting = opacityOutlines;
+      currentOpacity = "outline";
+      document.getElementById("outlineBtn").style.background = "#000000";
+      document.getElementById("outlineBtn").style.color = "#FFFFFF";
+      document.getElementById("fillBtn").style.background = "#FFFFFF";
+      document.getElementById("fillBtn").style.color = "#000000";
+    }
+    else  if (setting == "fill") {
+      if (currentOpacity == "fill") return "";
+      opacitySetting = opacityFills;
+      currentOpacity = "fill";
+      document.getElementById("fillBtn").style.background = "#000000";
+      document.getElementById("fillBtn").style.color = "#FFFFFF";
+      document.getElementById("outlineBtn").style.background = "#FFFFFF";
+      document.getElementById("outlineBtn").style.color = "#000000";
+    }
+
     numVars = 2;
 
     fillOpacityVal = opacitySetting[0];
+    weightVal = opacitySetting[1];
+    colorVal = opacitySetting[2];
 
       if (houstonIsOn) { // Repaint Houston layer
         map.removeLayer(houston);
@@ -651,8 +696,8 @@ crossorigin=""></script>
   //var donutLegendID = "donutLegend";
   //var cities = L.layerGroup(hou, wdc);
 
-  function toggleChorDropdown() {
-    document.getElementById("myDropdown").classList.toggle("show");
+  function toggleChorDropdown(id) {
+    document.getElementById(id).classList.toggle("show");
   }
 
   function returnToBivariate() {
@@ -790,6 +835,8 @@ crossorigin=""></script>
 
       document.getElementById("button1").style.display = "block";
       document.getElementById("button2").style.display = "block";
+      document.getElementById("fillBtn").style.display = "block";
+      document.getElementById("outlineBtn").style.display = "block";
       //document.getElementById(donutLegendID).style.display = "none";
       //document.getElementById(donutLegendID + "Button").style.display = "none";
       document.getElementById("chorMenu").style.display = "inline-block";
@@ -1221,16 +1268,20 @@ crossorigin=""></script>
     }
 
     var fillOpacityVal;
-    //var colorVal = "default"
+    var colorVal;
+    var weightVal;
 
     function style(feature) {
-      //var setColor;
-      //if (colorVal == "default") setColor = getColor(feature.properties.no2Perc, feature.properties.demographicIndex, ((feature.properties[singleVariable] / feature.properties.popTotal)*100));
+      var setColor;
+      if (colorVal == "") {
+        setColor = getColor(feature.properties.no2Perc, feature.properties.demographicIndex, ((feature.properties[singleVariable] / feature.properties.popTotal)*100));
+      }
+      else setColor = colorVal;
       return {
           fillColor: getColor(feature.properties.no2Perc, feature.properties.demographicIndex, ((feature.properties[singleVariable] / feature.properties.popTotal)*100)),
-          weight: 3,
+          weight: weightVal,
           opacity: 1,
-          color: getColor(feature.properties.no2Perc, feature.properties.demographicIndex, ((feature.properties[singleVariable] / feature.properties.popTotal)*100)), // outline color
+          color: setColor, // outline color
           dashArray: '0',
           smoothFactor: 1,
           fillOpacity: fillOpacityVal
@@ -1316,7 +1367,7 @@ crossorigin=""></script>
 
       var div = L.DomUtil.create('div', 'grid-container');
       div.id = gridContainerID;
-      var grades = [1, 40, 99];
+      var grades = [1, 40, 90];
       //<div class='popup' onclick='popItUp(\"no2AxisPopup\")' style='bottom:5px; left:5px;' ><img src='images/info.png' style='width:30px;height:30px;'></img><span class='popuptext' id='no2AxisPopup'><p><strong>Title: </strong></br>Description</p></span></div>
       //div.innerHTML += '<img src="images/no2dLegend.png" alt="Legend" style="width:300px;height:300px;">';
       div.innerHTML += "<div class='xButton' onclick='xButton(\"gridContainer\", \"inline-grid\")' ><h2>✕</h2></div><h3 class='axis' >Nitrogen Dioxide Percentile</h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0],"") + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1],"") + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2],"") + "\" id:\"c3\" ></div>";
