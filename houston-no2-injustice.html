@@ -45,7 +45,7 @@ crossorigin=""></script>
     /* bivariate choropleths */
 
     .info {
-        height: 700px;
+        height: 800px;
         width: 400px;
         padding: 6px 8px;
         font: 14px/16px 'Poppins', Helvetica, sans-serif;
@@ -55,6 +55,8 @@ crossorigin=""></script>
         box-shadow: 0 0 15px rgba(0,0,0,0.2);
         border-radius: 3px;
         display: "inline-block";
+        text-align: center;
+        justify-content: center;
     }
     .info h2 {
         margin: 0 0 5px;
@@ -142,6 +144,10 @@ crossorigin=""></script>
       background-color: #FFFFFF;
       border: 1px solid #FFFFFF;
       padding: 40px;
+      text-align: center;
+    }
+    .grid-titem {
+      border: 1px solid #FFFFFF;
       text-align: center;
     }
     .grid-container h3 {
@@ -873,11 +879,15 @@ crossorigin=""></script>
           /*'</br><div style="column-count:2;"><h4 style="font-size:3em; color:' + adjustColor(props.no2Perc, 0) + ';column-span: 1;bottom:0px;padding:10px;">' + props.no2Perc + '</h4><h4 style="font-size:3em; color:' + adjustColor(0, props.demographicIndex) + ';column-span: 1;top:0;padding:0px;">' + props.demographicIndex + '</h4></div><h4>NO<sub>2</sub> Percentile:</h4></br><h4>Average NO<sub>2</sub> Vertical Column Density: ' + expo(props.no2Actual, 4) + ' molecules/cm<sup>2</sup></h4></br><h4>Socio-Demographic Percentile: <h4 style="font-size:3em; color:' + adjustColor(0, props.demographicIndex) + ';">' + props.demographicIndex + '</h4><br /><h4>Tract #' + props.TRACT + '</h4></br><h4> $' + numberWithCommas(props.medianHHIncome) + '</h4></br>'
           : 'Click on a census tract');*/
 
-          '<div style="display: inline-grid;grid-template-columns: auto auto; height:3em;padding-right:0px;"><div class=\"grid-item\" style="padding-left:0px;text-align:center;width=150px;max-width: 100%;min-width: 100%;"><h4 style="font-size:3em; color:' + adjustColor(props.no2Perc, 0) + ';">' + props.no2Perc + '</br></h4><h4>NO<sub>2</sub> Percentile</h4></div><div class=\"grid-item\" style="text-align:center;width=150px;max-width: 100%;min-width: 100%;padding-left:0px;"><h4 style="font-size:3em; color:' + adjustColor(0, props.demographicIndex) + ';">' + props.demographicIndex + '</h4><h4>Socio-Demographic Percentile</h4></div></div>' +
-          '</br></br></br></br><h4>Average NO<sub>2</sub> Vertical Column Density: ' + expo(props.no2Actual, 4) + ' molecules/cm<sup>2</sup></h4></br><h4>Socio-Demographic Percentile: <br /><h4>Tract #' + props.TRACT + '</h4></br><h4> $' + numberWithCommas(props.medianHHIncome) + '</h4></br>'
+          '<h4 style="text-align: center;">Tract #' + props.TRACT + '</h4>' +
+          '</br><div style="display: inline-grid;grid-template-columns: auto auto; height:3em;"><div class=\"grid-titem\" style="padding-left:10px;text-align:center;justify-content:center;width=150px;max-width: 100%;min-width: 100%;"><h4 style="font-size:3em; color:' + adjustColor(props.no2Perc, 0) + ';">' + props.no2Perc + '</br></h4><h4>NO<sub>2</sub> Percentile</h4></div><div class=\"grid-titem\" style="padding-right:0px;justify-content:center;text-align:center;width=150px;max-width: 100%;min-width: 100%;padding-left:0px;"><h4 style="font-size:3em; color:' + adjustColor(0, props.demographicIndex) + ';">' + props.demographicIndex + '</h4><h4>Socio-Demographic Percentile</h4></div></div>' +
+          '<h4 style="margin-top: 50px;"><strong>Average NO<sub>2</sub> Vertical Column Density:</strong> ' + expo(props.no2Actual, 4) + ' molecules/cm<sup>2</sup></h4>' +
+          '<div style="margin-top: 40px;display: inline-grid;grid-template-columns: auto auto; height:2em;padding-right:0px;"><div class=\"grid-titem\" style="padding-left:0px;text-align:center;width=150px;max-width: 100%;min-width: 100%;"><h4 style="font-size:2em;">$' + numberWithCommas(props.medianHHIncome) + '</h4></br><h4>Tract\'s Median Household Income</h4></div>' +
+          '<div class=\"grid-titem\" style="padding-left:0px;text-align:center;width=150px;max-width: 100%;min-width: 100%;"><h4 style="font-size:2em;">$52,338</h4></br><h4>Houston\'s Median Household Income</h4>' +
+          '</br></br>'
           : 'Click on a census tract');
 
-          this._div.innerHTML += '<div id="infoBox" style="height: 400px" ><br /></div>';
+          this._div.innerHTML += '<br /><br /><br /><br /><br /><br /><div id="infoBox" style="height: 400px;" ><br /></div>';
 
           var data = [
               {x: "American Indian/Alaska Native", value: (props ? props.popNativeAmer : 0)},
