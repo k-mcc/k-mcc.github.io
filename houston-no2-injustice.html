@@ -25,6 +25,7 @@ crossorigin=""></script>
 <!-- data files -->
 <script src="https://k-mcc.github.io/no2HouData.js"></script> <!-- Houston data -->
 <script src="https://k-mcc.github.io/no2WithDemIndex.js"></script> <!-- D.C. data -->
+<script src="/Users/katemccarthy/Documents/GitHub/k-mcc.github.io/blendColors.js"></script> <!-- D.C. data -->
 <!-- pie chart -->
 <script src="https://cdn.anychart.com/releases/8.0.1/js/anychart-core.min.js"></script>
 <script src="https://cdn.anychart.com/releases/8.0.1/js/anychart-pie.min.js"></script>
@@ -905,14 +906,33 @@ crossorigin=""></script>
   }
 
   // Joshua Stevens
-  var paletteA = ['#E8E8E8', '#ACE4E4', '#5AC8C8', '#DFB0D6', '#A5ADD3', '#5698B9', '#BE64AC', '#8C62AA', '#3B4994'];
+  //var paletteA = ['#E8E8E8', '#ACE4E4', '#5AC8C8', '#DFB0D6', '#A5ADD3', '#5698B9', '#BE64AC', '#8C62AA', '#3B4994'];     // sq1                                   sq2                                  sq3
+  var paletteA = ['#E8E8E8', '#ACE4E4', '#5AC8C8', '#DFB0D6', '#A5ADD3', '#5698B9', '#BE64AC', '#8C62AA', '#3B4994',       '#D79DCC', '#CF8AC1', '#C677B7',        '#9F9AC9', '#9988BF', '#9275B4',      '#4F84B0', '#4971A7', '#425D9D'  ];
+  /*
+  '#BE64AC' '#8C62AA' '#3B4994'
+
+
+  '#DFB0D6' '#A5ADD3' '#5698B9'
+
+
+  '#E8E8E8' '#ACE4E4' '#5AC8C8' */
   for (var i = 0; i < 4; i++) {
     var corners = [0, 2, 6, 8];
     var idStr = "a" + i;
     document.getElementById(idStr).style.background = paletteA[corners[i]];
   }
-  // gridA.png option 2
-  var paletteB = ['#F3F3F3', '#B4D3E1', '#509DC2', '#F3E6B3', '#B3B3B3', '#376387', '#F3B300', '#B36600', '#000000'];
+  // gridA.png option 2 //                                                                                                      sq1                                   sq2                                       sq3
+  var paletteB = ['#F3F3F3', '#B4D3E1', '#509DC2', '#F3E6B3', '#B3B3B3', '#376387', '#F3B300', '#B36600', '#000000',         '#F3D986', '#F3CD5A', '#F3C02D',        '#B3A086', '#B38D5A', '#B3792D',      '#294A65', '#1C3244', '#0E1922'  ];
+  /*
+  '#F3B300', '#B36600', '#000000'
+
+
+  '#F3E6B3', '#B3B3B3', '#376387',
+
+
+  '#F3F3F3', '#B4D3E1', '#509DC2',
+  */
+
   for (var i = 0; i < 4; i++) {
     var corners = [0, 2, 6, 8];
     var idStr = "b" + i;
@@ -1087,11 +1107,32 @@ crossorigin=""></script>
           else if (b == 2) return colors[7]; //mid axisB value
           else return colors[8]; //high axisB value
         }
+
+        else if (a == 4) { //high axisA value
+          if (b == 1) return colors[9]; //low axisB value
+          else if (b == 2) return colors[12]; //mid axisB value
+          else return colors[15]; //high axisB value
+        }
+
+        else if (a == 5) { //high axisA value
+          if (b == 1) return colors[10]; //low axisB value
+          else if (b == 2) return colors[13]; //mid axisB value
+          else return colors[16]; //high axisB value
+        }
+
+        else if (a == 6) { //high axisA value
+          if (b == 1) return colors[11]; //low axisB value
+          else if (b == 2) return colors[14]; //mid axisB value
+          else return colors[17]; //high axisB value
+        }
       }
     }
 
     function getRange(x) {
-      return x >= 66.66  ? 3 : //high
+      return x >= 90  ? 6 :
+             x >= 80  ? 5 :
+             x >= 70  ? 4 :
+             x >= 66.66  ? 3 : //high
              x >= 33.33  ? 2 : //mid
                       1; //low
     }
