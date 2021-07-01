@@ -480,13 +480,15 @@ crossorigin=""></script>
       overflow: auto; /* Enable scroll if needed */
       background-color: rgb(0,0,0); /* Fallback color */
       background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+      text-align: center;
+      justify-content: center;
     }
 
     /* Modal Content/Box */
     .modal-content {
       background-color: #FFFFFF;
-      margin: 15% auto; /* 15% from the top and centered */
-      padding: 20px;
+      margin: 2% auto; /* 15% from the top and centered */
+      padding: 10px;
       border: 1px solid #888;
       width: 80%; /* Could be more or less, depending on screen size */
       font: 14px/16px 'Poppins', Helvetica, sans-serif;
@@ -508,6 +510,39 @@ crossorigin=""></script>
       text-decoration: none;
       cursor: pointer;
     }
+
+    .exploreBtn {
+      background-color: '#3B4994';
+      border-radius: 2px solid white;
+      font: 14px/16px 'Poppins', Helvetica, sans-serif;
+      text-align: center;
+      display: inline-block;
+      font-size: 2em;
+    }
+
+    .exploreBtnContainer:hover {
+      background: #1c2970;
+      color: white;
+      box-shadow: 0 0 0px rgba(0,0,0,0.2);
+      border-radius: 3px;
+    }
+
+    .exploreBtnContainer {
+      height: 85px;
+      width: 300px;
+      font: 14px/16px 'Poppins', Helvetica, sans-serif;
+      background: #3B4994;
+      color: white;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      border-radius: 3px;
+      display: "inline-block";
+      text-align: center;
+      justify-content: center;
+      margin: 2% auto;
+      padding:10px;
+      cursor: pointer;
+    }
+
 
   </style>
 </head>
@@ -531,8 +566,9 @@ crossorigin=""></script>
 
     <!-- Modal content -->
     <div class="modal-content">
-      <span class="close">&times;</span>
-      <p>Welcome!</p>
+      <span class="close" onclick="closeModal()">&times;</span>
+      <img src="images/IntroSlide1.png" alt="Introduction" style="width:1075px;height:675px;"> <!--2150px x 1350px-->
+      <div class='exploreBtnContainer' onclick="closeModal()"><div class='exploreBtn' id='exploreBtn' onclick="closeModal()"><h2>Explore</h2></div></div>
     </div>
 
   </div>
@@ -603,7 +639,7 @@ crossorigin=""></script>
   var xLightbox = document.getElementsByClassName("close")[0];
 
   // When the user clicks on <span> (x), close the modal
-  xLightbox.onclick = function() {
+  function closeModal() {
     modal.style.display = "none";
     //var infoBoxDiv =document.getElementById("info");
     //infoBoxDiv.style.display = "block";
@@ -1172,7 +1208,7 @@ crossorigin=""></script>
           }
 
         }
-        //info.update(layer.feature.properties);
+        info.update(layer.feature.properties);
     }
 
     function resetHighlight(e) {
