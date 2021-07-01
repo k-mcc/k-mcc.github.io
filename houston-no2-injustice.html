@@ -1063,7 +1063,7 @@ crossorigin=""></script>
     document.getElementById(idStr).style.background = paletteA[corners[i]];
   }
   // gridA.png option 2 //                                                                                                      sq1                                   sq2                                       sq3                             top10
-  var paletteB = ['#F3F3F3', '#B4D3E1', '#509DC2', '#F3E6B3', '#B3B3B3', '#376387', '#F3B300', '#B36600', '#000000',         '#F3D986', '#F3CD5A', '#F3C02D',        '#B3A086', '#B38D5A', '#B3792D',      '#294A65', '#1C3244', '#0E1922',      '#000000'];
+  var paletteB = ['#F3F3F3', '#B4D3E1', '#509DC2', '#F3E6B3', '#B3B3B3', '#376387', '#F3B300', '#B36600', '#000000',         '#F3D986', '#F3CD5A', '#F3C02D',        '#B3A086', '#B38D5A', '#B3792D',      '#294A65', '#1C3244', '#0E1922',      '#00CC00'];
   /*
   '#F3B300', '#B36600', '#000000'
 
@@ -1278,9 +1278,20 @@ crossorigin=""></script>
                       1; //low
     }
 
-    function getOutlineColor(x) {
-      return x >= 90  ? '#FFFC00' :
-                        '#FFFFFF';
+    function getColorRanked(rank, suggestedColor) {
+      if (singleLayerOn != "") return suggestedColor;
+      return rank <= 15  ? colors[18] :
+                        suggestedColor;
+    }
+
+    function getOutlineColor(rank, suggestedColor) {
+      return rank <= 15  ? colors[18] :
+                        suggestedColor;
+    }
+    function getOutlineWeight(rank, suggestedWeight) {
+      if (singleLayerOn != "") return suggestedWeight;
+      return rank <= 15  ? suggestedWeight+3:
+                           suggestedWeight;
     }
 
     var fillOpacityVal;
@@ -1294,14 +1305,19 @@ crossorigin=""></script>
       }
       else setColor = colorVal;
       return {
-          fillColor: getColor(feature.properties.no2Perc, feature.properties.demographicIndex, ((feature.properties[singleVariable] / feature.properties.popTotal)*100)),
-          weight: weightVal,
+          fillColor: getColorRanked(feature.properties.comboRank, getColor(feature.properties.no2Perc, feature.properties.demographicIndex, ((feature.properties[singleVariable] / feature.properties.popTotal)*100))),
+          weight: getOutlineWeight(feature.properties.comboRank, weightVal),
           opacity: 1,
           color: setColor, // outline color
           dashArray: '0',
           smoothFactor: 1,
           fillOpacity: fillOpacityVal
       };
+      if (feature.properties.comboRank <= 15) {
+        if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+            layer.bringToFront();
+        }
+      }
     }
 
     function highlightFeature(e) {
@@ -1311,14 +1327,15 @@ crossorigin=""></script>
 
           layer.setStyle({
             weight: 5,
-            color: getColor(layer.feature.properties.no2Perc, layer.feature.properties.demographicIndex, ((layer.feature.properties[singleVariable] / layer.feature.properties.popTotal)*100)),
+            color: getOutlineColor(layer.feature.properties.comboRank, getColor(layer.feature.properties.no2Perc, layer.feature.properties.demographicIndex, ((layer.feature.properties[singleVariable] / layer.feature.properties.popTotal)*100))),
             //fill: false
             //fillColor: '#FFFFFF'
             fillOpacity: 0.4
           });
-
-          if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-              layer.bringToFront();
+          if (layer.feature.properties.comboRank <= 15) {
+            if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+                layer.bringToFront();
+            }
           }
 
         }
