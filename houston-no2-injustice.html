@@ -585,7 +585,50 @@ crossorigin=""></script>
   function load() {
     addChoropleth("Houston");
     modal.style.display = "block";
+    opacitySetting = opacityFills;
     //document.getElementById("gridContainer").style.display = "none";
+  }
+
+//var settingName = [fillOpacity, outlineWeight, outlineColor]
+  var opacityFills = [0.9];
+  var opacityOutlines = [0.1];
+  var opacitySetting;
+  function toggleOpacity() {
+    numVars = 2;
+
+    fillOpacityVal = opacitySetting[0];
+
+      if (houstonIsOn) { // Repaint Houston layer
+        map.removeLayer(houston);
+
+        geojson = L.geoJson(houLayer);
+
+        houston = L.geoJson(houLayer, {
+            style: style,
+            onEachFeature: onEachFeature
+        });
+
+        var layer = houston.addTo(map);
+
+        geojson = layer;
+      }
+      if (dcIsOn) { // Repaint DC layer
+        map.removeLayer(dc);
+
+        geojson = L.geoJson(dcLayer);
+
+        dc = L.geoJson(dcLayer, {
+            style: style,
+            onEachFeature: onEachFeature
+        });
+        var layer = dc.addTo(map);
+
+        geojson = layer;
+      }
+
+      zoom = false;
+      zoomToFeature(clickEvent);
+      zoom = true;
   }
 
   //countCityClicks = 1;
@@ -989,7 +1032,7 @@ crossorigin=""></script>
     draggable.enable();
 
     return div;
-  }//"#f3f3f3 url('img_tree.png') no-repeat right top";
+  }
 
   info.onAdd = function (map) {
       this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
@@ -1177,7 +1220,12 @@ crossorigin=""></script>
                         '#FFFFFF';
     }
 
+    var fillOpacityVal;
+    //var colorVal = "default"
+
     function style(feature) {
+      //var setColor;
+      //if (colorVal == "default") setColor = getColor(feature.properties.no2Perc, feature.properties.demographicIndex, ((feature.properties[singleVariable] / feature.properties.popTotal)*100));
       return {
           fillColor: getColor(feature.properties.no2Perc, feature.properties.demographicIndex, ((feature.properties[singleVariable] / feature.properties.popTotal)*100)),
           weight: 3,
@@ -1185,7 +1233,7 @@ crossorigin=""></script>
           color: getColor(feature.properties.no2Perc, feature.properties.demographicIndex, ((feature.properties[singleVariable] / feature.properties.popTotal)*100)), // outline color
           dashArray: '0',
           smoothFactor: 1,
-          fillOpacity: 0.1
+          fillOpacity: fillOpacityVal
       };
     }
 
