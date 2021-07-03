@@ -87,7 +87,7 @@
         zoomOffset: -1
     }).addTo(map);
 
-  //  L.geoJson(dcLayer).addTo(map);
+  //  L.geoJson(no2Layer).addTo(map);
 
       function getColor(x) {
         return x >= 90  ? '#A50026' :
@@ -142,7 +142,7 @@
 				});
 			}
 
-      L.geoJson(dcLayer, {pointToLayer: paint}).addTo(map);
+      L.geoJson(no2Layer, {pointToLayer: paint}).addTo(map);
 
       function highlightFeature(e) {
           var layer = e.target;
@@ -166,7 +166,7 @@
       }
 
       var geojson;
-      geojson = L.geoJson(dcLayer);
+      geojson = L.geoJson(no2Layer);
 
       function zoomToFeature(e) {
           map.fitBounds(e.target.getBounds(), {top: 50000, bottom: 50000, left: 50000, right: 50000});
@@ -180,7 +180,7 @@
           });
       }
 
-      geojson = L.geoJson(dcLayer, {
+      geojson = L.geoJson(no2Layer, {
           pointToLayer: paint,
           onEachFeature: onEachFeature
       }).addTo(map);
