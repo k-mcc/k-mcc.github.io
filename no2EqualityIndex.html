@@ -47,10 +47,6 @@ crossorigin=""></script>
       position: absolute;
     }
 
-    .neighborhoodLabel {
-      position: absolute;
-    }
-
     /* bivariate choropleths */
 
     .info {
@@ -440,6 +436,12 @@ crossorigin=""></script>
     }
     .show {display:block;}
 
+    .neighborhoodLabel {
+      font-size: 1em;
+    }
+
+
+
   </style>
 </head>
 <body>
@@ -629,6 +631,8 @@ crossorigin=""></script>
     }
   }
 
+  var markerSize = 2;
+
   function resetIconButtons(icon) {
     if (icon != "pie") {
       document.getElementById("pieButton").style.width = "40px";
@@ -654,6 +658,31 @@ crossorigin=""></script>
     else { // display bivariate choropleths
       map.removeLayer(houMarker);
       map.removeLayer(wdcMarker);
+
+      if (map.getZoom() > 9) {
+        var arr = document.getElementsByClassName("neighborhoodLabel");
+        //map.removeLayer(nhLayer);
+        for (var i = 0; i < arr.length; i++) {
+          arr[i].style.fontSize = "1.2em";
+        }
+
+        /*markerSize = 20;
+        nhLayer = L.geoJson(houNHs, {pointToLayer: paint});
+        nhLayer.addTo(map);*/
+      }
+      else if (map.getZoom() > 8) {
+        var arr = document.getElementsByClassName("neighborhoodLabel");
+        //map.removeLayer(nhLayer);
+        for (var i = 0; i < arr.length; i++) {
+          arr[i].style.fontSize = "1.1em";
+        }
+        /*markerSize = 20;
+        nhLayer = L.geoJson(houNHs, {pointToLayer: paint});
+        nhLayer.addTo(map);
+        nhLayer = L.geoJson(houNHs, {pointToLayer: paint});
+        nhLayer.addTo(map);*/
+      }
+
     }
   });
 
@@ -696,6 +725,7 @@ crossorigin=""></script>
   var countCityClicks = 0;
   var firstTimeInCity = true;
   var hiddenLegends = [];
+  var nhLayer;
 
   function addChoropleth(cityName) {
     if (firstTimeInCity) {
@@ -741,7 +771,10 @@ crossorigin=""></script>
 
       var layer = houston.addTo(map);
 
-       var nhGeojson = L.geoJson(houNHs, {pointToLayer: paint}).addTo(map);
+      nhLayer = L.geoJson(houNHs, {pointToLayer: paint});
+      nhLayer.addTo(map);
+
+      // var nhGeojson = L.geoJson(houNHs, {pointToLayer: paint}).addTo(map);
 
 
       //var layerNHs = neighborhoods.addTo(map);
@@ -847,23 +880,31 @@ crossorigin=""></script>
 
 
   function paint(feature, latlng) {
-
-      /*var nhTextIcon = L.divIcon({
-        className: 'neighborhoodLabel',
-        html: "<h4>" + feature.properties.SNBNAME + "</h4>"
-      });*/
-
-      /*return L.marker(latlng, {
-         icon: nhTextIcon,
-         title: feature.properties.SNBNAME
-      });*/
-
-      return L.circleMarker(latlng, {
-        fillColor: "#000000",
+    /*return L.circleMarker(latlng, {
+        fillColor: getColor(feature.properties.OBJECTID),
+        color: getOutlineColor(feature.properties.OBJECTID),
         weight: 1,
         fillOpacity: 0.6,
         radius: 5
+    });*/
+    var nhTextIcon = L.divIcon({
+      className: 'neighborhoodLabel',
+      html: "<h4 class='neighborhoodLabel'>" + feature.properties.SNBNAME + "</h4>"
+      //iconSize: markerSize
     });
+
+    return L.marker(latlng, {
+       icon: nhTextIcon,
+       title: feature.properties.SNBNAME,
+       iconSize: markerSize
+    });
+    /*return L.marker(latlng, {
+        fillColor: getColor(feature.properties.OBJECTID),
+        color: getOutlineColor(feature.properties.OBJECTID),
+        weight: 1,
+        fillOpacity: 0.6,
+        radius: 5
+    });*/
   }
 
   function toggleUnivariateChoropleth(propName) {
