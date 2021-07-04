@@ -15,7 +15,7 @@ class City {
     this.#geojson = geojson;
     this.#isOn = false;
     this.#center = center; // central coordinates
-    this.#cityMarker = new CityMarker(this.#name, this.#center, r1, r2, r3, r4, numTracts);
+    this.#cityMarker = new CityMarker(this.#name, r1, r2, r3, r4, numTracts);
   }
 
   // accessors
