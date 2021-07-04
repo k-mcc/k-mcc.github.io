@@ -474,8 +474,8 @@ crossorigin=""></script>
   // city markers
   var houName = "Houston";
   var wdcName = "Washington, D.C.";
-  var hous = new City("Houston", houLayer, 3, 161, 247, 278, 154, 840);
-  var wadc = new City("Washington, D.C.", dcLayer, 3, 16, 76, 69, 18, 179);
+  var hous = new City("Houston", houLayer);
+  var wadc = new City("Washington, D.C.", dcLayer);
   var hou = addCityMarker(hous, 'pie'); //plots Houston's city marker
   var wdc = addCityMarker(wadc, 'pie'); //plots DC's city marker
   var currentCityMarkerType;
@@ -536,7 +536,7 @@ crossorigin=""></script>
       boxShadow += ((r3/sizeFactor)*100 + (r4/sizeFactor)*100) + "px #0FB223; \"";
       styleStr += boxShadow;
 
-      htmlStr = "<div id='cityMarkerIcon' style='" + styleStr + "' ></div><h4>" + name + "</h4>";
+      htmlStr = "<div id='cityMarkerIcon' style='" + styleStr + "' ></div><h4>" + city.getName() + "</h4>";
 
     } else if (cityMarkerType == "pie") {
       var total = r1 + r2 + r3 + r4;
@@ -545,7 +545,7 @@ crossorigin=""></script>
       r3 = getPercent(r3, total) + r2;
       r4 = getPercent(r4, total) + r3;
 
-      htmlStr = '<div class="pie" id="cityMarkerIcon" style="background: conic-gradient(#E81D26 0% ' + r1 + '%, #FFF81F ' + r1 + '% ' + r2 + '%, #5EC2EF ' + r2 + '% ' + r3 + '%, #0FB223 ' + r3 + '% ' + r4 + '% );"></div><h4>' + name + '</h4>';
+      htmlStr = '<div class="pie" id="cityMarkerIcon" style="background: conic-gradient(#E81D26 0% ' + r1 + '%, #FFF81F ' + r1 + '% ' + r2 + '%, #5EC2EF ' + r2 + '% ' + r3 + '%, #0FB223 ' + r3 + '% ' + r4 + '% );"></div><h4>' + city.getName() + '</h4>';
 
     }
 
