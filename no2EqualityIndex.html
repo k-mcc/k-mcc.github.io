@@ -476,8 +476,8 @@ crossorigin=""></script>
   // city markers
   var hou = new City("Houston", houLayer, [29.749907, -95.358421], 161,247,278,154,840);
   var wdc = new City("Washington, D.C.", dcLayer, [38.8950, -77.0], 16,76,69,18,179);
-  var houMarker = addCityMarker(hou, hou.getName(), 'pie'); //plots Houston's city marker
-  var wdcMarker = addCityMarker(wdc, wdc.getName(), 'pie'); //plots DC's city marker
+  var houMarker = addCityMarker(hou, 'pie'); //plots Houston's city marker
+  var wdcMarker = addCityMarker(wdc, 'pie'); //plots DC's city marker
   var currentCityMarkerType;
   var gridContainerID = "gridContainer";
   var donutLegendID = "donutLegend";
@@ -505,18 +505,14 @@ crossorigin=""></script>
     }
   }*/
 
-  function addCityMarker(cityVar, name, cityMarkerType) { // plots a clickable marker, given a city's name and central coordinates. -- Could also specify min zoom level if needed.
+  function addCityMarker(cityVar, cityMarkerType) { // plots a clickable marker, given a city's name and central coordinates. -- Could also specify min zoom level if needed.
     var coords = cityVar.getCenter();
     var r1, r2, r3, r4, numTracts;
-
-    if (cityVar.getName() == hou.getName()) {
-      //coords = hou.getCenter();
-      r1 = 161; r2 = 247; r3 = 278; r4 = 154; numTracts = 840;
-    } else if (cityVar.getName() == wdc.getName()) {
-      //coords = wdc.getCenter();
-      r1 = 16;
-       r2 = 76; r3 = 69; r4 = 18; numTracts = 179;
-    }
+    r1 = cityVar.getR1();
+    r2 = cityVar.getR2();
+    r3 = cityVar.getR3();
+    r4 = cityVar.getR4();
+    numTracts = cityVar.getNumTracts();
 
     currentCityMarkerType = cityMarkerType;
     var htmlStr = "";
@@ -533,7 +529,7 @@ crossorigin=""></script>
       boxShadow += ((r3/sizeFactor)*100 + (r4/sizeFactor)*100) + "px #0FB223; \"";
       styleStr += boxShadow;
 
-      htmlStr = "<div id='cityMarkerIcon' style='" + styleStr + "' ></div><h4>" + name + "</h4>";
+      htmlStr = "<div id='cityMarkerIcon' style='" + styleStr + "' ></div><h4>" + cityVar.getName() + "</h4>";
 
     } else if (cityMarkerType == "pie") {
       var total = r1 + r2 + r3 + r4;
@@ -542,7 +538,7 @@ crossorigin=""></script>
       var percR3 = getPercent(r3, total) + percR2;
       var percR4 = getPercent(r4, total) + percR3;
 
-      htmlStr = '<div class="pie" id="cityMarkerIcon" style="background: conic-gradient(#E81D26 0% ' + percR1 + '%, #FFF81F ' + percR1 + '% ' + percR2 + '%, #5EC2EF ' + percR2 + '% ' + percR3 + '%, #0FB223 ' + percR3 + '% ' + percR4 + '% );"></div><h4>' + name + '</h4>';
+      htmlStr = '<div class="pie" id="cityMarkerIcon" style="background: conic-gradient(#E81D26 0% ' + percR1 + '%, #FFF81F ' + percR1 + '% ' + percR2 + '%, #5EC2EF ' + percR2 + '% ' + percR3 + '%, #0FB223 ' + percR3 + '% ' + percR4 + '% );"></div><h4>' + cityVar.getName() + '</h4>';
 
     }
 
@@ -553,7 +549,7 @@ crossorigin=""></script>
 
     var city = L.marker(coords, {
        icon: donutIcon,
-       title: name
+       title: cityVar.getName()
     }).addTo(map);
 
     city.on('click', function(e){
@@ -561,7 +557,7 @@ crossorigin=""></script>
         map.options.maxZoom = 30;
         map.setView(e.latlng, 12);
         countCityClicks++;
-        addChoropleth(name);
+        addChoropleth(cityVar.getName());
     });
 
     return city;
