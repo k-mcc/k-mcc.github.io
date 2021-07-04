@@ -39,8 +39,9 @@ class City {
   }
 
   getMarkerSegment(num) {
-    if (num < markerSegments.length) return this.#markerSegments[num];
-    else return null;
+    return this.#markerSegments[num];
+    //if (num < markerSegments.length);
+    //else return null;
   }
 
   // mutators
