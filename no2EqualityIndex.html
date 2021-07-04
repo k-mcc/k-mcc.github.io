@@ -475,7 +475,7 @@ crossorigin=""></script>
 
   // city markers
   var hou = new City("Houston", houLayer, [29.749907, -95.358421]);
-  var wdc = new City("Washington, D.C.", dcLayer, [38.449907, -98.358421]);
+  var wdc = new City("Washington, D.C.", dcLayer, [38.8950, -77.0]);
   var houMarker = addCityMarker(hou.getName(), 'pie'); //plots Houston's city marker
   var wdcMarker = addCityMarker(wdc.getName(), 'pie'); //plots DC's city marker
   var currentCityMarkerType;
@@ -508,19 +508,16 @@ crossorigin=""></script>
   function addCityMarker(name, cityMarkerType) { // plots a clickable marker, given a city's name and central coordinates. -- Could also specify min zoom level if needed.
     var coords;
     var r1, r2, r3, r4, numTracts;
-    var htmlStr = "";
-    currentCityMarkerType = cityMarkerType;
-
     if (name == hou.getName()) {
-      //coords = [29.749907, -95.358421];
       coords = hou.getCenter();
-      //r1 = 161; r2 = 247; r3 = 278; r4 = 154; numTracts = 845;
-      var houCityMarker = new CityMarker(hou.getName(), 161, 247, 278, 154, 845);
-      htmlStr = houCityMarker.getHTML(cityMarkerType);
+      r1 = 161; r2 = 247; r3 = 278; r4 = 154; numTracts = 840;
     } else if (name == wdc.getName()) {
-      coords = [38.8950, -77.0];
+      coords = wdc.getCenter();
       r1 = 16; r2 = 76; r3 = 69; r4 = 18; numTracts = 179;
+    }
 
+    currentCityMarkerType = cityMarkerType;
+    var htmlStr = "";
     if (cityMarkerType == "target") {
 
       var sizeFactor = numTracts*3;
@@ -546,7 +543,6 @@ crossorigin=""></script>
       htmlStr = '<div class="pie" id="cityMarkerIcon" style="background: conic-gradient(#E81D26 0% ' + r1 + '%, #FFF81F ' + r1 + '% ' + r2 + '%, #5EC2EF ' + r2 + '% ' + r3 + '%, #0FB223 ' + r3 + '% ' + r4 + '% );"></div><h4>' + name + '</h4>';
 
     }
-  }
 
     var donutIcon = L.divIcon({
       className: 'cityMarker',

@@ -7,13 +7,14 @@ class City {
   #geojson;
   #layer;
   #center;
-  #cityMarker;
+  #markerSegments;
 
-  constructor(name, geojson, center) {
+  constructor(name, geojson, center, markerSegments) {
     this.#name = name;
     this.#geojson = geojson;
     this.#isOn = false;
     this.#center = center;
+    this.#markerSegments = markerSegments;
   }
 
   // accessors
@@ -37,8 +38,9 @@ class City {
     return this.#center;
   }
 
-  getCityMarker() {
-    return this.#cityMarker;
+  getMarkerSegment(num) {
+    if (num < markerSegments.length) return this.#markerSegments[num];
+    else return null;
   }
 
   // mutators
@@ -56,10 +58,6 @@ class City {
 
   setCenter(newCenter) {
     this.#center = newCenter;
-  }
-
-  setCityMarker(newCityMarker) {
-    this.#cityMarker = newCityMarker;
   }
 
 
