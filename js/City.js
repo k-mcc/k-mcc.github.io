@@ -6,12 +6,6 @@ class City {
   #isOn;
   #geojson;
   #layer;
-  #center;
-  #cityMarker;
-  #markerType;
-
-  #pieHTML;
-  #targetHTML;
 
   constructor(name, geojson) {
     this.#name = name;
@@ -37,10 +31,6 @@ class City {
     return this.#layer;
   }
 
-  getCenter() {
-    return this.#center;
-  }
-
   // mutators
   setIsOn(newIsOn) {
     this.#isOn = newIsOn;
@@ -52,10 +42,6 @@ class City {
 
   setLayer(newLayer) {
     this.#layer = newLayer;
-  }
-
-  setMarkerType(newMarkerType) {
-    this.#markerType = newMarkerType;
   }
 
 
