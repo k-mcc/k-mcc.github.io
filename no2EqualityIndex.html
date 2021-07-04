@@ -474,11 +474,10 @@ crossorigin=""></script>
   // city markers
   var houName = "Houston";
   var wdcName = "Washington, D.C.";
-  var hous = new City("Houston", );
-  //var pizzzza = pizza;
-  var wadc = new City("Washington, D.C.", dcLayer);
+  var hous = new City("Houston", houLayer, 161, 247, 278, 154, 840);
+  var wadc = new City("Washington, D.C.", dcLayer, 16, 76, 69, 18, 179);
   var hou = addCityMarker(hous.getName(), 'pie'); //plots Houston's city marker
-  var wdc = addCityMarker(wdcName, 'pie'); //plots DC's city marker
+  var wdc = addCityMarker(wadc.getName(), 'pie'); //plots DC's city marker
   var currentCityMarkerType;
   var gridContainerID = "gridContainer";
   var donutLegendID = "donutLegend";
