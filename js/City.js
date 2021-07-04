@@ -38,8 +38,8 @@ class City {
     return this.#center;
   }
 
-  getMarkerSegment(num) {
-    return this.#markerSegments[num];
+  getMarkerSegment() {
+    return this.#markerSegments[0];
     //if (num < markerSegments.length);
     //else return null;
   }
