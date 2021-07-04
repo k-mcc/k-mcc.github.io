@@ -10,6 +10,9 @@ class City {
   #cityMarker;
   #markerType;
 
+  #pieHTML;
+  #targetHTML;
+
   constructor(name, geojson, center, r1, r2, r3, r4, numTracts) {
     this.#name = name;
     this.#geojson = geojson;
@@ -47,7 +50,9 @@ class City {
 
   getCityMarkerHTML(markerType) {
     setMarkerType(markerType);
-    return this.#cityMarker.getHTML(markerType);
+    //return this.#cityMarker.getHTML(markerType);
+    if (markerType == "pie") return this.#pieHTML;
+    else if (markerType == "target") return this.#targetHTML;
   }
 
   // mutators
