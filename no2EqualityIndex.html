@@ -474,8 +474,8 @@ crossorigin=""></script>
   // city markers
   var houName = "Houston";
   var wdcName = "Washington, D.C.";
-  var hous = new City("Houston", houLayer, 161, 247, 278, 154, 840);
-  var wadc = new City("Washington, D.C.", dcLayer, 16, 76, 69, 18, 179);
+  var hous = new City("Houston", houLayer, [29.749907, -95.358421], 161, 247, 278, 154, 840);
+  var wadc = new City("Washington, D.C.", dcLayer, [38.449907, -98.358421], 16, 76, 69, 18, 179);
   var hou = addCityMarker(hous, 'pie'); //plots Houston's city marker
   var wdc = addCityMarker(wadc, 'pie'); //plots DC's city marker
   var currentCityMarkerType;
