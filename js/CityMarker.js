@@ -39,10 +39,10 @@ class CityMarker {
 
   makePieHTML() {
     var total = this.#r1 + this.#r2 + this.#r3 + this.#r4;
-    var percR1 = getPercent(this.#r1, total);
-    var percR2 = getPercent(this.#r2, total) + percR1;
-    var percR3 = getPercent(this.#r3, total) + percR2;
-    var percR4 = getPercent(this.#r4, total) + percR4;
+    var percR1 = this.getPercent(this.#r1, total);
+    var percR2 = this.getPercent(this.#r2, total) + percR1;
+    var percR3 = this.getPercent(this.#r3, total) + percR2;
+    var percR4 = this.getPercent(this.#r4, total) + percR4;
 
     this.#pieHTML = '<div class="pie" id="cityMarkerIcon" style="background: conic-gradient(#E81D26 0% ' + percR1 + '%, #FFF81F ' +
     percR1 + '% ' + percR2 + '%, #5EC2EF ' + percR2 + '% ' + percR3 + '%, #0FB223 ' + percR3 + '% ' + percR4 + '% );"></div><h4>' + this.#name + '</h4>';
