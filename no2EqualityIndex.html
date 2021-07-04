@@ -30,6 +30,8 @@ crossorigin=""></script>
 <script src="https://cdn.anychart.com/releases/8.0.1/js/anychart-pie.min.js"></script>
 
 <script src="https://k-mcc.github.io/js/City.js"></script>
+<script src="https://k-mcc.github.io/js/CityMarker.js"></script>
+
 
   <style>
     body { margin: 0; padding: 0; }
@@ -472,12 +474,10 @@ crossorigin=""></script>
   }).addTo(map);
 
   // city markers
-  var houName = "Houston";
-  var wdcName = "Washington, D.C.";
-  var hous = new City("Houston", houLayer, [29.749907, -95.358421]);
-  var wadc = new City("Washington, D.C.", dcLayer, [38.449907, -98.358421]);
-  var hou = addCityMarker(houName, 'pie'); //plots Houston's city marker
-  var wdc = addCityMarker(wdcName, 'pie'); //plots DC's city marker
+  var hou = new City("Houston", houLayer, [29.749907, -95.358421]);
+  var wdc = new City("Washington, D.C.", dcLayer, [38.449907, -98.358421]);
+  var houMarker = addCityMarker(hou.getName(), 'pie'); //plots Houston's city marker
+  var wdcMarker = addCityMarker(wdc.getName(), 'pie'); //plots DC's city marker
   var currentCityMarkerType;
   var gridContainerID = "gridContainer";
   var donutLegendID = "donutLegend";
@@ -508,10 +508,10 @@ crossorigin=""></script>
   function addCityMarker(name, cityMarkerType) { // plots a clickable marker, given a city's name and central coordinates. -- Could also specify min zoom level if needed.
     var coords;
     var r1, r2, r3, r4, numTracts;
-    if (name == houName) {
+    if (name == hou.getName()) {
       coords = [29.749907, -95.358421];
       r1 = 161; r2 = 247; r3 = 278; r4 = 154; numTracts = 840;
-    } else if (name == wdcName) {
+    } else if (name == wdc.getName()) {
       coords = [38.8950, -77.0];
       r1 = 16; r2 = 76; r3 = 69; r4 = 18; numTracts = 179;
     }
@@ -607,10 +607,10 @@ crossorigin=""></script>
 
   function changeCityMarkerIcon(icon) {
     if (currentCityMarkerType != icon) {
-      map.removeLayer(hou);
-      map.removeLayer(wdc);
-      hou = addCityMarker(houName, icon);
-      wdc = addCityMarker(wdcName, icon);
+      map.removeLayer(houMarker);
+      map.removeLayer(wdcMarker);
+      houMarker = addCityMarker(hou.getName(), icon);
+      wdcMarker= addCityMarker(wdc.getName(), icon);
       var buttonID = icon + "Button";
       if (icon == "pie") {
         document.getElementById(buttonID).style.width = "40px";
@@ -643,12 +643,12 @@ crossorigin=""></script>
   // set zoom levels
   map.on('zoom', function () {
     if (map.getZoom() < 10) { // display city markers
-      map.addLayer(hou);
-      map.addLayer(wdc);
+      map.addLayer(houMarker);
+      map.addLayer(wdcMarker);
     }
     else { // display bivariate choropleths
-      map.removeLayer(hou);
-      map.removeLayer(wdc);
+      map.removeLayer(houMarker);
+      map.removeLayer(wdcMarker);
     }
   });
 
@@ -845,8 +845,8 @@ crossorigin=""></script>
       document.getElementById(propName + "Btn").style.color = "#000000";
       //remove uni legend, too
       singleLayerOn = "";
-      addChoropleth(houName);
-      addChoropleth(wdcName);
+      addChoropleth(hou.getName());
+      addChoropleth(wdc.getName());
     }
 
     else if (singleLayerOn != "") {

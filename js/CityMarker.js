@@ -1,6 +1,5 @@
 // CityMarker class
 
-// City Marker class
 class CityMarker {
 
   #name;
@@ -13,6 +12,7 @@ class CityMarker {
   #pieHTML;
 
   constructor(name, r1, r2, r3, r4, numTracts) {
+    this.#name = name;
     this.#r1 = r1;
     this.#r2 = r2;
     this.#r3 = r3;
