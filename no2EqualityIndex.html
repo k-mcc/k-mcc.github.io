@@ -32,6 +32,8 @@ crossorigin=""></script>
 <script src="https://k-mcc.github.io/js/City.js"></script>
 <script src="https://k-mcc.github.io/js/CityMarker.js"></script>
 
+<script src="https://k-mcc.github.io/geoJSON/houNHs.js"></script>
+
 
   <style>
     body { margin: 0; padding: 0; }
@@ -473,6 +475,8 @@ crossorigin=""></script>
       zoomOffset: -1
   }).addTo(map);
 
+
+
   // city markers
   var hou = new City("Houston", houLayer, [29.749907, -95.358421], 161,247,278,154,840);
   var wdc = new City("Washington, D.C.", dcLayer, [38.8950, -77.0], 16,76,69,18,179);
@@ -728,6 +732,13 @@ crossorigin=""></script>
       geojson = L.geoJson(houLayer);
 
       houston = L.geoJson(houLayer, {
+          style: style,
+          onEachFeature: onEachFeature
+      });
+
+      var layer = houston.addTo(map);
+
+      houston = L.geoJson(houNHs, {
           style: style,
           onEachFeature: onEachFeature
       });
