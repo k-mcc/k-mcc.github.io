@@ -19,11 +19,11 @@ class City {
     this.#isOn = false;
     this.#center = center;
     this.#markerSegments = markerSegments;
-    this.#r1 = markerSegments[0];
-    this.#r2 = markerSegments[1];
-    this.#r3 = markerSegments[2];
-    this.#r4 = markerSegments[3];
-    this.#numTracts = markerSegments[4];
+    this.#r1 = markerSegments.get(0);
+    this.#r2 = markerSegments.get(1);
+    this.#r3 = markerSegments.get(2);
+    this.#r4 = markerSegments.get(3);
+    this.#numTracts = markerSegments.get(4);
   }
 
   // accessors
