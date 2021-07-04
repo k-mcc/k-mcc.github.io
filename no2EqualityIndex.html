@@ -29,7 +29,7 @@ crossorigin=""></script>
 <script src="https://cdn.anychart.com/releases/8.0.1/js/anychart-core.min.js"></script>
 <script src="https://cdn.anychart.com/releases/8.0.1/js/anychart-pie.min.js"></script>
 
-<script src="/Users/katemccarthy/Documents/GitHub/k-mcc.github.io/js/City.js"></script>
+<script src="https://k-mcc.github.io/js/City.js"></script>
 
   <style>
     body { margin: 0; padding: 0; }
@@ -474,10 +474,10 @@ crossorigin=""></script>
   // city markers
   var houName = "Houston";
   var wdcName = "Washington, D.C.";
-  //var hous = new City("Houston");
-  var pizzzza = pizza;
-  //var wadc = new City("Washington, D.C.", dcLayer);
-  var hou = addCityMarker(houName, 'pie'); //plots Houston's city marker
+  var hous = new City("Houston", );
+  //var pizzzza = pizza;
+  var wadc = new City("Washington, D.C.", dcLayer);
+  var hou = addCityMarker(hous.getName(), 'pie'); //plots Houston's city marker
   var wdc = addCityMarker(wdcName, 'pie'); //plots DC's city marker
   var currentCityMarkerType;
   var gridContainerID = "gridContainer";

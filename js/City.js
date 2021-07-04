@@ -7,9 +7,9 @@ class City {
   #geojson;
   #layer;
 
-  constructor(name) {
+  constructor(name, geojson) {
     this.#name = name;
-    this.#geojson = "";
+    this.#geojson = geojson;
     this.#isOn = false;
   }
 
