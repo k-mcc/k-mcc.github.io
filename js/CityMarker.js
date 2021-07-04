@@ -3,7 +3,6 @@
 class CityMarker {
 
   #name;
-  #center;
   #r1;
   #r2;
   #r3;
@@ -12,8 +11,7 @@ class CityMarker {
   #targetHTML;
   #pieHTML;
 
-  constructor(name, center, r1, r2, r3, r4, numTracts) {
-    this.#center = center;
+  constructor(name, r1, r2, r3, r4, numTracts) {
     this.#r1 = r1;
     this.#r2 = r2;
     this.#r3 = r3;
