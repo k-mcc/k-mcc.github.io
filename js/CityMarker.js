@@ -1,6 +1,6 @@
 // CityMarker class
 
-class CityMarker {
+export default class CityMarker {
 
   #name;
   #r1;
