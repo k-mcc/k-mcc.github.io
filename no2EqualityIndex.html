@@ -474,8 +474,8 @@ crossorigin=""></script>
   }).addTo(map);
 
   // city markers
-  var hou = new City("Houston", houLayer, [29.749907, -95.358421], [161,247,278,154,840]);
-  var wdc = new City("Washington, D.C.", dcLayer, [38.8950, -77.0], [16,76,69,18,179]);
+  var hou = new City("Houston", houLayer, [29.749907, -95.358421], 161,247,278,154,840);
+  var wdc = new City("Washington, D.C.", dcLayer, [38.8950, -77.0], 16,76,69,18,179);
   var houMarker = addCityMarker(hou, hou.getName(), 'pie'); //plots Houston's city marker
   var wdcMarker = addCityMarker(wdc, wdc.getName(), 'pie'); //plots DC's city marker
   var currentCityMarkerType;
@@ -511,8 +511,7 @@ crossorigin=""></script>
 
     if (cityVar.getName() == hou.getName()) {
       //coords = hou.getCenter();
-      r1 = hou.getR1();//161;
-      r2 = 247; r3 = 278; r4 = 154; numTracts = 840;
+      r1 = 161; r2 = 247; r3 = 278; r4 = 154; numTracts = 840;
     } else if (cityVar.getName() == wdc.getName()) {
       //coords = wdc.getCenter();
       r1 = 16;

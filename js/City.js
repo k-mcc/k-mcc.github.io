@@ -18,7 +18,6 @@ class City {
     this.#geojson = geojson;
     this.#isOn = false;
     this.#center = center;
-    this.#markerSegments = markerSegments;
     this.#r1 = r1;
     this.#r2 = r2;
     this.#r3 = r3;
