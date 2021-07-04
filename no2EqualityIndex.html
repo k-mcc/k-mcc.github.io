@@ -34,7 +34,6 @@ crossorigin=""></script>
 
 <script src="https://k-mcc.github.io/geoJSON/houNHPoints.js"></script>
 
-
   <style>
     body { margin: 0; padding: 0; }
     #map {
@@ -742,11 +741,10 @@ crossorigin=""></script>
 
       var layer = houston.addTo(map);
 
-      /*var neighborhoods = L.geoJson(houNHs, {
-          pointToLayer: paint
-      });
+       var nhGeojson = L.geoJson(houNHs, {pointToLayer: paint}).addTo(map);
 
-      var layerNHs = neighborhoods.addTo(map);*/
+
+      //var layerNHs = neighborhoods.addTo(map);
 
       geojson = layer;
 
@@ -850,15 +848,22 @@ crossorigin=""></script>
 
   function paint(feature, latlng) {
 
-      var nhTextIcon = L.divIcon({
+      /*var nhTextIcon = L.divIcon({
         className: 'neighborhoodLabel',
-        html: "<h4>" + feature.properties.SNBNAME + "</h4>";
-      });
+        html: "<h4>" + feature.properties.SNBNAME + "</h4>"
+      });*/
 
-      return L.marker(latlng, {
+      /*return L.marker(latlng, {
          icon: nhTextIcon,
          title: feature.properties.SNBNAME
-      });
+      });*/
+
+      return L.circleMarker(latlng, {
+        fillColor: "#000000",
+        weight: 1,
+        fillOpacity: 0.6,
+        radius: 5
+    });
   }
 
   function toggleUnivariateChoropleth(propName) {
