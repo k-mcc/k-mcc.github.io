@@ -13,17 +13,17 @@ class City {
   #r4;
   #numTracts;
 
-  constructor(name, geojson, center, markerSegments) {
+  constructor(name, geojson, center, r1, r2, r3, r4, numTracts) {
     this.#name = name;
     this.#geojson = geojson;
     this.#isOn = false;
     this.#center = center;
     this.#markerSegments = markerSegments;
-    this.#r1 = markerSegments.get(0);
-    this.#r2 = markerSegments.get(1);
-    this.#r3 = markerSegments.get(2);
-    this.#r4 = markerSegments.get(3);
-    this.#numTracts = markerSegments.get(4);
+    this.#r1 = r1;
+    this.#r2 = r2;
+    this.#r3 = r3;
+    this.#r4 = r4;
+    this.#numTracts = numTracts;
   }
 
   // accessors
