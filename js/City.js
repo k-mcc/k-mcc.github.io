@@ -7,13 +7,13 @@ class City {
   #geojson;
   #layer;
   #center;
+  #cityMarker;
 
   constructor(name, geojson, center) {
     this.#name = name;
     this.#geojson = geojson;
     this.#isOn = false;
     this.#center = center;
-    //this.#cityMarker = new CityMarker(this.#name, r1, r2, r3, r4, numTracts);
   }
 
   // accessors
@@ -37,6 +37,10 @@ class City {
     return this.#center;
   }
 
+  getCityMarker() {
+    return this.#cityMarker;
+  }
+
   // mutators
   setIsOn(newIsOn) {
     this.#isOn = newIsOn;
@@ -52,6 +56,10 @@ class City {
 
   setCenter(newCenter) {
     this.#center = newCenter;
+  }
+
+  setCityMarker(newCityMarker) {
+    this.#cityMarker = newCityMarker;
   }
 
 
