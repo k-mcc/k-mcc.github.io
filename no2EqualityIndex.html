@@ -443,12 +443,118 @@ crossorigin=""></script>
     .show {display:block;}
 
     .neighborhoodLabel {
-      font-size: 10px;
-      text-shadow: 0px 0px 4px white;
+      display: none;
+      font-size: 14px;
+      opacity: 0;
+      text-shadow: 0px 0px 6px rgba(0, 0, 0);
       font-family: 'Asap', sans-serif;
+      color: #FFFFFF;
     }
 
+    .top10 {
+      opacity: 1;
+      font-size: 18px;
+      text-shadow: 0px 0px 6px rgba(0, 0, 0);
+      font-family: 'Asap', sans-serif;
+      color: #FFFFFF;
+      line-height: 20px;
+    }
 
+    .fade-in-text {
+      opacity: 1;
+
+      animation: fadeIn ease-out 1s;
+      -webkit-animation: fadeIn ease-out 1s;
+      -moz-animation: fadeIn ease-out 1s;
+      -o-animation: fadeIn ease-out 1s;
+      -ms-animation: fadeIn ease-out 1s;
+    }
+
+    .fade-in-text-top10 {
+      display: inline-block;
+      opacity: 1;
+
+      animation: fadeIn ease-out 1s;
+      -webkit-animation: fadeIn ease-out 1s;
+      -moz-animation: fadeIn ease-out 1s;
+      -o-animation: fadeIn ease-out 1s;
+      -ms-animation: fadeIn ease-out 1s;
+    }
+
+    .fade-out-text {
+      display: inline-block;
+      opacity: 0;
+
+      animation: fadeOut ease-out 1s;
+      -webkit-animation: fadeOut ease-out 1s;
+      -moz-animation: fadeOut ease-out 1s;
+      -o-animation: fadeOut ease-out 1s;
+      -ms-animation: fadeOut ease-out 1s;
+    }
+
+    .fade-out-text-top10 {
+      display: inline-block;
+      opacity: 0;
+
+      animation: fadeOut ease-out 1s;
+      -webkit-animation: fadeOut ease-out 1s;
+      -moz-animation: fadeOut ease-out 1s;
+      -o-animation: fadeOut ease-out 1s;
+      -ms-animation: fadeOut ease-out 1s;
+    }
+
+    /* FADE IN */
+
+    @keyframes fadeIn {
+      0% {opacity:0;}
+      100% {opacity:1;}
+    }
+
+    @-moz-keyframes fadeIn {
+      0% {opacity:0;}
+      100% {opacity:1;}
+    }
+
+    @-webkit-keyframes fadeIn {
+      0% {opacity:0;}
+      100% {opacity:1;}
+    }
+
+    @-o-keyframes fadeIn {
+      0% {opacity:0;}
+      100% {opacity:1;}
+    }
+
+    @-ms-keyframes fadeIn {
+      0% {opacity:0;}
+      100% {opacity:1;}
+    }
+
+    /* FADE OUT */
+    @keyframes fadeOut {
+      0% {opacity:1;}
+      100% {opacity:0;}
+    }
+
+    @-moz-keyframes fadeOut {
+      0% {opacity:1;}
+      100% {opacity:0;}
+    }
+
+    @-webkit-keyframes fadeOut {
+      0% {opacity:1;}
+      100% {opacity:0;}
+    }
+
+    @-o-keyframes fadeOut {
+      0% {opacity:1;}
+      100% {opacity:0;}
+    }
+
+    @-ms-keyframes fadeOut {
+      0% {opacity:1;}
+      100% {opacity:0;}
+    }
 
   </style>
 </head>
@@ -639,8 +745,6 @@ crossorigin=""></script>
     }
   }
 
-  var markerSize = 2;
-
   function resetIconButtons(icon) {
     if (icon != "pie") {
       document.getElementById("pieButton").style.width = "40px";
@@ -655,13 +759,14 @@ crossorigin=""></script>
   document.getElementById("pieButton").style.width = "40px";
   document.getElementById("pieButton").style.height = "40px";
   document.getElementById("pieButton").style.border = ".25em solid #000000";
-
+  var firstZoom = true;
   // set zoom levels
   map.on('zoom', function () {
     if (map.getZoom() < 10) { // display city markers
       map.addLayer(houMarker);
       map.addLayer(wdcMarker);
-      if (map.getZoom() < 10) {
+      map.removeLayer(nhLayer);
+      /*if (map.getZoom() < 10) {
         var arr = document.getElementsByClassName("neighborhoodLabel");
         //map.removeLayer(nhLayer);
         for (var i = 0; i < arr.length; i++) {
@@ -671,8 +776,8 @@ crossorigin=""></script>
         nhLayer = L.geoJson(houNHs, {pointToLayer: paint});
         nhLayer.addTo(map);
         nhLayer = L.geoJson(houNHs, {pointToLayer: paint});
-        nhLayer.addTo(map);*/
-      }
+        nhLayer.addTo(map);
+      }*/
     }
     else { // display bivariate choropleths
       map.removeLayer(houMarker);
@@ -692,11 +797,72 @@ crossorigin=""></script>
       }*/
 
       //10px on 12zoom
-      var size = getFontSize(map.getZoom());
+      //var size = getFontSize(map.getZoom());
+
+      var opacity;
 
       var arr = document.getElementsByClassName("neighborhoodLabel");
+
+      /*for (var i = 0; i < arr.length; i++) {
+        arr[i].style.opacity = opacity;
+      }*/
+      var display = "";
+      var className = "neighborhoodLabel";
+      if (map.getZoom() < 14 && !firstZoom) {
+        className = 'neighborhoodLabel fade-out-text';
+        //opacity = 0;
+      }
+      else if (map.getZoom() >= 14) {
+        className = 'neighborhoodLabel fade-in-text';
+        display = "inline-block";
+        firstZoom = false;
+        //opacity = 1;
+      }
+      //else if (map.getZoom() > 12) className = 'neighborhoodLabel';
+
+      arr = document.getElementsByClassName("neighborhoodLabel");
+
       for (var i = 0; i < arr.length; i++) {
-        arr[i].style.fontSize = "" + size + "px";
+        arr[i].className = className;
+        if (display != "")  arr[i].style.display = display;
+        //arr[i].style.opacity = opacity;
+        //arr[i].style.fontSize = size;
+      }
+
+      /*var arrTop10 = document.getElementsByClassName("top10");
+
+      for (var i = 0; i < arrTop10.length; i++) {
+        arrTop10[i].style.opacity = 1;
+      }*/
+
+      /*if (map.getZoom() >= 14) {
+        for (var i = 0; i < arr.length; i++) {
+          arr[i].className = 'fade-in-text';
+        }
+      }
+      else {
+        for (var i = 0; i < arr.length; i++) {
+          arr[i].className = 'neighborhoodLabel';
+        }
+      }*/
+
+      /*var arr = document.getElementsByClassName("neighborhoodLabel");
+      for (var i = 0; i < arr.length; i++) {
+        //arr[i].style.fontSize = "" + size + "px";
+
+      }*/
+
+      var size = getFontSizeTop10(map.getZoom());
+      //opacity = getOpacityTop10(map.getZoom());
+      var className = "top10";
+      if (map.getZoom() < 12) className = 'top10 fade-out-text-top10';
+      else if (map.getZoom() >= 12) className = 'top10 fade-in-text-top10';
+
+      arr = document.getElementsByClassName("top10");
+
+      for (var i = 0; i < arr.length; i++) {
+        arr[i].className = className;
+        arr[i].style.fontSize = size;
       }
 
 
@@ -707,10 +873,37 @@ crossorigin=""></script>
     return z >= 16  ? 18 :
            z >= 15  ? 16 :
            z >= 14  ? 14 :
-           z >= 13  ? 12 :
-           z >= 12  ? 10 :
-           z >= 11  ? 8 :
-                    6;
+           z >= 13  ? 0 :
+           z >= 12  ? 0 :
+           z >= 11  ? 0 :
+                    0;
+  }
+
+  function getTextOpacity(z) { // z = zoom level
+    return z >= 16  ? 1 :
+           z >= 15  ? 0.9 :
+           z >= 14  ? 0.6 :
+           z >= 13  ? 0.3 :
+           z >= 12  ? 0 :
+           z >= 11  ? 0 :
+                    0;
+  }
+
+  function getFontSizeTop10(z) { // z = zoom level
+    return z >= 16  ? 26 :
+           z >= 15  ? 24 :
+           z >= 14  ? 22 :
+           z >= 13  ? 20 :
+           z >= 12  ? 18 :
+           z >= 11  ? 12 :
+                    10;
+  }
+  function getOpacityTop10(z) { // z = zoom level
+    return z >= 12  ? 1 :
+           z >= 11.5  ? 0.7 :
+           z >= 11  ? 0.4 :
+           z >= 10.5  ? 0.1 :
+                    0;
   }
 
   // bivariate choropleths
@@ -798,7 +991,9 @@ crossorigin=""></script>
 
       var layer = houston.addTo(map);
 
-      nhLayer = L.geoJson(houNHs, {pointToLayer: paint});
+      nhLayer = L.geoJson(houNHs, {
+        pointToLayer: paint
+      }); //{layout: layout}
       nhLayer.addTo(map);
 
       // var nhGeojson = L.geoJson(houNHs, {pointToLayer: paint}).addTo(map);
@@ -906,23 +1101,41 @@ crossorigin=""></script>
   }
 
 
+
+
   function paint(feature, latlng) {
 
     var textLabel = feature.properties.SNBNAME
 
+    var top10 = feature.properties.Top10;
+    var addClass = "neighborhoodLabel ";
+
+    if (top10 == "Y") addClass = " top10  fade-in-text-top10 "; //top10
+
     var nhTextIcon = L.divIcon({
-      className: 'neighborhoodLabel',
-      html: "<h4 class='neighborhoodLabel'>" + feature.properties.SNBNAME + "</h4>"
-      //iconSize: markerSize
+      className: 'nhMarker',
+      html: "<h4 class='" + addClass + "'>" + feature.properties.SNBNAME + "</h4>",
+      iconSize: [200,10]
     });
+
+    //var
+    //element.style.setProperty("--nhFactor", feature.properties.ShapeSTArea);
 
     return L.marker(latlng, {
        icon: nhTextIcon,
-       title: feature.properties.SNBNAME,
-       iconSize: markerSize
-
+       title: feature.properties.SNBNAME
     });
   }
+
+  /*function layout(feature) {
+    return {
+      'icon': 'none',
+      'text-field': feature.properties.SNBNAME,
+      'text-font': ['Asap', 'sans-serif'],
+      'text-halo-blur': 2,
+      'text-halo-color': '#FFFFFF'
+    };
+  }*/
 
   function toggleUnivariateChoropleth(propName) {
 
