@@ -14,6 +14,12 @@ crossorigin=""></script>
 <!-- font -->
 <link rel="preconnect" href="https://fonts.gstatic.com">
 <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Asap&display=swap" rel="stylesheet">
+
+
 <!-- easy button -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">
 <script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
@@ -437,7 +443,9 @@ crossorigin=""></script>
     .show {display:block;}
 
     .neighborhoodLabel {
-      font-size: 1em;
+      font-size: 10px;
+      text-shadow: 0px 0px 4px white;
+      font-family: 'Asap', sans-serif;
     }
 
 
@@ -648,33 +656,16 @@ crossorigin=""></script>
   document.getElementById("pieButton").style.height = "40px";
   document.getElementById("pieButton").style.border = ".25em solid #000000";
 
-
   // set zoom levels
   map.on('zoom', function () {
     if (map.getZoom() < 10) { // display city markers
       map.addLayer(houMarker);
       map.addLayer(wdcMarker);
-    }
-    else { // display bivariate choropleths
-      map.removeLayer(houMarker);
-      map.removeLayer(wdcMarker);
-
-      if (map.getZoom() > 9) {
+      if (map.getZoom() < 10) {
         var arr = document.getElementsByClassName("neighborhoodLabel");
         //map.removeLayer(nhLayer);
         for (var i = 0; i < arr.length; i++) {
-          arr[i].style.fontSize = "1.2em";
-        }
-
-        /*markerSize = 20;
-        nhLayer = L.geoJson(houNHs, {pointToLayer: paint});
-        nhLayer.addTo(map);*/
-      }
-      else if (map.getZoom() > 8) {
-        var arr = document.getElementsByClassName("neighborhoodLabel");
-        //map.removeLayer(nhLayer);
-        for (var i = 0; i < arr.length; i++) {
-          arr[i].style.fontSize = "1.1em";
+          arr[i].style.fontSize = "0px";
         }
         /*markerSize = 20;
         nhLayer = L.geoJson(houNHs, {pointToLayer: paint});
@@ -682,9 +673,45 @@ crossorigin=""></script>
         nhLayer = L.geoJson(houNHs, {pointToLayer: paint});
         nhLayer.addTo(map);*/
       }
+    }
+    else { // display bivariate choropleths
+      map.removeLayer(houMarker);
+      map.removeLayer(wdcMarker);
+
+      /*var i = 0;
+      var done = false;
+      while (i < zoomLevels.length && !done) {
+        if (map.getZoom() <= zoomLevels[i]) {
+          var arr = document.getElementsByClassName("neighborhoodLabel");
+          for (var j = 0; j < arr.length; j++) {
+            arr[j].style.fontSize = fontSizes[i];
+          }
+          done = true;
+        }
+        i++;
+      }*/
+
+      //10px on 12zoom
+      var size = getFontSize(map.getZoom());
+
+      var arr = document.getElementsByClassName("neighborhoodLabel");
+      for (var i = 0; i < arr.length; i++) {
+        arr[i].style.fontSize = "" + size + "px";
+      }
+
 
     }
   });
+
+  function getFontSize(z) { // z = zoom level
+    return z >= 16  ? 18 :
+           z >= 15  ? 16 :
+           z >= 14  ? 14 :
+           z >= 13  ? 12 :
+           z >= 12  ? 10 :
+           z >= 11  ? 8 :
+                    6;
+  }
 
   // bivariate choropleths
 
@@ -880,13 +907,9 @@ crossorigin=""></script>
 
 
   function paint(feature, latlng) {
-    /*return L.circleMarker(latlng, {
-        fillColor: getColor(feature.properties.OBJECTID),
-        color: getOutlineColor(feature.properties.OBJECTID),
-        weight: 1,
-        fillOpacity: 0.6,
-        radius: 5
-    });*/
+
+    var textLabel = feature.properties.SNBNAME
+
     var nhTextIcon = L.divIcon({
       className: 'neighborhoodLabel',
       html: "<h4 class='neighborhoodLabel'>" + feature.properties.SNBNAME + "</h4>"
@@ -897,14 +920,8 @@ crossorigin=""></script>
        icon: nhTextIcon,
        title: feature.properties.SNBNAME,
        iconSize: markerSize
+
     });
-    /*return L.marker(latlng, {
-        fillColor: getColor(feature.properties.OBJECTID),
-        color: getOutlineColor(feature.properties.OBJECTID),
-        weight: 1,
-        fillOpacity: 0.6,
-        radius: 5
-    });*/
   }
 
   function toggleUnivariateChoropleth(propName) {
