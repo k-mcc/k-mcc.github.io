@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Nitrogen Dioxide Equality Index</title>
+  <title>Nitrogen Dioxide Injustice in Houston</title>
   <!-- Leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
  integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
@@ -23,11 +23,15 @@ crossorigin=""></script>
 <!-- L.Control.Button -->
 <script src="https://raw.githubusercontent.com/jerroydmoore/leaflet-button/b568e84f4e46167c4a8a8f640e2b192afdc34930/L.Control.Button.js"></script>
 <!-- data files -->
-<script src="https://k-mcc.github.io/no2HouData.js"></script> <!-- Houston data -->
+<script src="HoustonData/houNo2SEPT.js"></script> <!-- Houston data -->
 <script src="https://k-mcc.github.io/no2WithDemIndex.js"></script> <!-- D.C. data -->
 <!-- pie chart -->
 <script src="https://cdn.anychart.com/releases/8.0.1/js/anychart-core.min.js"></script>
 <script src="https://cdn.anychart.com/releases/8.0.1/js/anychart-pie.min.js"></script>
+
+<script src="https://k-mcc.github.io/geoJSON/houNHPoints.js"></script>
+<script src="geoJSON/dcNHPoints.js"></script>
+
 
   <style>
     body { margin: 0; padding: 0; }
@@ -502,7 +506,29 @@ crossorigin=""></script>
       border: 1px solid #888;
       width: 80%; /* Could be more or less, depending on screen size */
       font: 14px/16px 'Poppins', Helvetica, sans-serif;
-      font-size: 5em;
+      font-size: 25px;
+      line-height: 30px;
+      text-align: center;
+    }
+
+    .modal-content p {
+      padding: 10px;
+      margin-right: 20px;
+      margin-left: 20px;
+      font: 14px/16px 'Poppins', Helvetica, sans-serif;
+      font-size: 25px;
+      line-height: 30px;
+      text-align: left;
+    }
+
+    .modal-content h3 {
+      background-color: #FFFFFF;
+      color: #3B4994;
+      margin: 2% auto; /* 15% from the top and centered */
+      padding: 10px;
+      font: 14px/16px 'Poppins', Helvetica, sans-serif;
+      font-size: 50px;
+      line-height: 25px;
       text-align: center;
     }
 
@@ -553,6 +579,123 @@ crossorigin=""></script>
       cursor: pointer;
     }
 
+    .neighborhoodLabel {
+      display: none;
+      font-size: 14px;
+      opacity: 0;
+      text-shadow: 0px 0px 6px rgba(0, 0, 0);
+      font-family: 'Asap', sans-serif;
+      color: #FFFFFF;
+      text-transform: uppercase;
+
+    }
+
+    .top10 {
+      opacity: 1;
+      font-size: 18px;
+      text-shadow: 0px 0px 6px rgba(0, 0, 0);
+      font-family: 'Asap', sans-serif;
+      color: #FFFFFF;
+      line-height: 20px;
+      text-transform: uppercase;
+    }
+
+    .fade-in-text {
+      opacity: 1;
+
+      animation: fadeIn ease-out 1s;
+      -webkit-animation: fadeIn ease-out 1s;
+      -moz-animation: fadeIn ease-out 1s;
+      -o-animation: fadeIn ease-out 1s;
+      -ms-animation: fadeIn ease-out 1s;
+    }
+
+    .fade-in-text-top10 {
+      display: inline-block;
+      opacity: 1;
+
+      animation: fadeIn ease-out 1s;
+      -webkit-animation: fadeIn ease-out 1s;
+      -moz-animation: fadeIn ease-out 1s;
+      -o-animation: fadeIn ease-out 1s;
+      -ms-animation: fadeIn ease-out 1s;
+    }
+
+    .fade-out-text {
+      display: inline-block;
+      opacity: 0;
+
+      animation: fadeOut ease-out 1s;
+      -webkit-animation: fadeOut ease-out 1s;
+      -moz-animation: fadeOut ease-out 1s;
+      -o-animation: fadeOut ease-out 1s;
+      -ms-animation: fadeOut ease-out 1s;
+    }
+
+    .fade-out-text-top10 {
+      display: inline-block;
+      opacity: 0;
+
+      animation: fadeOut ease-out 1s;
+      -webkit-animation: fadeOut ease-out 1s;
+      -moz-animation: fadeOut ease-out 1s;
+      -o-animation: fadeOut ease-out 1s;
+      -ms-animation: fadeOut ease-out 1s;
+    }
+
+    /* FADE IN */
+
+    @keyframes fadeIn {
+      0% {opacity:0;}
+      100% {opacity:1;}
+    }
+
+    @-moz-keyframes fadeIn {
+      0% {opacity:0;}
+      100% {opacity:1;}
+    }
+
+    @-webkit-keyframes fadeIn {
+      0% {opacity:0;}
+      100% {opacity:1;}
+    }
+
+    @-o-keyframes fadeIn {
+      0% {opacity:0;}
+      100% {opacity:1;}
+    }
+
+    @-ms-keyframes fadeIn {
+      0% {opacity:0;}
+      100% {opacity:1;}
+    }
+
+    /* FADE OUT */
+    @keyframes fadeOut {
+      0% {opacity:1;}
+      100% {opacity:0;}
+    }
+
+    @-moz-keyframes fadeOut {
+      0% {opacity:1;}
+      100% {opacity:0;}
+    }
+
+    @-webkit-keyframes fadeOut {
+      0% {opacity:1;}
+      100% {opacity:0;}
+    }
+
+    @-o-keyframes fadeOut {
+      0% {opacity:1;}
+      100% {opacity:0;}
+    }
+
+    @-ms-keyframes fadeOut {
+      0% {opacity:1;}
+      100% {opacity:0;}
+    }
+
 
   </style>
 </head>
@@ -586,7 +729,9 @@ crossorigin=""></script>
     <!-- Modal content -->
     <div class="modal-content">
       <span class="close" onclick="closeModal()">&times;</span>
-      <img src="images/IntroSlide3.png" alt="Introduction" style="width:1075px;height:710px;"> <!--2150px x 1350px-->
+      <h3>Houston's NO<sub>2</sub> Equality Map</h3>
+      <p>Where we live, work, and spend our time affects how much nitrogen dioxide (NO<sub>2</sub>) and other air pollutants we breathe. Many primary pollutants, including NO2, vary between neighborhoods in the same city. On average, Houston’s low-income residents and residents of color experience 30% higher burdens of NO<sub>2</sub>.</br></br>The NO<sub>2</sub> Equality Map aims to draw attention to this injustice as it compares NO2 column densities and socio-demographic vulnerability. The NO<sub>2</sub> Equality Map currently displays data measured from space by <a href="http://www.tropomi.eu/" target="_blank" rel="noopener noreferrer">TROPOMI</a> on weekdays (September 2018 and 2019) at the census tract level. In the future, the NO<sub>2</sub> Equality Map will update in real time.</p>
+      <img src="images/IntroSlide4.png" alt="Introduction" style="width:1000px;height:600px;"> <!--2150px x 1350px-->
       <div class='exploreBtnContainer' onclick="closeModal()"><div class='exploreBtn' id='exploreBtn' onclick="closeModal()"><h2>Explore</h2></div></div>
     </div>
 
@@ -594,7 +739,7 @@ crossorigin=""></script>
 <script>
 
   var mapboxAccessToken = 'pk.eyJ1Ijoia2F0ZW1hcCIsImEiOiJja3A0NWV0ZTkwNjBtMm5vdWxzcXR6dWxjIn0.7rYO_pPmtvwuWUb0cG3QXQ';
-  var map = L.map('map').setView([29.7604, -95.3698], 11);
+  var map = L.map('map').setView([29.7604, -95.3698], 12);
   // set initial zoom limits for country view
   var countryMin = 0;
   var countryMax = 7;
@@ -609,8 +754,103 @@ crossorigin=""></script>
     currentOpacity = "";
     toggleOpacity("fill");
     //document.getElementById("gridContainer").style.display = "none";
-    addNeighborhoods();
+    //addNeighborhoods();
   }
+
+  var firstZoom = true;
+  map.on('zoom', function () {
+      /*var i = 0;
+      var done = false;
+      while (i < zoomLevels.length && !done) {
+        if (map.getZoom() <= zoomLevels[i]) {
+          var arr = document.getElementsByClassName("neighborhoodLabel");
+          for (var j = 0; j < arr.length; j++) {
+            arr[j].style.fontSize = fontSizes[i];
+          }
+          done = true;
+        }
+        i++;
+      }*/
+
+      //10px on 12zoom
+      //var size = getFontSize(map.getZoom());
+
+      var opacity;
+
+      var arr = document.getElementsByClassName("neighborhoodLabel");
+
+      /*for (var i = 0; i < arr.length; i++) {
+        arr[i].style.opacity = opacity;
+      }*/
+      var display = "";
+      var className = "neighborhoodLabel";
+      if (map.getZoom() < 14 && !firstZoom) {
+        className = 'neighborhoodLabel fade-out-text';
+        //opacity = 0;
+      }
+      else if (map.getZoom() >= 14) {
+        className = 'neighborhoodLabel fade-in-text';
+        display = "inline-block";
+        firstZoom = false;
+      }
+
+      arr = document.getElementsByClassName("neighborhoodLabel");
+
+      for (var i = 0; i < arr.length; i++) {
+        arr[i].className = className;
+        if (display != "")  arr[i].style.display = display;
+      }
+      var size = getFontSizeTop10(map.getZoom());
+
+      var className = "top10";
+      if (map.getZoom() < 12) className = 'top10 fade-out-text-top10';
+      else if (map.getZoom() >= 12) className = 'top10 fade-in-text-top10';
+
+      arr = document.getElementsByClassName("top10");
+
+      for (var i = 0; i < arr.length; i++) {
+        arr[i].className = className;
+        arr[i].style.fontSize = size;
+      }
+  });
+
+  function getFontSize(z) { // z = zoom level
+    return z >= 16  ? 18 :
+           z >= 15  ? 16 :
+           z >= 14  ? 14 :
+           z >= 13  ? 0 :
+           z >= 12  ? 0 :
+           z >= 11  ? 0 :
+                    0;
+  }
+
+  function getTextOpacity(z) { // z = zoom level
+    return z >= 16  ? 1 :
+           z >= 15  ? 0.9 :
+           z >= 14  ? 0.6 :
+           z >= 13  ? 0.3 :
+           z >= 12  ? 0 :
+           z >= 11  ? 0 :
+                    0;
+  }
+
+  function getFontSizeTop10(z) { // z = zoom level
+    return z >= 16  ? 26 :
+           z >= 15  ? 24 :
+           z >= 14  ? 22 :
+           z >= 13  ? 20 :
+           z >= 12  ? 18 :
+           z >= 11  ? 12 :
+                    10;
+  }
+  function getOpacityTop10(z) { // z = zoom level
+    return z >= 12  ? 1 :
+           z >= 11.5  ? 0.7 :
+           z >= 11  ? 0.4 :
+           z >= 10.5  ? 0.1 :
+                    0;
+  }
+
 
 //var settingName = [fillOpacity, outlineWeight, outlineColor]
   var opacityFills = [0.9, 0.5, "white"];
@@ -844,6 +1084,7 @@ crossorigin=""></script>
   var countCityClicks = 1;
   var firstTimeInCity = true;
   var hiddenLegends = [];
+  var nhLayer;
 
   function addChoropleth(cityName) {
     if (firstTimeInCity) {
@@ -893,6 +1134,11 @@ crossorigin=""></script>
       var layer = houston.addTo(map);
 
       geojson = layer;
+
+      nhLayer = L.geoJson(houNHs, {
+        pointToLayer: paint
+      }); //{layout: layout}
+      nhLayer.addTo(map);
 
       img.addTo(map);
 
@@ -978,6 +1224,31 @@ crossorigin=""></script>
     }
   }
 
+  function paint(feature, latlng) {
+
+    var textLabel = feature.properties.SNBNAME
+
+    var top10 = feature.properties.Top10;
+    var addClass = "neighborhoodLabel ";
+
+    if (top10 == "Y") addClass = " top10  fade-in-text-top10 "; //top10
+
+    var nhTextIcon = L.divIcon({
+      className: 'nhMarker',
+      html: "<h4 class='" + addClass + "'>" + feature.properties.SNBNAME + "</h4>",
+      iconSize: [200,10]
+    });
+
+    //var
+    //element.style.setProperty("--nhFactor", feature.properties.ShapeSTArea);
+
+    return L.marker(latlng, {
+       icon: nhTextIcon,
+       title: feature.properties.SNBNAME,
+       interactive: false
+    });
+  }
+
   function toggleUnivariateChoropleth(propName) {
 
     firstTimeInCity = false;
@@ -1051,7 +1322,7 @@ crossorigin=""></script>
 
   // Joshua Stevens
   //var paletteA = ['#E8E8E8', '#ACE4E4', '#5AC8C8', '#DFB0D6', '#A5ADD3', '#5698B9', '#BE64AC', '#8C62AA', '#3B4994'];     // sq1                                   sq2                                  sq3                                 top10
-  var paletteA = ['#E8E8E8', '#ACE4E4', '#5AC8C8', '#DFB0D6', '#A5ADD3', '#5698B9', '#BE64AC', '#8C62AA', '#3B4994',       '#D79DCC', '#CF8AC1', '#C677B7',        '#9F9AC9', '#9988BF', '#9275B4',      '#4F84B0', '#4971A7', '#425D9D',      '#000000'];
+  var paletteA = ['#E8E8E8', '#ACE4E4', '#5AC8C8', '#DFB0D6', '#A5ADD3', '#5698B9', '#BE64AC', '#8C62AA', '#3B4994',       '#D79DCC', '#CF8AC1', '#C677B7',        '#9F9AC9', '#9988BF', '#9275B4',      '#4F84B0', '#4971A7', '#425D9D',      '#FFFF00'];
   /*
   '#BE64AC' '#8C62AA' '#3B4994'
 
@@ -1282,19 +1553,36 @@ crossorigin=""></script>
     }
 
     function getColorRanked(rank, suggestedColor) {
-      if (singleLayerOn != "") return suggestedColor;
-      return rank <= 15  ? colors[18] :
-                        suggestedColor;
+      if (!(rank == null)) {
+        if (singleLayerOn != "") return suggestedColor;
+        return rank <= 25  ? colors[18] :
+                          suggestedColor;
+      }
+      else return suggestedColor;
     }
 
     function getOutlineColor(rank, suggestedColor) {
-      return rank <= 15  ? colors[18] :
-                        suggestedColor;
+      if (!(rank == null)) {
+        return rank <= 25  ? colors[18] :
+                          suggestedColor;
+      }
+      else return suggestedColor;
     }
     function getOutlineWeight(rank, suggestedWeight) {
-      if (singleLayerOn != "") return suggestedWeight;
-      return rank <= 15  ? suggestedWeight+3:
-                           suggestedWeight;
+      if (!(rank == null)) {
+        if (singleLayerOn != "") return suggestedWeight;
+        return rank <= 25  ? suggestedWeight+3:
+                             suggestedWeight;
+      }
+      else return suggestedWeight;
+    }
+
+    function getOutlineOpacity(rank) {
+      if (!(rank == null)) {
+        return rank <= 25  ? 1 :
+                          0.5;
+      }
+      else return 0.5;
     }
 
     var fillOpacityVal;
@@ -1308,17 +1596,22 @@ crossorigin=""></script>
       }
       else setColor = colorVal;
       return {
-          fillColor: getColorRanked(feature.properties.comboRank, getColor(feature.properties.no2Perc, feature.properties.demographicIndex, ((feature.properties[singleVariable] / feature.properties.popTotal)*100))),
+          fillColor: getColor(feature.properties.no2Perc, feature.properties.demographicIndex, ((feature.properties[singleVariable] / feature.properties.popTotal)*100)),
           weight: getOutlineWeight(feature.properties.comboRank, weightVal),
-          opacity: 1,
-          color: setColor, // outline color
+          opacity: getOutlineOpacity(feature.properties.comboRank),
+          color: getColorRanked(feature.properties.comboRank, setColor), // outline color
           dashArray: '0',
           smoothFactor: 1,
           fillOpacity: fillOpacityVal
       };
-      if (feature.properties.comboRank <= 15) {
+      if (feature.properties.comboRank <= 25) {
         if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
             layer.bringToFront();
+        }
+      }
+      else {
+        if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+            layer.bringToBack();
         }
       }
     }
@@ -1359,7 +1652,13 @@ crossorigin=""></script>
 
         //map.fitBounds(e.target.getBounds(), {top: 50000000000000000000000, bottom: 50000000000000000000000, left: 50000000000000000000000, right: 50000000000000000000000});
         //map.fitBounds(bounds, {padding: []})
-        if (zoom == true) map.fitBounds(e.target.getBounds(), {padding: [100, 100]});
+        if (zoom == true) {
+          //var latlng = layer.getLatLng();
+          var zoomLevel = 14;
+          map.setView(e.latlng, zoomLevel);
+        //map.fitBounds(e.target.getBounds(), {padding: [100, 100]});
+        }
+
         zoom = true;
 
         layer.setStyle({
