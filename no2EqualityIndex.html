@@ -686,7 +686,7 @@ crossorigin=""></script>
       <div class='chorOption' id='popWhiteBtn' onclick = "toggleUnivariateChoropleth('popWhite')">White</div>
     </div>
   </div>
-  <div class="donut-legend" id="donutLegend"><button class="piecon" id="pieButton" onclick="changeCityMarkerIcon('pie')"></button><button class="targetIconHolder" onclick="changeCityMarkerIcon('target')" ><div class="targetIcon" id="targetButton" ></div></button></div>
+  <div class="donut-legend" id="donutLegend"><button class="piecon" id="pieButton" onclick="changeCityMarkerIcon('pie')"></button><button class="targetIconHolder" onclick="changeCityMarkerIcon('target')" ><div class="targetIcon" id="targetButton"></div></button></div>
   <button class="button" id="button1" onclick="setPalette(1)"><h2>Palette 1</h2><i id="a0"></i><i id="a1"></i><i id="a2"></i><i id="a3"></i></button>
   <button class="button" id="button2" onclick="setPalette(2)" ><h2>Palette 2</h2><i id="b0"></i><i id="b1"></i><i id="b2"></i><i id="b3"></i></button>
   <div id="map"></div>
@@ -715,7 +715,7 @@ crossorigin=""></script>
   var wdc = new City("Washington, D.C.", dcLayer, [38.8950, -77.0], 16,76,69,18,179);
   var houMarker = addCityMarker(hou, 'pie'); //plots Houston's city marker
   var wdcMarker = addCityMarker(wdc, 'pie'); //plots DC's city marker
-  var currentCityMarkerType;
+  var currentCityMarkerType = 'pie';
   var gridContainerID = "gridContainer";
   var donutLegendID = "donutLegend";
   //var cities = L.layerGroup(hou, wdc);
@@ -755,7 +755,7 @@ crossorigin=""></script>
     r4 = cityVar.getR4();
     numTracts = cityVar.getNumTracts();
 
-    currentCityMarkerType = cityMarkerType;
+    //currentCityMarkerType = cityMarkerType;
     var htmlStr = "";
     if (cityMarkerType == "target") {
 
@@ -848,9 +848,10 @@ crossorigin=""></script>
     if (currentCityMarkerType != icon) {
       map.removeLayer(houMarker);
       map.removeLayer(wdcMarker);
-      houMarker = addCityMarker(hou.getName(), icon);
-      wdcMarker= addCityMarker(wdc.getName(), icon);
+      houMarker = addCityMarker(hou, icon);
+      wdcMarker= addCityMarker(wdc, icon);
       var buttonID = icon + "Button";
+      currentCityMarkerType = icon;
       if (icon == "pie") {
         document.getElementById(buttonID).style.width = "40px";
         document.getElementById(buttonID).style.height = "40px";
