@@ -57,18 +57,36 @@ crossorigin=""></script>
     /* bivariate choropleths */
 
     .info {
-        height: 700px;
-        width: 284px;
-        padding: 6px 8px;
-        font: 14px/16px 'Poppins', Helvetica, sans-serif;
-        /*font-family: 'Poppins', sans-serif;*/
-        background: white;
-        background: rgba(255,255,255);
-        box-shadow: 0 0 15px rgba(0,0,0,0.2);
-        border-radius: 3px;
+      height: 800px;
+      width: 400px;
+      padding: 6px 8px;
+      font: 14px/16px 'Poppins', Helvetica, sans-serif;
+      /*font-family: 'Poppins', sans-serif;*/
+      background: white;
+      background: rgba(255,255,255);
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      border-radius: 3px;
+      display: "inline-block";
+      text-align: center;
+      justify-content: center;
+      overflow: auto;
     }
     .info h2 {
         margin: 0 0 5px;
+        color: #000000;
+        text-align: center;
+    }
+    .littleDiv {
+      text-align: center;
+    }
+    .info h3 {
+        margin: 0 0 5px;
+        font-size: 1.2em;
+        color: #000000;
+    }
+    .info h4 {
+        margin: 0 0 5px;
+        font-size: 1.2em;
         color: #000000;
     }
 
@@ -140,6 +158,10 @@ crossorigin=""></script>
       background-color: #FFFFFF;
       border: 1px solid #FFFFFF;
       padding: 40px;
+      text-align: center;
+    }
+    .grid-titem {
+      border: 1px solid #FFFFFF;
       text-align: center;
     }
     .grid-container h3 {
@@ -560,6 +582,95 @@ crossorigin=""></script>
       100% {opacity:0;}
     }
 
+    /*additions from hou-no2-injutice.html*/
+    .legend-key {
+      display: inline-block;
+      border-radius: 20%;
+      width: 20px;
+      height: 20px;
+      margin-right: 5px;
+      opacity: 0.8;
+    }
+    .designMenu {
+      display: block;
+      top: 10px;
+      margin-left: 100px;
+      z-index: 800;
+    }
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 1000; /* Sit on top */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgb(0,0,0); /* Fallback color */
+      background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+      text-align: center;
+      justify-content: center;
+    }
+
+    /* Modal Content/Box */
+    .modal-content {
+      background-color: #FFFFFF;
+      margin: 2% auto; /* 15% from the top and centered */
+      padding: 10px;
+      border: 1px solid #888;
+      width: 80%; /* Could be more or less, depending on screen size */
+      font: 14px/16px 'Poppins', Helvetica, sans-serif;
+      font-size: 5em;
+      text-align: center;
+    }
+
+    /* The Close Button */
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 40px;
+      font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .exploreBtn {
+      background-color: '#3B4994';
+      border-radius: 2px solid white;
+      font: 14px/16px 'Poppins', Helvetica, sans-serif;
+      text-align: center;
+      display: inline-block;
+      font-size: 2em;
+    }
+
+    .exploreBtnContainer:hover {
+      background: #1c2970;
+      color: white;
+      box-shadow: 0 0 0px rgba(0,0,0,0.2);
+      border-radius: 3px;
+    }
+
+    .exploreBtnContainer {
+      height: 85px;
+      width: 300px;
+      font: 14px/16px 'Poppins', Helvetica, sans-serif;
+      background: #3B4994;
+      color: white;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      border-radius: 3px;
+      display: "inline-block";
+      text-align: center;
+      justify-content: center;
+      margin: 2% auto;
+      padding:10px;
+      cursor: pointer;
+    }
+
   </style>
 </head>
 <body>
@@ -569,7 +680,6 @@ crossorigin=""></script>
     <button onclick="toggleChorDropdown()" class="dropbtn">Maps ▽</button>
     <div id="myDropdown" class="dropdown-content">
       <div class='chorOption' id='returnBtn' onclick = "returnToBivariate()">NO<sub>2</sub> Equality Index (Default)</div>
-      <div class='chorOption' id='popNativeAmerBtn' onclick = "toggleUnivariateChoropleth('popNativeAmer')">American Indian and Alaska Native</div>
       <div class='chorOption' id='popAsianBtn' onclick = "toggleUnivariateChoropleth('popAsian')">Asian</div>
       <div class='chorOption' id='popBlackOrAfrAmerBtn' onclick = "toggleUnivariateChoropleth('popBlackOrAfrAmer')">Black or African American</div>
       <div class='chorOption' id='popHispanicBtn' onclick = "toggleUnivariateChoropleth('popHispanic')">Hispanic</div>
@@ -631,6 +741,10 @@ crossorigin=""></script>
       singleLayerOn = "";
     }
   }*/
+
+  function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
 
   function addCityMarker(cityVar, cityMarkerType) { // plots a clickable marker, given a city's name and central coordinates. -- Could also specify min zoom level if needed.
     var coords = cityVar.getCenter();
@@ -1169,8 +1283,13 @@ crossorigin=""></script>
       document.getElementById("returnBtn").style.background = "#FFFFFF";
       document.getElementById("returnBtn").style.color = "#000000";
 
+
+      map.removeLayer(univariateChoropleth);
+
       singleLayerOn = propName;
       addChoropleth(propName);
+
+      uniLegend();
     }
 
     else {
@@ -1178,6 +1297,7 @@ crossorigin=""></script>
       document.getElementById("returnBtn").style.color = "#000000";
       singleLayerOn = propName;
       addChoropleth(propName);
+      uniLegend();
     }
 
   }
@@ -1222,14 +1342,32 @@ crossorigin=""></script>
   }
 
   // Joshua Stevens
-  var paletteA = ['#E8E8E8', '#ACE4E4', '#5AC8C8', '#DFB0D6', '#A5ADD3', '#5698B9', '#BE64AC', '#8C62AA', '#3B4994'];
+  /*
+  '#BE64AC' '#8C62AA' '#3B4994'
+
+
+  '#DFB0D6' '#A5ADD3' '#5698B9'
+
+
+  '#E8E8E8' '#ACE4E4' '#5AC8C8' */
+  var paletteA = ['#E8E8E8', '#ACE4E4', '#5AC8C8', '#DFB0D6', '#A5ADD3', '#5698B9', '#BE64AC', '#8C62AA', '#3B4994',       '#D79DCC', '#CF8AC1', '#C677B7',        '#9F9AC9', '#9988BF', '#9275B4',      '#4F84B0', '#4971A7', '#425D9D',      '#000000'];
   for (var i = 0; i < 4; i++) {
     var corners = [0, 2, 6, 8];
     var idStr = "a" + i;
     document.getElementById(idStr).style.background = paletteA[corners[i]];
   }
+
+
   // gridA.png option 2
-  var paletteB = ['#F3F3F3', '#B4D3E1', '#509DC2', '#F3E6B3', '#B3B3B3', '#376387', '#F3B300', '#B36600', '#000000'];
+  /*
+  '#F3B300', '#B36600', '#000000'
+
+
+  '#F3E6B3', '#B3B3B3', '#376387',
+
+
+  '#F3F3F3', '#B4D3E1', '#509DC2' */
+  var paletteB = ['#F3F3F3', '#B4D3E1', '#509DC2', '#F3E6B3', '#B3B3B3', '#376387', '#F3B300', '#B36600', '#000000',         '#F3D986', '#F3CD5A', '#F3C02D',        '#B3A086', '#B38D5A', '#B3792D',      '#294A65', '#1C3244', '#0E1922',      '#00CC00'];
   for (var i = 0; i < 4; i++) {
     var corners = [0, 2, 6, 8];
     var idStr = "b" + i;
@@ -1238,14 +1376,14 @@ crossorigin=""></script>
 
   img.onAdd = function (map) {
     var div = L.DomUtil.create('div', 'grid-container');
-    div.id = "gridContainer";
+    div.id = gridContainerID;
     div.style.display = "inline-grid";
-    grades = [1, 40, 80];
+    var grades = [1, 40, 99];
     //<div class='popup' onclick='popItUp(\"no2AxisPopup\")' style='bottom:5px; left:5px;'><img src='images/info.png' style='width:30px;height:30px;'></img><span class='popuptext' id='no2AxisPopup'><p><strong>Title: </strong></br>Description</p></span></div>
     //div.innerHTML += '<img src="images/no2dLegend.png" alt="Legend" style="width:300px;height:300px;">';
-    div.innerHTML += "<div class='xButton' onclick='xButton(\"gridContainer\", \"inline-grid\")' ><h2 style='top: -47px; left: -26px'>✕</h2></div><h3 class='axis'>Nitrogen Dioxide Index</h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0],"") + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1],"") + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2],"") + "\" id:\"c3\" ></div>";
+    div.innerHTML += "<div class='xButton' onclick='xButton(\"gridContainer\", \"inline-grid\")' ><h2 style='top: -47px; left: -26px'>✕</h2></div><h3 class='axis'>Nitrogen Dioxide Percentile</h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0],"") + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1],"") + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2],"") + "\" id:\"c3\" ></div>";
     div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[0],"") + "\" id:\"a2\"></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[1],"") + "\" id:\"b2\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[2],"") + "\" id:\"c2\" ></div>";
-    div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0],"") + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1],"") + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2],"") + "\" id:\"c1\" ></div><h2 class='axis' >Demographic Index</h2>";
+    div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0],"") + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1],"") + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2],"") + "\" id:\"c1\" ></div><h2 class='axis' >Socio-Demographic Index</h2>";
 
     var draggable = new L.Draggable(div);
     draggable.enable();
@@ -1263,34 +1401,51 @@ crossorigin=""></script>
   };
 
   info.update = function (props) {
-      this._div.innerHTML = '<h2>NO<sub>2</sub> Equality Index</h2>' +  (props ?
-          '<h3>NO<sub>2</sub> Index: ' + props.no2Perc + '</h3><br /><h3>Demographic Index: ' + props.demographicIndex + '</h3><br /><h3>Tract #' + props.TRACT + '</h3><br />'
-          : 'Click on a census tract');
+    this._div.innerHTML = '<h2>NO<sub>2</sub> Equality Index</h2>' +  (props ?
+        /*'<h4>NO<sub>2</sub> Percentile: ' + props.no2Perc + '</h4><br /><h4>Average NO<sub>2</sub> Vertical Column Density: ' + expo(props.no2Actual, 4) + ' molecules/cm<sup>2</sup></h4></br><h4>Socio-Demographic Percentile: ' + props.demographicIndex + '</h4><br /><h4>Tract #' + props.TRACT + '</h4></br><h4> $' + numberWithCommas(props.medianHHIncome) + '</h4></br>'
+        : 'Click on a census tract');*/
 
-          this._div.innerHTML += '<div id="infoBox" style="height: 400px" ><br /></div>';
+        /*'</br><div style="column-count:2;"><h4 style="font-size:3em; color:' + adjustColor(props.no2Perc, 0) + ';column-span: 1;bottom:0px;padding:10px;">' + props.no2Perc + '</h4><h4 style="font-size:3em; color:' + adjustColor(0, props.demographicIndex) + ';column-span: 1;top:0;padding:0px;">' + props.demographicIndex + '</h4></div><h4>NO<sub>2</sub> Percentile:</h4></br><h4>Average NO<sub>2</sub> Vertical Column Density: ' + expo(props.no2Actual, 4) + ' molecules/cm<sup>2</sup></h4></br><h4>Socio-Demographic Percentile: <h4 style="font-size:3em; color:' + adjustColor(0, props.demographicIndex) + ';">' + props.demographicIndex + '</h4><br /><h4>Tract #' + props.TRACT + '</h4></br><h4> $' + numberWithCommas(props.medianHHIncome) + '</h4></br>'
+        : 'Click on a census tract');*/
 
-          var data = [
-              {x: "American Indian and Alaska Native", value: (props ? props.popNativeAmer : 0)},
-              {x: "Asian", value: (props ? props.popAsian : 0)},
-              {x: "Black or African American", value: (props ? props.popBlackOrAfrAmer : 0)},
-              {x: "Hispanic", value: (props ? props.popHispanic : 0)},
-              {x: "White", value: (props ? props.popWhite : 0)}
-          ];
+        '<h4 style="text-align: center;">Tract #' + props.TRACT + '</h4>' +
+        '</br><div style="display: inline-grid;grid-template-columns: auto auto; height:3em;"><div class=\"grid-titem\" style="padding-left:10px;text-align:center;justify-content:center;width=150px;max-width: 100%;min-width: 100%;"><h4 style="font-size:3em; color:' + adjustColor(props.no2Perc, 0) + ';">' + props.no2Perc + '</br></h4><h4>NO<sub>2</sub> Percentile</h4></div><div class=\"grid-titem\" style="padding-right:0px;justify-content:center;text-align:center;width=150px;max-width: 100%;min-width: 100%;padding-left:0px;"><h4 style="font-size:3em; color:' + adjustColor(0, props.demographicIndex) + ';">' + props.demographicIndex + '</h4><h4>Socio-Demographic Percentile</h4></div></div>' +
+        '<h4 style="margin-top: 50px;"><strong>Average NO<sub>2</sub> Vertical Column Density:</strong> ' + expo(props.no2Actual, 4) + ' molecules/cm<sup>2</sup></h4>' +
+        '<div style="margin-top: 40px;display: inline-grid;grid-template-columns: auto auto; height:2em;padding-right:0px;"><div class=\"grid-titem\" style="padding-left:0px;text-align:center;width=150px;max-width: 100%;min-width: 100%;"><h4 style="font-size:2em;">$' + numberWithCommas(props.medianHHIncome) + '</h4></br><h4>Tract\'s Median Household Income</h4></div>' +
+        '<div class=\"grid-titem\" style="padding-left:0px;text-align:center;width=150px;max-width: 100%;min-width: 100%;"><h4 style="font-size:2em;">$52,338</h4></br><h4>Houston\'s Median Household Income</h4>' +
+        '</br></br>'
+        : 'Click on a census tract');
 
-          //this._div.innerHTML += (props ? props.pWhite : 'hi');
+        this._div.innerHTML += '<br /><br /><br /><br /><br /><br /><div id="infoBox" style="height: 400px;" ><br /></div>';
 
-          // create the chart
-          var chart = anychart.pie();
+        var data = [
+            {x: "American Indian/Alaska Native", value: (props ? props.popNativeAmer : 0)},
+            {x: "Asian", value: (props ? props.popAsian : 0)},
+            {x: "Black or African American", value: (props ? props.popBlackOrAfrAmer : 0)},
+            {x: "Hispanic or Latino", value: (props ? props.popHispanic : 0)},
+            {x: "White (Non-Hispanic)", value: (props ? props.popWhite : 0)}
+        ];
 
-          // add the data
-          chart.data(data);
+        //this._div.innerHTML += (props ? props.pWhite : 'hi');
 
-          // display the chart in the container
-          chart.container('infoBox');
-          chart.draw();
-          chart.legend().itemsLayout("vertical");
-          //chart.sort("desc");
+        // create the chart
+        var chart = anychart.pie();
+
+        // add the data
+        chart.data(data);
+
+        //if (explodedPieSect != 0) chart.select([explodedPieSect]);
+
+        // display the chart in the container
+        chart.container('infoBox');
+        chart.draw();
+        chart.legend().itemsLayout("vertical");
+        //chart.sort("desc");
   };
+
+  function expo(x, f) {
+    return Number.parseFloat(x).toExponential(f);
+  }
 
   /*
   [ a3 ]  [ b3 ]  [ c3 ]
@@ -1300,50 +1455,119 @@ crossorigin=""></script>
   [ a1 ]  [ b1 ]  [ c1 ]
   */
 
-    function getColor(axisA, axisB, variableA) {
-      var x = variableA;
-      if (numVars == 1) {
-        return x >= 90  ? '#4D004B' :
-               x >= 80  ? '#810F7C' :
-               x >= 70  ? '#88419D' :
-               x >= 60  ? '#8C6BB1' :
-               x >= 50  ? '#8C96C6' :
-               x >= 40   ? '#9EBCDA' :
-               x >= 30   ? '#BFD3E6' :
-               x >= 20   ? '#E0ECF4' :
-               x >= 10   ? '#F7FCFD' :
-               x > 0   ? '#FFFFFF' :
-                        '#FFFFFF';
-      }
-      else if (numVars == 2) {
-        var a = getRange(axisA);
-        var b = getRange(axisB);
+  function adjustColor(prop1, prop2) {
+    var suggestedColor = getColor(prop1,prop2,"");
+    if (suggestedColor == colors[0] || suggestedColor == colors[1] || suggestedColor == colors[3]) { // if too light for a white background, change to black text.
+      return LightenDarkenColor(suggestedColor, -50);
+    }
+    else if (singleLayerOn != "") { // if univariate choropleth
+      return "#000000";
+    }
+    else return suggestedColor;
+  }
 
-        if (a == 1) { //low axisA value
-          if (b == 1) return colors[0]; //low axisB value
-          else if (b == 2) return colors[1]; //mid axisB value
-          else return colors[2]; //high axisB value
-        }
+  function LightenDarkenColor(colorCode, amount) {
+    var usePound = false;
 
-        else if (a == 2) { //mid axisA value
-          if (b == 1) return colors[3]; //low axisB value
-          else if (b == 2) return colors[4]; //mid axisB value
-          else return colors[5]; //high axisB value
-        }
-
-        else if (a == 3) { //high axisA value
-          if (b == 1) return colors[6]; //low axisB value
-          else if (b == 2) return colors[7]; //mid axisB value
-          else return colors[8]; //high axisB value
-        }
-      }
+    if (colorCode[0] == "#") {
+        colorCode = colorCode.slice(1);
+        usePound = true;
     }
 
-    function getRange(x) {
-      return x >= 66.66  ? 3 : //high
-             x >= 33.33  ? 2 : //mid
-                      1; //low
+    var num = parseInt(colorCode, 16);
+
+    var r = (num >> 16) + amount;
+
+    if (r > 255) {
+        r = 255;
+    } else if (r < 0) {
+        r = 0;
     }
+
+    var b = ((num >> 8) & 0x00FF) + amount;
+
+    if (b > 255) {
+        b = 255;
+    } else if (b < 0) {
+        b = 0;
+    }
+
+    var g = (num & 0x0000FF) + amount;
+
+    if (g > 255) {
+        g = 255;
+    } else if (g < 0) {
+        g = 0;
+    }
+
+    return (usePound ? "#" : "") + (g | (b << 8) | (r << 16)).toString(16);
+  }
+
+  function getColor(axisA, axisB, variableA) {
+    var x = variableA;
+    if (numVars == 1) {
+      return x >= 90  ? '#4D004B' :
+             x >= 80  ? '#810F7C' :
+             x >= 70  ? '#88419D' :
+             x >= 60  ? '#8C6BB1' :
+             x >= 50  ? '#8C96C6' :
+             x >= 40   ? '#9EBCDA' :
+             x >= 30   ? '#BFD3E6' :
+             x >= 20   ? '#E0ECF4' :
+             x >= 10   ? '#F7FCFD' :
+             x > 0   ? '#FFFFFF' :
+                      '#FFFFFF';
+    }
+    else if (numVars == 2) {
+      var a = getRange(axisA);
+      var b = getRange(axisB);
+
+      if (a == 1) { //low axisA value
+        if (b == 1) return colors[0]; //low axisB value
+        else if (b == 2) return colors[1]; //mid axisB value
+        else return colors[2]; //high axisB value
+      }
+
+      else if (a == 2) { //mid axisA value
+        if (b == 1) return colors[3]; //low axisB value
+        else if (b == 2) return colors[4]; //mid axisB value
+        else return colors[5]; //high axisB value
+      }
+
+      else if (a == 3) { //high axisA value
+        if (b == 1) return colors[9]; //low axisB value
+        else if (b == 2) return colors[12]; //mid axisB value
+        else return colors[15]; //high axisB value
+      }
+
+      else if (a == 4) { //high axisA value
+        if (b == 1) return colors[10]; //low axisB value
+        else if (b == 2) return colors[13]; //mid axisB value
+        else return colors[16]; //high axisB value
+      }
+
+      else if (a == 5) { //high axisA value
+        if (b == 1) return colors[11]; //low axisB value
+        else if (b == 2) return colors[14]; //mid axisB value
+        else return colors[17]; //high axisB value
+      }
+
+      else if (a == 6) { //high axisA value
+        if (b == 1) return colors[6]; //low axisB value
+        else if (b == 2) return colors[7]; //mid axisB value
+        else return colors[8]; //high axisB value
+      }
+    }
+  }
+
+  function getRange(x) {
+    return x >= 90  ? 6 :
+           x >= 80  ? 5 :
+           x >= 70  ? 4 :
+           x >= 66.66  ? 3 : //high
+           x >= 33.33  ? 2 : //mid
+                    1; //low
+  }
 
     function getOutlineColor(x) {
       return x >= 90  ? '#FFFC00' :
@@ -1355,10 +1579,10 @@ crossorigin=""></script>
           fillColor: getColor(feature.properties.no2Perc, feature.properties.demographicIndex, ((feature.properties[singleVariable] / feature.properties.popTotal)*100)),
           weight: 0.5,
           opacity: 1,
-          color: 'white', // outline color
+          color: getColor(feature.properties.no2Perc, feature.properties.demographicIndex, ((feature.properties[singleVariable] / feature.properties.popTotal)*100)),
           dashArray: '0',
           smoothFactor: 1,
-          fillOpacity: 0.9
+          fillOpacity: 0.5
       };
     }
 
@@ -1372,7 +1596,7 @@ crossorigin=""></script>
             color: getColor(layer.feature.properties.no2Perc, layer.feature.properties.demographicIndex, ((layer.feature.properties[singleVariable] / layer.feature.properties.popTotal)*100)),
             //fill: false
             //fillColor: '#FFFFFF'
-            fillOpacity: 0.5
+            fillOpacity: 0.4
           });
 
           if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
@@ -1440,16 +1664,17 @@ crossorigin=""></script>
     function updateImg() {
 
       var div = L.DomUtil.create('div', 'grid-container');
-      div.id = "gridContainer";
-      grades = [1, 40, 80];
+      div.id = gridContainerID;
+      var grades = [1, 40, 90];
       //<div class='popup' onclick='popItUp(\"no2AxisPopup\")' style='bottom:5px; left:5px;' ><img src='images/info.png' style='width:30px;height:30px;'></img><span class='popuptext' id='no2AxisPopup'><p><strong>Title: </strong></br>Description</p></span></div>
       //div.innerHTML += '<img src="images/no2dLegend.png" alt="Legend" style="width:300px;height:300px;">';
-      div.innerHTML += "<div class='xButton' onclick='xButton(\"gridContainer\", \"inline-grid\")' ><h2>✕</h2></div><h3 class='axis' >Nitrogen Dioxide Index</h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0],"") + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1],"") + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2],"") + "\" id:\"c3\" ></div>";
+      div.innerHTML += "<div class='xButton' onclick='xButton(\"gridContainer\", \"inline-grid\")' ><h2>✕</h2></div><h3 class='axis' >Nitrogen Dioxide Percentile</h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0],"") + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1],"") + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2],"") + "\" id:\"c3\" ></div>";
       div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[0],"") + "\" id:\"a2\"></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[1],"") + "\" id:\"b2\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[2],"") + "\" id:\"c2\" ></div>";
-      div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0],"") + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1],"") + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2],"") + "\" id:\"c1\" ></div><h2 class='axis' >Demographic Index</h2>";
+      div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0],"") + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1],"") + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2],"") + "\" id:\"c1\" ></div><h2 class='axis' >Socio-Demographic Index</h2>";
 
       //<button type=\"button\" class=\"collapsible\" id=\"collapse1\" onclick=\"toggleLegend()\"  >
 
+      div.style.display = "inline-grid";
 
       var draggable = new L.Draggable(div);
       draggable.enable();
@@ -1544,6 +1769,30 @@ crossorigin=""></script>
         zoom = false;
         zoomToFeature(clickEvent);
         zoom = true;
+  }
+
+  // univariate choropleth legend
+  function uniLegend() {
+
+    var div = document.getElementById(gridContainerID);
+    var grades = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90];
+    //<div class='popup' onclick='popItUp(\"no2AxisPopup\")' style='bottom:5px; left:5px;' ><img src='images/info.png' style='width:30px;height:30px;'></img><span class='popuptext' id='no2AxisPopup'><p><strong>Title: </strong></br>Description</p></span></div>
+    //div.innerHTML += '<img src="images/no2dLegend.png" alt="Legend" style="width:300px;height:300px;">';
+
+    div.innerHTML = '<img src="images/uniLegend.png" alt="Legend" style="width:200px;height:370px;margin-right:50px;margin-top:30px;"></img>';
+    //<div class="xButton" onclick="xButton(\"gridContainer\", \"inline-grid\")" style="right:35px;top:-43px;"><h2>✕</h2></div>
+    /*for (var i = grades.length-1; i > 0; i--) {
+        div.innerHTML +=
+            '<h4>' + grades[i] + '<i style="background:' + getColor(0,0,grades[i] + 1) + '"></i></h4>' +
+            '</br>';
+    }*/
+
+    div.style.display = "inline-block";
+    //div.style.lineHeight = '0px';
+    div.style.padding = "0px";
+    div.style.lineHeight = "20px";
+
+    return div;
   }
 
 </script>
