@@ -152,7 +152,6 @@ crossorigin=""></script>
       border-bottom: 50px solid #FFFFFF;
       border-radius: 3px;
       box-shadow: 0 0 15px rgba(0,0,0,0.2);
-      display: inline-grid;
     }
     .grid-item {
       background-color: #FFFFFF;
@@ -176,7 +175,7 @@ crossorigin=""></script>
       background: none;
       transform-origin: 0 0;
       transform: rotate(90deg);
-      font-size: 1.8em;
+      font-size: 1.5em;
     }
     .grid-container h2 {
       font: 14px/16px 'Poppins', Helvetica, sans-serif;
@@ -189,7 +188,15 @@ crossorigin=""></script>
       top: 257px;
       left: 0;
       background: none;
-      font-size: 1.8em;
+      font-size: 1.5em;
+    }
+
+    .grid-container i {
+      width: 20px;
+      height: 20px;
+      float: left;
+      margin-right: 8px;
+      opacity: 0.7;
     }
 
     .button {
@@ -1249,7 +1256,8 @@ crossorigin=""></script>
 
     return L.marker(latlng, {
        icon: nhTextIcon,
-       title: feature.properties.SNBNAME
+       title: feature.properties.SNBNAME,
+       interactive: false
     });
   }
 
@@ -1393,12 +1401,12 @@ crossorigin=""></script>
   }//"#f3f3f3 url('img_tree.png') no-repeat right top";
 
   info.onAdd = function (map) {
-      this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
-      this._div.id = "info";
-      this.update();
-      var draggable = new L.Draggable(this._div);
-      draggable.enable();
-      return this._div;
+    this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+    this._div.id = "info";
+    this.update();
+    var draggable = new L.Draggable(this._div);
+    draggable.enable();
+    return this._div;
   };
 
   info.update = function (props) {
@@ -1622,7 +1630,13 @@ crossorigin=""></script>
 
         //map.fitBounds(e.target.getBounds(), {top: 50000000000000000000000, bottom: 50000000000000000000000, left: 50000000000000000000000, right: 50000000000000000000000});
         //map.fitBounds(bounds, {padding: []})
-        if (zoom == true) map.fitBounds(e.target.getBounds(), {padding: [100, 100]});
+        if (zoom == true) {
+          //var latlng = layer.getLatLng();
+          var zoomLevel = 14;
+          map.setView(e.latlng, zoomLevel);
+        //map.fitBounds(e.target.getBounds(), {padding: [100, 100]});
+        }
+
         zoom = true;
 
         layer.setStyle({
