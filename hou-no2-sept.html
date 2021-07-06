@@ -1616,7 +1616,13 @@ crossorigin=""></script>
 
         //map.fitBounds(e.target.getBounds(), {top: 50000000000000000000000, bottom: 50000000000000000000000, left: 50000000000000000000000, right: 50000000000000000000000});
         //map.fitBounds(bounds, {padding: []})
-        if (zoom == true) map.fitBounds(e.target.getBounds(), {padding: [100, 100]});
+        if (zoom == true) {
+          //var latlng = layer.getLatLng();
+          var zoomLevel = 14;
+          map.setView(e.latlng, zoomLevel);
+        //map.fitBounds(e.target.getBounds(), {padding: [100, 100]});
+        }
+
         zoom = true;
 
         layer.setStyle({
