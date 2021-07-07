@@ -604,6 +604,7 @@ crossorigin=""></script>
       margin-left: 100px;
       z-index: 800;
     }
+
     .modal {
       display: none; /* Hidden by default */
       position: fixed; /* Stay in place */
@@ -627,7 +628,29 @@ crossorigin=""></script>
       border: 1px solid #888;
       width: 80%; /* Could be more or less, depending on screen size */
       font: 14px/16px 'Poppins', Helvetica, sans-serif;
-      font-size: 5em;
+      font-size: 25px;
+      line-height: 30px;
+      text-align: center;
+    }
+
+    .modal-content p {
+      padding: 10px;
+      margin-right: 20px;
+      margin-left: 20px;
+      font: 14px/16px 'Poppins', Helvetica, sans-serif;
+      font-size: 25px;
+      line-height: 35px;
+      text-align: left;
+    }
+
+    .modal-content h3 {
+      background-color: #FFFFFF;
+      color: #3B4994;
+      margin: 2% auto; /* 15% from the top and centered */
+      padding: 10px;
+      font: 14px/16px 'Poppins', Helvetica, sans-serif;
+      font-size: 50px;
+      line-height: 25px;
       text-align: center;
     }
 
@@ -697,6 +720,19 @@ crossorigin=""></script>
   <button class="button" id="button1" onclick="setPalette(1)"><h2>Palette 1</h2><i id="a0"></i><i id="a1"></i><i id="a2"></i><i id="a3"></i></button>
   <button class="button" id="button2" onclick="setPalette(2)" ><h2>Palette 2</h2><i id="b0"></i><i id="b1"></i><i id="b2"></i><i id="b3"></i></button>
   <div id="map"></div>
+
+  <div id="myModal" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h3>NO<sub>2</sub> Equality Map</h3>
+      <p>Where we live, work, and spend our time affects how much nitrogen dioxide (NO<sub>2</sub>) and other air pollutants we breathe. Many primary pollutants, including NO<sub>2</sub>, vary between neighborhoods in the same city. For example, on average, Houston’s low-income residents and residents of color experience 30% higher burdens of NO<sub>2</sub>.</br></br>The NO<sub>2</sub> Equality Map aims to draw attention to this injustice as it compares NO<sub>2</sub> column densities and socio-demographic vulnerability. The NO<sub>2</sub> Equality Map currently displays data measured from space by <a href="http://www.tropomi.eu/" target="_blank" rel="noopener noreferrer">TROPOMI</a> on weekdays (June 2018–February 2020) at the census tract level. In the future, the NO<sub>2</sub> Equality Map will update in real time.</p>
+      <img src="images/IntroSlide4.png" alt="Introduction" style="width:1000px;height:600px;"> <!--2150px x 1350px-->
+      <div class='exploreBtnContainer' onclick="closeModal()"><div class='exploreBtn' id='exploreBtn' onclick="closeModal()"><h2>Explore</h2></div></div>
+    </div>
+
+  </div>
 <script>
 
   var mapboxAccessToken = 'pk.eyJ1Ijoia2F0ZW1hcCIsImEiOiJja3A0NWV0ZTkwNjBtMm5vdWxzcXR6dWxjIn0.7rYO_pPmtvwuWUb0cG3QXQ';
@@ -707,6 +743,28 @@ crossorigin=""></script>
   map.options.minZoom = countryMin;
   map.options.maxZoom = countryMax;
   map.doubleClickZoom.disable();
+
+  var modal = document.getElementById("myModal");
+
+  // Get the <span> element that closes the modal
+  var xLightbox = document.getElementsByClassName("close")[0];
+
+  // When the user clicks on <span> (x), close the modal
+  function closeModal() {
+    modal.style.display = "none";
+    //var infoBoxDiv =document.getElementById("info");
+    //infoBoxDiv.style.display = "block";
+    //document.getElementById("gridContainer").style.display = "inline-grid";
+  }
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
+
+  modal.style.display = "block";
 
   var tileL = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + mapboxAccessToken, {
       id: 'mapbox/light-v9',
