@@ -783,6 +783,7 @@ crossorigin=""></script>
   var currentCityMarkerType = 'pie';
   var gridContainerID = "gridContainer";
   var donutLegendID = "donutLegend";
+  var cityOn = "";
   //var cities = L.layerGroup(hou, wdc);
 
   function toggleChorDropdown() {
@@ -790,12 +791,9 @@ crossorigin=""></script>
   }
 
   function returnToBivariate() {
-    if (singleLayerOn != "") {
-      toggleUnivariateChoropleth(singleVariable);
+      toggleUnivariateChoropleth(singleLayerOn);
       document.getElementById("returnBtn").style.background = "#000000";
       document.getElementById("returnBtn").style.color = "#FFFFFF";
-      singleVariable = "";
-    }
   }
 
 /*  function returnToBivariate(specialCase) {
@@ -810,6 +808,7 @@ crossorigin=""></script>
   function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
+
 
   function addCityMarker(cityVar, cityMarkerType) { // plots a clickable marker, given a city's name and central coordinates. -- Could also specify min zoom level if needed.
     var coords = cityVar.getCenter();
@@ -864,6 +863,7 @@ crossorigin=""></script>
         map.setView(e.latlng, 12);
         countCityClicks++;
         addChoropleth(cityVar.getName());
+        cityOn = cityVar.getName();
     });
 
     return city;
@@ -949,7 +949,10 @@ crossorigin=""></script>
     if (map.getZoom() < 10) { // display city markers
       map.addLayer(houMarker);
       map.addLayer(wdcMarker);
-      map.removeLayer(nhLayer);
+      if (nhLayerIsOn) {
+        map.removeLayer(nhLayer);
+        nhLayerIsOn = false;
+      }
       /*if (map.getZoom() < 10) {
         var arr = document.getElementsByClassName("neighborhoodLabel");
         //map.removeLayer(nhLayer);
@@ -1130,6 +1133,8 @@ crossorigin=""></script>
   var firstTimeInCity = true;
   var hiddenLegends = [];
   var nhLayer;
+  var nhLayerIsOn = false;
+  var cityOn = "";
 
   function addChoropleth(cityName) {
     if (firstTimeInCity) {
@@ -1161,10 +1166,10 @@ crossorigin=""></script>
     if (cityName == "Houston") { // Add Houston layer
       numVars = 2;
       houstonIsOn = true;
-      if (singleLayerOn != "") {
+      /*if (singleLayerOn != "") {
         toggleUnivariateChoropleth(singleVariable);
       }
-      singleLayerOn = "";
+      singleLayerOn = "";*/
 
       geojson = L.geoJson(houLayer);
 
@@ -1175,11 +1180,14 @@ crossorigin=""></script>
 
       var layer = houston.addTo(map);
 
-      nhLayer = L.geoJson(houNHs, {
-        pointToLayer: paint
-      }); //{layout: layout}
-      nhLayer.addTo(map);
-      firstZoom = true;
+      if (!nhLayerIsOn) {
+        nhLayer = L.geoJson(houNHs, {
+          pointToLayer: paint
+        }); //{layout: layout}
+        nhLayer.addTo(map);
+        firstZoom = true;
+        nhLayerIsOn = true;
+      }
 
       // var nhGeojson = L.geoJson(houNHs, {pointToLayer: paint}).addTo(map);
 
@@ -1205,10 +1213,10 @@ crossorigin=""></script>
     else if (cityName == "Washington, D.C.") {  // Add DC layer
       numVars = 2;
       dcIsOn = true;
-      if (singleLayerOn != "") {
+      /*if (singleLayerOn != "") {
         toggleUnivariateChoropleth(singleVariable);
       }
-      singleLayerOn = "";
+      singleLayerOn = "";*/
 
       geojson = L.geoJson(dcLayer);
 
@@ -1218,11 +1226,14 @@ crossorigin=""></script>
       });
       var layer = dc.addTo(map);
 
-      nhLayer = L.geoJson(dcNHs, {
-        pointToLayer: paint
-      }); //{layout: layout}
-      nhLayer.addTo(map);
-      firstZoom = true;
+      if (!nhLayerIsOn) {
+        nhLayer = L.geoJson(dcNHs, {
+          pointToLayer: paint
+        }); //{layout: layout}
+        nhLayer.addTo(map);
+        firstZoom = true;
+        nhLayerIsOn = true;
+      }
 
       geojson = layer;
 
@@ -1244,6 +1255,8 @@ crossorigin=""></script>
     else {
       numVars = 1;
       singleVariable = cityName;
+      singleLayerOn = cityName;
+      uniLegend();
 
       var buttonID = singleVariable + "Btn";
       document.getElementById(buttonID).style.background = "#000000";
@@ -1252,8 +1265,11 @@ crossorigin=""></script>
       document.getElementById("button1").style.display = "none";
       document.getElementById("button2").style.display = "none";
 
-      if (houstonIsOn) { // Remove Houston layer
-        map.removeLayer(houston);
+      if (cityOn == hou.getName()) { // Remove Houston layer
+        if (houstonIsOn) {
+          map.removeLayer(houston);
+          houstonIsOn = false;
+        }
 
         geojson = L.geoJson(houLayer);
 
@@ -1266,8 +1282,11 @@ crossorigin=""></script>
 
         geojson = layer;
       }
-      if (dcIsOn) { // Remove DC layer
-        map.removeLayer(dc);
+      if (cityOn == wdc.getName()) { // Remove DC layer
+        if (dcIsOn) {
+          map.removeLayer(dc);
+          dcIsOn = false;
+        }
 
         geojson = L.geoJson(dcLayer);
 
@@ -1339,32 +1358,24 @@ crossorigin=""></script>
       document.getElementById(propName + "Btn").style.color = "#000000";
       //remove uni legend, too
       singleLayerOn = "";
-      addChoropleth(hou.getName());
-      addChoropleth(wdc.getName());
+      singleVariable = "";
+      addChoropleth(cityOn);
     }
 
     else if (singleLayerOn != "") {
       map.removeLayer(univariateChoropleth);
-      document.getElementById(singleVariable + "Btn").style.background = "#FFFFFF";
-      document.getElementById(singleVariable + "Btn").style.color = "#000000";
+      document.getElementById(singleLayerOn + "Btn").style.background = "#FFFFFF";
+      document.getElementById(singleLayerOn + "Btn").style.color = "#000000";
       document.getElementById("returnBtn").style.background = "#FFFFFF";
       document.getElementById("returnBtn").style.color = "#000000";
 
-
-      map.removeLayer(univariateChoropleth);
-
-      singleLayerOn = propName;
       addChoropleth(propName);
-
-      uniLegend();
     }
 
     else {
       document.getElementById("returnBtn").style.background = "#FFFFFF";
       document.getElementById("returnBtn").style.color = "#000000";
-      singleLayerOn = propName;
       addChoropleth(propName);
-      uniLegend();
     }
 
   }
@@ -1376,6 +1387,16 @@ crossorigin=""></script>
       document.getElementById(gridContainerID).style.display = "none";
       document.getElementById(gridContainerID + "Button").style.display = "none";
       //legend.style.maxHeight = null;
+
+      if (singleLayerOn != "") {
+        map.removeLayer(univariateChoropleth);
+        document.getElementById(singleLayerOn + "Btn").style.background = "#FFFFFF";
+        document.getElementById(singleLayerOn + "Btn").style.color = "#000000";
+        document.getElementById("returnBtn").style.background = "#000000";
+        document.getElementById("returnBtn").style.color = "#FFFFFF";
+        singleLayerOn = "";
+      }
+
       var squares = document.getElementsByClassName("grid-item");
       for (i = 0; i < squares.length; i++) {
         squares[i].style.display = "none";
@@ -1393,6 +1414,11 @@ crossorigin=""></script>
       if (dcIsOn) { // Remove DC layer
         map.removeLayer(dc);
         dcIsOn = false;
+      }
+
+      if (nhLayerIsOn) {
+        map.removeLayer(nhLayer);
+        nhLayerIsOn = false;
       }
 
       document.getElementById(donutLegendID).style.display = "block";
