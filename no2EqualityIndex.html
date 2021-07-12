@@ -56,7 +56,6 @@ crossorigin=""></script>
       <div class='chorOption' id='popBlackOrAfrAmerBtn' onclick = "toggleUnivariateChoropleth('popBlackOrAfrAmer')">Black or African American</div>
       <div class='chorOption' id='popHispanicBtn' onclick = "toggleUnivariateChoropleth('popHispanic')">Hispanic</div>
       <div class='chorOption' id='popWhiteBtn' onclick = "toggleUnivariateChoropleth('popWhite')">White</div>
-      <div class='chorOption' id='sourcesBtn' onclick = "toggleLayer('sources')">NO<sub>2</sub> Sources</div>
     </div>
   </div>
   <div class="donut-legend" id="donutLegend"><button class="piecon" id="pieButton" onclick="changeCityMarkerIcon('pie')"></button><button class="targetIconHolder" onclick="changeCityMarkerIcon('target')" ><div class="targetIcon" id="targetButton"></div></button></div>
@@ -1257,11 +1256,11 @@ crossorigin=""></script>
       layer.bindPopup("Site name: " + titleCase(feature.properties.site_name.toLowerCase()) + "</br>Total Emissions: " + feature.properties.total_emissions + " tons\n");
   }
 
-  L.geoJson(houSources,
+  /*L.geoJson(houSources,
     {
       pointToLayer: paintPointSources,
       onEachFeature: onEachFeaturePointSources
-    }).addTo(map);
+    }).addTo(map);*/
 
 
   /* secondary functions */
