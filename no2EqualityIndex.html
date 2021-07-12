@@ -10,6 +10,11 @@
  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
 integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
 crossorigin=""></script>
+<!-- Add the `mapbox-gl-js` library to the page. This gives our JS code below access to the `mapboxgl` object -->
+<script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.0/mapbox-gl.js'></script>
+
+<!-- Add some default styling for the map container & controls -->
+<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.0/mapbox-gl.css' rel='stylesheet' />
 <!-- bivariate choropleths -->
 <!-- font -->
 <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -59,6 +64,9 @@ crossorigin=""></script>
     </div>
   </div>
   <div class="donut-legend" id="donutLegend"><button class="piecon" id="pieButton" onclick="changeCityMarkerIcon('pie')"></button><button class="targetIconHolder" onclick="changeCityMarkerIcon('target')" ><div class="targetIcon" id="targetButton"></div></button></div>
+
+  <div class="chorMenu" id="sourcesBtn"><button onclick="toggleLayer('sources')" class="dropbtn" style="top:90px;">NOx Sources</button></div>
+
   <button class="button" id="button1" onclick="setPalette(1)"><h2>Palette 1</h2><i id="a0"></i><i id="a1"></i><i id="a2"></i><i id="a3"></i></button>
   <button class="button" id="button2" onclick="setPalette(2)" ><h2>Palette 2</h2><i id="b0"></i><i id="b1"></i><i id="b2"></i><i id="b3"></i></button>
   <div id="map"></div>
@@ -78,7 +86,13 @@ crossorigin=""></script>
 <script>
 
   var mapboxAccessToken = 'pk.eyJ1Ijoia2F0ZW1hcCIsImEiOiJja3A0NWV0ZTkwNjBtMm5vdWxzcXR6dWxjIn0.7rYO_pPmtvwuWUb0cG3QXQ';
-  var map = L.map('map').setView([38.449907, -98.358421], 4.5);
+  var map = L.map('map'); //, {zoomControl: false});
+  map.setView([38.449907, -98.358421], 4.5);
+  //map.addControl(new mapboxgl.NavigationControl());
+  /*L.control.zoom({
+    position: 'bottomright'
+  }).addTo(map);*/
+
   // set initial zoom limits for country view
   var countryMin = 0;
   var countryMax = 7;
@@ -490,6 +504,7 @@ crossorigin=""></script>
       document.getElementById(donutLegendID).style.display = "none";
       document.getElementById(donutLegendID + "Button").style.display = "none";
       document.getElementById("chorMenu").style.display = "inline-block";
+      document.getElementById("sourcesBtn").style.display = "inline-block";
 
       if (countCityClicks == 1) {
         colors = paletteA;
@@ -768,6 +783,7 @@ crossorigin=""></script>
       document.getElementById("button1").style.display = "none";
       document.getElementById("button2").style.display = "none";
       document.getElementById("chorMenu").style.display = "none";
+      document.getElementById("sourcesBtn").style.display = "none";
 
       if (hiddenLegends.includes(donutLegendID)) {
         document.getElementById(donutLegendID).style.display = "none";
@@ -1034,9 +1050,9 @@ crossorigin=""></script>
             fillOpacity: 0.4
           });
 
-          if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+          /*if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
               layer.bringToFront();
-          }
+          }*/
 
         }
         //info.update(layer.feature.properties);
@@ -1236,7 +1252,8 @@ crossorigin=""></script>
     return div;
   }
 
-  //var sources = new Layer("sources", onEachFeaturePointSources, paintPointSources, houSources);
+  //var sources = new Layer("sources", "a", "b", houSources);
+  //toggleLayer(sources);
   var maxEmissions = 1767.7;
   var minEmissions = 0.0000122986;
   var numStepsEmissions = 5;
@@ -1296,14 +1313,37 @@ crossorigin=""></script>
     return (Math.round(radius * 100)/100);
   }
 
+
+  var sourcesIsOn = false;
+  var sources;
   function toggleLayer(layer) {
-    var layerIsOn = layer.getMapped();
+    if (!sourcesIsOn) {
+      var sources = L.geoJson(houSources,
+        {
+          pointToLayer: paintPointSources,
+          onEachFeature: onEachFeaturePointSources
+        });
+
+      sources.addTo(map);
+      sourcesIsOn = true;
+    }
+    else {
+      map.removeLayer(sources);
+      sourcesIsOn = false;
+    }
+
+    /*var layerIsOn = layer.getMapped();
     if (layerIsOn) {
       layer.setMapped(false);
     }
     else {
       layer.setMapped(true);
-    }
+      L.geoJson(layer.getLayer(),
+        {
+          pointToLayer: paintPointSources,
+          onEachFeature: onEachFeaturePointSources
+        }).addTo(map);
+    }*/
   }
 
 

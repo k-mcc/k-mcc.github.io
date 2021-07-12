@@ -7,15 +7,14 @@ class Layer {
   #functionOEF;
   #functionPaint;
   #layerName;
+  #storeLayer;
 
-
-  constructor(id, functionOEF, functionPaint, layer) {
+  constructor(id, layer) { //functionOEF, functionPaint,
     this.#name = id;
-    this.#functionOEF = functionOEF;
-    this.#functionPaint = functionPaint;
-    this.#layerName = layerName;
+    //this.#functionOEF = functionOEF;
+    //this.#functionPaint = functionPaint;
+    this.#layer = layer;
     this.#mapped = false;
-
   }
 
   // accessors
@@ -27,13 +26,13 @@ class Layer {
     return this.#mapped;
   }
 
-  getFunctionOEF() {
+  /*getFunctionOEF() {
     return this.#functionOEF;
   }
 
   getFunctionPaint() {
     return this.#functionPaint;
-  }
+  }*/
 
   getLayer() {
     return this.#layer;
@@ -43,8 +42,17 @@ class Layer {
     return this.#id + "Btn";
   }
 
+  getStoreLayer() {
+    if (this.#storeLayer != null) return this.#storeLayer;
+    else return "Error: this layer has not yet been added to the map.";
+  }
+
   setMapped(status) { // either true or false
     this.#mapped = status;
+  }
+
+  setStoreLayer(storeLayer) { // either true or false
+    this.#storeLayer = storeLayer;
   }
 
 
