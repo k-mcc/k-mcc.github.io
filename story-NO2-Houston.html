@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title>Mapbox Storytelling</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.0.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.0.0/mapbox-gl.css' rel='stylesheet' />
+    <script src="https://unpkg.com/intersection-observer@0.5.1/intersection-observer.js"></script>
+    <script src="https://unpkg.com/scrollama"></script>
+
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+    crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin=""></script>
+    <script src="https://k-mcc.github.io/no2HouData.js"></script> <!-- Houston data -->
+    <script src="https://k-mcc.github.io/geoJSON/houSources.js"></script> <!-- Houston source data -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+    <script type="text/javascript" src="https://stamen-maps.a.ssl.fastly.net/js/tile.stamen.js?v1.3.0"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fugaz+One&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin:0;
+            padding:0;
+            font-family: sans-serif;
+        }
+        a, a:hover, a:visited {
+            color: #0071bc;
+        }
+        #map {
+            top:0;
+            height: 100vh;
+            width:100vw;
+            position: fixed;
+        }
+        #header {
+            margin: auto;
+            width: 100%;
+            position: relative;
+            z-index: 5;
+        }
+        #header h1, #header h2, #header p {
+            margin: 0;
+            padding: 2vh 2vw;
+            text-align: center;
+        }
+        h1 {
+          font-family: 'Lato', sans-serif;
+          font-size: 40px;
+        }
+        h2 {
+          font-family: 'Lato', sans-serif;
+        }
+        h3 {
+          font-family: 'Lato', sans-serif;
+        }
+        h4 {
+          font-family: 'Lato', sans-serif;
+        }
+        p {
+          font-family: 'Lato', sans-serif;
+          font-size: 24px;
+          line-height: 34px;
+        }
+        a {
+          color: #83ecfc;
+        }
+        a:hover {
+          color: #30cee6;
+        }
+        .emphasis {
+          font-family: 'Fugaz One', cursive;
+          font-size: 32px;
+        }
+        #footer {
+            width: 100%;
+            min-height: 5vh;
+            padding-top: 2vh;
+            padding-bottom: 2vh;
+            text-align: center;
+            line-height: 25px;
+            font-size: 13px;
+            position: relative;
+            z-index: 5;
+        }
+        #features {
+            padding-top: 10vh;
+            padding-bottom: 10vh;
+        }
+        .hidden {
+            visibility: hidden;
+        }
+        .centered {
+            width: 50vw;
+            margin: 0 auto;
+        }
+        .lefty {
+            width: 33vw;
+            margin-left: 5vw;
+        }
+        .righty {
+            width: 33vw;
+            margin-left: 62vw;
+        }
+        .fully {
+            width: 100%;
+            margin: auto;
+        }
+        .light {
+            color: #444;
+            background-color: #fafafa;
+        }
+        .dark {
+            color: #fafafa;
+            background-color: #444;
+        }
+        .step {
+            padding-bottom: 50vh;
+            /* margin-bottom: 10vh; */
+            opacity: 0.25;
+        }
+        .step.active {
+            opacity: 0.9;
+        }
+
+        .step div {
+            padding:  25px 50px;
+            line-height: 25px;
+            font-size: 13px;
+        }
+
+        .step img {
+            width: 100%;
+        }
+
+        @media (max-width: 750px) {
+            .centered, .lefty, .righty, .fully {
+                width: 90vw;
+                margin: 0 auto;
+            }
+        }
+
+        /* Fix issue on mobile browser where scroll breaks  */
+        .mapboxgl-canvas-container.mapboxgl-touch-zoom-rotate.mapboxgl-touch-drag-pan,
+        .mapboxgl-canvas-container.mapboxgl-touch-zoom-rotate.mapboxgl-touch-drag-pan .mapboxgl-canvas {
+            touch-action: unset;
+        }
+        .info {
+            height: 320px;
+            width: 320px;
+            padding: 6px 8px;
+            background: white;
+            background: rgba(255,255,255,0.8);
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            border-radius: 3px;
+            z-index: 1000;
+        }
+        .legend {
+            color: #555;
+            font-size: 20px;
+            z-index: 1000;
+        }
+        .legend h2 {
+            font-size: 16px;
+        }
+        .legend i {
+            width: 50px;
+            height: 30px;
+            float: left;
+            margin-right: 8px;
+            opacity: 1;
+        }
+
+        /* bivChor Legend */
+        .grid-container {
+          grid-template-columns: auto auto auto;
+          background-color: #FFFFFF;
+          padding: 30px 18px;
+          margin: 40px 0;
+          display: inline-grid;
+          bottom: 5px;
+          left: 5px;
+          position: relative;
+          border-left: 50px solid #FFFFFF;
+          border-bottom: 50px solid #FFFFFF;
+          border-radius: 3px;
+          box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        }
+        .grid-item {
+          background-color: #FFFFFF;
+          border: 1px solid #FFFFFF;
+          padding: 40px;
+          text-align: center;
+        }
+        .grid-titem {
+          border: 1px solid #FFFFFF;
+          text-align: center;
+        }
+        .grid-container h3 {
+          font: 14px/16px 'Poppins', Helvetica, sans-serif;
+          color: #000000;
+          padding: 5px 10px;
+          margin: 30px 0 15px 0;
+          line-height: 24px;
+          position: absolute;
+          top: 0;
+          left: 0;
+          background: none;
+          transform-origin: 0 0;
+          transform: rotate(90deg);
+          font-size: 1.5em;
+        }
+        .grid-container h2 {
+          font: 14px/16px 'Poppins', Helvetica, sans-serif;
+          color: #000000;
+          padding: 0 10px;
+          margin: 60px 10px 0 0;
+          line-height: 2px;
+          position: absolute;
+          bottom: 0;
+          top: 257px;
+          left: 0;
+          background: none;
+          font-size: 1.5em;
+        }
+
+        .grid-container i {
+          width: 20px;
+          height: 20px;
+          float: left;
+          margin-right: 8px;
+          opacity: 0.7;
+        }
+
+        </style>
+</head>
+<body>
+
+<div id="map"></div>
+<div id="story"></div>
+<script src="./config.js"></script>
+<script>
+var layerTypes = {
+    'fill': ['fill-opacity'],
+    'line': ['line-opacity'],
+    'circle': ['circle-opacity', 'circle-stroke-opacity'],
+    'symbol': ['icon-opacity', 'text-opacity'],
+    'raster': ['raster-opacity'],
+    'fill-extrusion': ['fill-extrusion-opacity'],
+    'heatmap': ['heatmap-opacity']
+}
+
+var alignments = {
+    'left': 'lefty',
+    'center': 'centered',
+    'right': 'righty',
+    'full': 'fully'
+}
+
+function getLayerPaintType(layer) {
+    var layerType = map.getLayer(layer).type; //Layer = Pane
+    return layerTypes[layerType];
+}
+
+function setLayerOpacity(layer) {
+    var paintProps = getLayerPaintType(layer.layer);
+    paintProps.forEach(function(prop) {
+        var options = {};
+        if (layer.duration) {
+            var transitionProp = prop + "-transition";
+            options = { "duration": layer.duration };
+            map.setPaintProperty(layer.layer, transitionProp, options);
+        }
+        map.setPaintProperty(layer.layer, prop, layer.opacity, options);
+    });
+}
+
+var story = document.getElementById('story');
+var features = document.createElement('div');
+features.setAttribute('id', 'features');
+
+var header = document.createElement('div');
+
+if (config.title) {
+    var titleText = document.createElement('h1');
+    titleText.innerText = config.title;
+    header.appendChild(titleText);
+}
+
+if (config.subtitle) {
+    var subtitleText = document.createElement('h2');
+    subtitleText.innerText = config.subtitle;
+    header.appendChild(subtitleText);
+}
+
+if (config.byline) {
+    var bylineText = document.createElement('p');
+    bylineText.innerText = config.byline;
+    header.appendChild(bylineText);
+}
+
+if (header.innerText.length > 0) {
+    header.classList.add(config.theme);
+    header.setAttribute('id', 'header');
+    story.appendChild(header);
+}
+
+config.chapters.forEach((record, idx) => {
+    var container = document.createElement('div');
+    var chapter = document.createElement('div');
+
+    if (record.title) {
+        var title = document.createElement('h3');
+        title.innerText = record.title;
+        chapter.appendChild(title);
+    }
+
+    if (record.image) {
+        var image = new Image();
+        image.src = record.image;
+        chapter.appendChild(image);
+    }
+
+    if (record.description) {
+        var story = document.createElement('p');
+        story.innerHTML = record.description;
+        chapter.appendChild(story);
+    }
+
+    container.setAttribute('id', record.id);
+    container.classList.add('step');
+    if (idx === 0) {
+        container.classList.add('active');
+    }
+
+    chapter.classList.add(config.theme);
+    container.appendChild(chapter);
+    container.classList.add(alignments[record.alignment] || 'centered');
+    if (record.hidden) {
+        container.classList.add('hidden');
+    }
+    features.appendChild(container);
+});
+
+story.appendChild(features);
+
+var footer = document.createElement('div');
+
+if (config.footer) {
+    var footerText = document.createElement('p');
+    footerText.innerHTML = config.footer;
+    footer.appendChild(footerText);
+}
+
+if (footer.innerText.length > 0) {
+    footer.classList.add(config.theme);
+    footer.setAttribute('id', 'footer');
+    story.appendChild(footer);
+}
+
+mapboxgl.accessToken = config.accessToken;
+
+const transformRequest = (url) => {
+    const hasQuery = url.indexOf("?") !== -1;
+    const suffix = hasQuery ? "&pluginName=scrollytellingV2" : "?pluginName=scrollytellingV2";
+    return {
+      url: url + suffix
+    }
+}
+
+/*var map = new mapboxgl.Map({
+    container: 'map',
+    style: config.style,
+    center: config.chapters[0].location.center,
+    zoom: config.chapters[0].location.zoom,
+    bearing: config.chapters[0].location.bearing,
+    pitch: config.chapters[0].location.pitch,
+    interactive: false,
+    transformRequest: transformRequest
+});*/
+
+var map = L.map('map', {scrollWheelZoom: false, transformRequest: transformRequest}); //, {zoomControl: false});
+map.setView(config.chapters[0].location.center, config.chapters[0].location.zoom);
+  map.doubleClickZoom.disable();
+
+var mapboxAccessToken = 'pk.eyJ1Ijoia2F0ZW1hcCIsImEiOiJja3A0NWV0ZTkwNjBtMm5vdWxzcXR6dWxjIn0.7rYO_pPmtvwuWUb0cG3QXQ';
+
+var tileL = L.tileLayer('https://stamen-tiles.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.jpg', {
+    id: 'watercolor',
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>'
+    //tileSize: 512,
+    //filter: {id: "water"},
+    //zoomOffset: -1
+});
+
+tileL.addTo(map);
+
+
+/*var nexrad = L.tileLayer.wms("https://fsapps.nwcg.gov/wms", {
+    layers: '2015-wms',
+    format: 'image/png',
+    transparent: true,
+    attribution: "Weather data © 2012 IEM Nexrad"
+});*/
+
+//nexrad.addTo(map);
+//tileL.eachLayer(function(layer) {
+//});
+//var layerGroup = L.layerGroup().addTo(map);
+//tileL.addTo(layerGroup);
+/*map.eachLayer(function(layer) {
+  if (layer.type == 'fill') map.removeLayer(layer);
+});*/
+//layerGroup.addTo(map);
+
+/*start adding bivariate choropleth*/
+
+var paletteA = ['#E8E8E8', '#ACE4E4', '#5AC8C8', '#DFB0D6', '#A5ADD3', '#5698B9', '#BE64AC', '#8C62AA', '#3B4994',       '#D79DCC', '#CF8AC1', '#C677B7',        '#9F9AC9', '#9988BF', '#9275B4',      '#4F84B0', '#4971A7', '#425D9D',      '#000000'];
+var colors = paletteA;
+var numVars = 2;
+var excludeA = false;
+var excludeB = false;
+var houston;
+var singleVariable;
+
+function style(feature) {
+  var tractColor = getColor(feature.properties.no2Perc, feature.properties.demographicIndex, feature.properties[singleVariable]);
+
+  return {
+      fillColor: tractColor,
+      weight: 1.5,
+      opacity: 1,
+      color: tractColor,
+      dashArray: '0',
+      smoothFactor: 1,
+      fillOpacity: 0.8
+  };
+}
+
+function getColor(axisA, axisB, variableA) {
+  var x = variableA;
+  if (numVars == 1) {
+    return x >= 90  ? '#4D004B' :
+           x >= 80  ? '#810F7C' :
+           x >= 70  ? '#88419D' :
+           x >= 60  ? '#8C6BB1' :
+           x >= 50  ? '#8C96C6' :
+           x >= 40   ? '#9EBCDA' :
+           x >= 30   ? '#BFD3E6' :
+           x >= 20   ? '#E0ECF4' :
+           x >= 10   ? '#F7FCFD' :
+           x > 0   ? '#FFFFFF' :
+                    '#FFFFFF';
+  }
+  else if (numVars == 2) {
+    var a = getRange(axisA);
+    var b = getRange(axisB);
+
+    if (a == 1) { //low axisA value
+      if (b == 1) return colors[0]; //low axisB value
+      else if (b == 2) return colors[1]; //mid axisB value
+      else return colors[2]; //high axisB value
+    }
+
+    else if (a == 2) { //mid axisA value
+      if (b == 1) return colors[3]; //low axisB value
+      else if (b == 2) return colors[4]; //mid axisB value
+      else return colors[5]; //high axisB value
+    }
+
+    else if (a == 3) { //high axisA value
+      if (b == 1) return colors[9]; //low axisB value
+      else if (b == 2) return colors[12]; //mid axisB value
+      else return colors[15]; //high axisB value
+    }
+
+    else if (a == 4) { //high axisA value
+      if (b == 1) return colors[10]; //low axisB value
+      else if (b == 2) return colors[13]; //mid axisB value
+      else return colors[16]; //high axisB value
+    }
+
+    else if (a == 5) { //high axisA value
+      if (b == 1) return colors[11]; //low axisB value
+      else if (b == 2) return colors[14]; //mid axisB value
+      else return colors[17]; //high axisB value
+    }
+
+    else if (a == 6) { //high axisA value
+      if (b == 1) return colors[6]; //low axisB value
+      else if (b == 2) return colors[7]; //mid axisB value
+      else return colors[8]; //high axisB value
+    }
+  }
+}
+function getRange(x) {
+  return x >= 90  ? 6 :
+         x >= 80  ? 5 :
+         x >= 70  ? 4 :
+         x >= 66.66  ? 3 : //high
+         x >= 33.33  ? 2 : //mid
+                  1; //low
+}
+
+/*done with bivariate choropleth*/
+
+/* sources layer */
+
+var maxEmissions = 1767.7;
+var minEmissions = 0.0000122986;
+var numStepsEmissions = 5;
+
+function paintPointSources(feature, latlng) {
+  var r = getCircleRadius(feature.properties.total_emissions);
+    return L.circleMarker(latlng, {
+      fillColor: '#000000',
+      color: '#000000',
+      weight: 1,
+      fillOpacity: 1,
+      radius: r
+  });
+}
+
+function onEachFeaturePointSources(feature, layer) {
+    var book = feature.properties.company_name;
+    if (book != "") log = "</br>Company name: " + book;
+    else log = "";
+    layer.bindPopup("Site name: " + titleCase(feature.properties.site_name.toLowerCase()) + log + "</br>Total Emissions: " + feature.properties.total_emissions + " tons\n");
+}
+
+function titleCase(phrase) {
+  var words = phrase.split(" ");
+  var title = "";
+
+  for (var i = 0; i < words.length; i++) {
+      title += words[i][0].toUpperCase() + words[i].substr(1) + " ";
+  }
+
+  return title;
+}
+
+function getCircleRadius(num) {
+  for (var i = 0; i < numStepsEmissions; i++) {
+    if (num >= scaleStep(i)) return circleAreaToRadius(scaleStep(num));
+  }
+  return circleAreaToRadius(scaleStep(numStepsEmissions));
+}
+
+function scaleStep(stepNum) {
+  //var range = maxEmissions - minEmissions;
+  var range = 25;
+  var segment = range/numStepsEmissions;
+  return segment*stepNum;
+}
+
+function circleAreaToRadius(area) {
+  var radius = area/Math.PI;
+  radius = Math.sqrt(radius);
+  return (Math.round(radius * 100)/100);
+}
+
+
+var sourcesIsOn = false;
+var sources;
+function toggleLayer(layer) {
+  if (!sourcesIsOn) {
+    sources = L.geoJson(houSources,
+      {
+        pointToLayer: paintPointSources,
+        onEachFeature: onEachFeaturePointSources
+      });
+
+    sources.addTo(map);
+    sourcesIsOn = true;
+  }
+  else {
+    map.removeLayer(sources);
+    sourcesIsOn = false;
+  }
+}
+
+var legend = L.control({position: 'bottomright'});
+
+legend.onAdd = function (map) {
+
+    var div = L.DomUtil.create('div', 'info legend'),
+        grades = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90],
+        labels = [];
+
+    div.innerHTML += "<h2>Percentile Nitrogen Dioxide Density</h2>"
+
+    // loop through our density intervals and generate a label with a colored square for each interval
+    for (var i = grades.length-1; i > 0; i--) {
+        div.innerHTML +=
+            '<i style="background:' + getColor(0,0,grades[i] + 1) + '"></i>' +
+            grades[i] + '</br>';
+    }
+
+    return div;
+};
+
+// bivChor legend
+
+var img = L.control({position: 'bottomleft'});
+
+img.onAdd = function (map) {
+  var div = L.DomUtil.create('div', 'grid-container');
+  div.id = "gridContainer";
+  div.style.display = "inline-grid";
+  var grades = [1, 40, 99];
+  //<div class='popup' onclick='popItUp(\"no2AxisPopup\")' style='bottom:5px; left:5px;'><img src='images/info.png' style='width:30px;height:30px;'></img><span class='popuptext' id='no2AxisPopup'><p><strong>Title: </strong></br>Description</p></span></div>
+  //div.innerHTML += '<img src="images/no2dLegend.png" alt="Legend" style="width:300px;height:300px;">';
+  div.innerHTML += "<div class='xButton' onclick='xButton(\"gridContainer\", \"inline-grid\")' ><h2 style='top: -47px; left: -26px'>✕</h2></div><h3 class='axis'>Nitrogen Dioxide Percentile</h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0],"") + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1],"") + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2],"") + "\" id:\"c3\" ></div>";
+  div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[0],"") + "\" id:\"a2\"></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[1],"") + "\" id:\"b2\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[2],"") + "\" id:\"c2\" ></div>";
+  div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0],"") + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1],"") + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2],"") + "\" id:\"c1\" ></div><h2 class='axis' >Socio-Demographic Index</h2>";
+
+  return div;
+}
+
+/* complete sources layer */
+
+/*var tileStreets = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + mapboxAccessToken, {
+    id: 'mapbox/streets-v8/motorway',
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+    tileSize: 512,
+    zoomOffset: -1
+});
+
+var groop = L.layerGroup(tileStreets);
+
+groop.eachLayer(function (layer) {
+    groop.removeLayer(layer);
+}
+
+groop.addTo(map);*/
+
+/*tileStreets.addTo(map);*/
+
+/*map.eachLayer(function (layer) {
+  if (layer.id != 'motorway')
+    map.removeLayer(layer);
+}*/
+
+// instantiate the scrollama
+var scroller = scrollama();
+
+scroller
+.setup({
+    step: '.step',
+    offset: 0.5,
+    progress: true
+})
+.onStepEnter(response => {
+    var chapter = config.chapters.find(chap => chap.id === response.element.id);
+    response.element.classList.add('active');
+    //map[chapter.mapAnimation || 'flyTo'](chapter.location);
+    map.flyTo(chapter.location.center, chapter.location.zoom);
+    //map.setZoom(3);
+    /*if (config.showMarkers) {
+        marker.setLngLat(chapter.location.center);
+    }
+    if (chapter.onChapterEnter.length > 0) {
+        chapter.onChapterEnter.forEach(setLayerOpacity);
+    }*/
+    if (chapter.callback) {
+        window[chapter.callback]();
+    }
+
+    if (chapter.id == "sources1") {
+      toggleLayer(sources);
+    }
+
+    if (chapter.id == "no2Chor") {
+      numVars = 1;
+      singleVariable = "no2Perc";
+      houston = L.geoJson(houLayer, {
+        style: style
+      });
+      var layer = houston.addTo(map);
+      toggleLayer(sources);
+      legend.addTo(map);
+    }
+
+    if (chapter.id == "bivChor") {
+      numVars = 2;
+      houston = L.geoJson(houLayer, {
+        style: style
+      });
+      var layer = houston.addTo(map);
+      toggleLayer(sources);
+      //img.addTo(map);
+    }
+
+    /* sources layer */
+
+    /*if (chapter.rotateAnimation) {
+        map.once('moveend', function() {
+            const rotateNumber = map.getBearing();
+            map.rotateTo(rotateNumber + 90, {
+                duration: 24000, easing: function (t) {
+                    return t;
+                }
+            });
+        });
+    }*/
+})
+.onStepExit(response => {
+    var chapter = config.chapters.find(chap => chap.id === response.element.id);
+    response.element.classList.remove('active');
+    /*if (chapter.onChapterExit.length > 0) {
+        chapter.onChapterExit.forEach(setLayerOpacity);
+    }*/
+    if (chapter.id == "sources1") {
+      toggleLayer(sources);
+    }
+    if (chapter.id == "no2Chor") {
+      map.removeLayer(houston);
+      toggleLayer(sources);
+      map.removeControl(legend);
+    }
+    if (chapter.id == "bivChor") {
+      map.removeLayer(houston);
+      toggleLayer(sources);
+      //map.removeDomUtil(legend);
+    }
+});
+
+// setup resize event
+window.addEventListener('resize', scroller.resize);
+
+
+
+</script>
+
+</body>
+</html>

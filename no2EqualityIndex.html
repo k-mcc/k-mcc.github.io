@@ -1270,7 +1270,10 @@ crossorigin=""></script>
   }
 
   function onEachFeaturePointSources(feature, layer) {
-      layer.bindPopup("Site name: " + titleCase(feature.properties.site_name.toLowerCase()) + "</br>Total Emissions: " + feature.properties.total_emissions + " tons\n");
+      var book = feature.properties.company_name;
+      if (book != "") log = "</br>Company name: " + book;
+      else log = "";
+      layer.bindPopup("Site name: " + titleCase(feature.properties.site_name.toLowerCase()) + log + "</br>Total Emissions: " + feature.properties.total_emissions + " tons\n");
   }
 
   /*L.geoJson(houSources,
@@ -1287,7 +1290,7 @@ crossorigin=""></script>
     var title = "";
 
     for (var i = 0; i < words.length; i++) {
-        title += words[i][0].toUpperCase() + words[i].substr(1) + " ";
+      title += words[i][0].toUpperCase() + words[i].substr(1) + " ";
     }
 
     return title;
@@ -1313,18 +1316,19 @@ crossorigin=""></script>
     return (Math.round(radius * 100)/100);
   }
 
-
+  var log = "";
   var sourcesIsOn = false;
   var sources;
   function toggleLayer(layer) {
     if (!sourcesIsOn) {
-      var sources = L.geoJson(houSources,
+      sources = L.geoJson(houSources,
         {
           pointToLayer: paintPointSources,
           onEachFeature: onEachFeaturePointSources
         });
 
       sources.addTo(map);
+      //alert(log);
       sourcesIsOn = true;
     }
     else {
