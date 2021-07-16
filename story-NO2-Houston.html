@@ -519,7 +519,7 @@ var rangeEmissions = maxEmissions - minEmissions;
 var numStepsEmissions = 100;
 
 function paintPointSources(feature, latlng) {
-  var r = circleAreaToRadius(getCircleRadius(feature.properties.total_emissions));
+  var r = getCircleRadius(feature.properties.total_emissions);
     return L.circleMarker(latlng, {
       fillColor: '#000000',
       color: '#000000',
@@ -548,10 +548,12 @@ function titleCase(phrase) {
 }
 
 function getCircleRadius(x) {
-  /*for (var i = numStepsEmissions; i >= 0; i--) {
-    if (num >= scaleStep(i)) return circleAreaToRadius(scaleStep(num));
-  }
-  return circleAreaToRadius(scaleStep(numStepsEmissions));*/
+  var a = getArea(x)*30;
+  var r = circleAreaToRadius(a);
+  return r;
+}
+
+function getArea(x) {
   var m = maxEmissions;
   var n = 10;
   return x >= m - (m/n)  ? 30 :
