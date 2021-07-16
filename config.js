@@ -84,7 +84,7 @@ var config = {
             alignment: 'right',
             title: '',
             image: 'https://s.hdnux.com/photos/74/11/13/15766225/25/rawImage.jpg',
-            description: '<h2>The Houston Ship Channel</h2></br>The Houston Ship Channel, in Houston, Texas, is part of the Port of Houston, one of the busiest seaports in the world.',
+            description: '<h2>The Houston Ship Channel</h2></br>The Houston Ship Channel is part of the Port of Houston, one of the busiest seaports in the world.',
             location: {
                 center: [29.7148474770, -95.2445839003227],
                 zoom: 13,//12.92,
@@ -104,7 +104,7 @@ var config = {
             alignment: 'left',
             title: '',
             image: '',
-            description: '<h2>Where Nitrogen Oxides Come From</h2><p>The Houston Ship Channel is lined with sources of nitrogen oxides (NO<sub>x</sub>), a group of gases that includes NO<sub>2</sub>. NO<sub>2</sub> usually gets in the air from the burning of fuel.</br></br>Click on each source to learn more.</p>',
+            description: '<h2>Where Nitrogen Oxides Come From</h2><p>The Houston Ship Channel is lined with sources of nitrogen oxides (NO<sub>x</sub>), a group of gases that includes NO<sub>2</sub>.</br></br>Click on each source to learn more.</p>',
             location: {
                 center: [29.7148474770, -95.2445839003227],
                 zoom: 13,//12.92,
