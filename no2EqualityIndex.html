@@ -470,6 +470,13 @@ crossorigin=""></script>
       map.options.maxZoom = countryMax;
       map.setView(central, 4.5);
       removeChoroplethControls();
+
+      //remove sources
+      if (sourcesIsOn) {
+        map.removeLayer(sources);
+        sourcesIsOn = false;
+      }
+
       firstTimeInCity = true;
   });
   var numVars;
@@ -493,6 +500,11 @@ crossorigin=""></script>
   var cityOn = "";
 
   function addChoropleth(cityName) {
+    var sourcesWasOn = false;
+    if (sourcesIsOn) {
+      sourcesWasOn = true;
+      toggleLayer(sources);
+    }
     if (firstTimeInCity) {
       clickedTract = "";
       previousTarget = "";
@@ -664,6 +676,10 @@ crossorigin=""></script>
       //document.getElementById("chorMenu").style.display = "inline-block";
 
       info.addTo(map);
+    }
+
+    if (sourcesWasOn) {
+      toggleLayer(sources);
     }
   }
 
@@ -1089,9 +1105,9 @@ crossorigin=""></script>
           fillOpacity: 0
         });
 
-        if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+        /*if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
             layer.bringToFront();
-        }
+        }*/
 
         info.update(layer.feature.properties);
 
@@ -1155,6 +1171,11 @@ crossorigin=""></script>
     }//"#f3f3f3 url('img_tree.png') no-repeat right top";*/
 
     function setPalette(num) {
+      var sourcesWasOn = false;
+      if (sourcesIsOn) {
+        sourcesWasOn = true;
+        toggleLayer(sources);
+      }
       if (num == 1) {
         colors = paletteA;
         //select button1
@@ -1222,10 +1243,15 @@ crossorigin=""></script>
           geojson = layer;
         }
 
+        if (sourcesWasOn) {
+          toggleLayer(sources);
+        }
+
 
         zoom = false;
         zoomToFeature(clickEvent);
         zoom = true;
+
   }
 
   // univariate choropleth legend
@@ -1254,9 +1280,10 @@ crossorigin=""></script>
 
   //var sources = new Layer("sources", "a", "b", houSources);
   //toggleLayer(sources);
-  var maxEmissions = 1767.7;
-  var minEmissions = 0.0000122986;
-  var numStepsEmissions = 5;
+  var maxEmissions = 5658.8332;
+  var minEmissions = 0.0000325;
+  var rangeEmissions = maxEmissions - minEmissions;
+  var numStepsEmissions = 100;
 
   function paintPointSources(feature, latlng) {
     var r = getCircleRadius(feature.properties.total_emissions);
@@ -1296,16 +1323,30 @@ crossorigin=""></script>
     return title;
   }
 
-  function getCircleRadius(num) {
-    for (var i = 0; i < numStepsEmissions; i++) {
+  function getCircleRadius(x) {
+    /*for (var i = numStepsEmissions; i >= 0; i--) {
       if (num >= scaleStep(i)) return circleAreaToRadius(scaleStep(num));
     }
-    return circleAreaToRadius(scaleStep(numStepsEmissions));
+    return circleAreaToRadius(scaleStep(numStepsEmissions));*/
+    var m = maxEmissions;
+    var n = 10;
+    return x >= m - (m/n)  ? 30 :
+           x >= m - 2*(m/n)  ? 27 :
+           x >= m - 3*(m/n)  ? 24 :
+           x >= m - 4*(m/n)  ? 21 :
+           x >= m - 5*(m/n)  ? 18 :
+           x >= m - 6*(m/n)  ? 15 :
+           x >= m - 7*(m/n)  ? 12 :
+           x >= m - 8*(m/n)  ? 9 : //high
+           x >= m - 9*(m/n)  ? 6 : //mid
+                    3; //low
   }
 
   function scaleStep(stepNum) {
-    //var range = maxEmissions - minEmissions;
-    var range = 25;
+    //var range = Math.round(maxEmissions - minEmissions);
+    var range = 50;
+
+    //var range = 50;
     var segment = range/numStepsEmissions;
     return segment*stepNum;
   }

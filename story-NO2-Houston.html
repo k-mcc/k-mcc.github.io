@@ -513,9 +513,10 @@ function getRange(x) {
 
 /* sources layer */
 
-var maxEmissions = 1767.7;
-var minEmissions = 0.0000122986;
-var numStepsEmissions = 5;
+var maxEmissions = 5658.8332;
+var minEmissions = 0.0000325;
+var rangeEmissions = maxEmissions - minEmissions;
+var numStepsEmissions = 100;
 
 function paintPointSources(feature, latlng) {
   var r = getCircleRadius(feature.properties.total_emissions);
@@ -546,11 +547,23 @@ function titleCase(phrase) {
   return title;
 }
 
-function getCircleRadius(num) {
-  for (var i = 0; i < numStepsEmissions; i++) {
+function getCircleRadius(x) {
+  /*for (var i = numStepsEmissions; i >= 0; i--) {
     if (num >= scaleStep(i)) return circleAreaToRadius(scaleStep(num));
   }
-  return circleAreaToRadius(scaleStep(numStepsEmissions));
+  return circleAreaToRadius(scaleStep(numStepsEmissions));*/
+  var m = maxEmissions;
+  var n = 10;
+  return x >= m - (m/n)  ? 30 :
+         x >= m - 2*(m/n)  ? 27 :
+         x >= m - 3*(m/n)  ? 24 :
+         x >= m - 4*(m/n)  ? 21 :
+         x >= m - 5*(m/n)  ? 18 :
+         x >= m - 6*(m/n)  ? 15 :
+         x >= m - 7*(m/n)  ? 12 :
+         x >= m - 8*(m/n)  ? 9 : //high
+         x >= m - 9*(m/n)  ? 6 : //mid
+                  3; //low
 }
 
 function scaleStep(stepNum) {
