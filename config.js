@@ -18,7 +18,7 @@ var config = {
             description: 'The energy industry plays a primary role in Houston\'s economy.',
             location: {
                 center: [29.749907, -95.358421],
-                zoom: 10,
+                zoom: 8,
                 pitch: 0.00,
                 bearing: 0.00
             },
@@ -40,11 +40,31 @@ var config = {
             ]
         },
         {
-            id: 'welcomeToHouston',
-            alignment: 'left',
+            id: 'no2basics',
+            alignment: 'center',
             title: '',
             image: '',
-            description: '<p">On average, Houston’s low-income residents and residents of color experience 30% higher burdens of Nitrogen Dioxide (NO<sub>2</sub>).</p>',
+            description: '<h2>What is nitrogen dioxide?</h2><p>Nitrogen dioxide is a gaseous air pollutant. It comes from the burning of fossil fuels.</br></br><b>Common sources of nitrogen dioxide</b></br><ul><li>Cars, trucks, and buses</li><li>Power plants</li><li>Industrial sources</li><li>Off-road equipment (e.g. construction vehicles, lawn and garden equipment)</li></ul></br><a href="https://www.epa.gov/no2-pollution/basic-information-about-no2#What%20is%20NO2" target="_blank" rel="noopener noreferrer">Learn more about nitrogen dioxide</a></p>',
+            location: {
+                center: [29.749907, -95.358421],
+                zoom: 8,//12.92,
+                pitch: 0.00,//39.50,
+                bearing: 0.00//36.00
+            },
+            onChapterEnter: [],
+            onChapterExit: [
+                // {
+                //     layer: 'gnpglaciers-2015',
+                //     opacity: 0
+                // }
+            ]
+        },
+        {
+            id: 'welcomeToHouston',
+            alignment: 'center',
+            title: '',
+            image: '',
+            description: '<p>On average, Houston’s low-income residents and residents of color experience 30% higher burdens of nitrogen dioxide (NO<sub>2</sub>).</p>',
             location: {
                 center: [29.749907, -95.358421],
                 zoom: 11,//12.92,
@@ -84,7 +104,7 @@ var config = {
             alignment: 'left',
             title: '',
             image: '',
-            description: '<h2>Where Nitrogen Oxides Come From</h2><p>The Houston Ship Channel is lined with sources of nitrogen oxides (NO<sub>x</sub>), a group of gases that includes nitrogen dioxide (NO<sub>2</sub>). NO<sub>2</sub> usually gets in the air from the burning of fuel.</br></br>Click on each source to learn more.</p>',
+            description: '<h2>Where Nitrogen Oxides Come From</h2><p>The Houston Ship Channel is lined with sources of nitrogen oxides (NO<sub>x</sub>), a group of gases that includes NO<sub>2</sub>. NO<sub>2</sub> usually gets in the air from the burning of fuel.</br></br>Click on each source to learn more.</p>',
             location: {
                 center: [29.7148474770, -95.2445839003227],
                 zoom: 13,//12.92,
