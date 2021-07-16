@@ -519,7 +519,7 @@ var rangeEmissions = maxEmissions - minEmissions;
 var numStepsEmissions = 100;
 
 function paintPointSources(feature, latlng) {
-  var r = getCircleRadius(feature.properties.total_emissions);
+  var r = circleAreaToRadius(getCircleRadius(feature.properties.total_emissions));
     return L.circleMarker(latlng, {
       fillColor: '#000000',
       color: '#000000',

@@ -31,6 +31,7 @@ crossorigin=""></script>
 
 <script src="https://k-mcc.github.io/geoJSON/houNHPoints.js"></script>
 <script src="geoJSON/dcNHPoints.js"></script>
+<script src="geoJSON/houSources.js"></script>
 
 
   <style>
@@ -191,26 +192,44 @@ crossorigin=""></script>
     }
 
     .button {
-      position: relative;
+      /*position: relative;
       background: #FFFFFF;
       border-radius: 1px;
       left: 10px;
-      top: 230px;
+      top: 250px;
       width: 120px;
-      height: 80px;
+      height: 60px;
       text-align: left;
       font: 14px/16px 'Poppins', Helvetica, sans-serif;
       color: '#000000';
       transition-duration: 0.4s;
       z-index: 600;
       line-height: 0px;
-      display: none;
+      display: none;*/
+
+      font: 14px/16px 'Poppins', Helvetica, sans-serif;
+      background-color: #FFFFFF;
+      color: #000000;
+      /*padding: 5px;*/
+      font-size: 16px;
+      border: none;
+      display: inline-block;
+      left: 10px;
+      line-height: 0px;
+      top: 250px;
+      width: 160px;
+      height: 80px;
+      position: relative;
+      z-index: 800;
+      cursor: pointer;
+      text-align: left;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
     }
 
     .iconButton {
       position: relative;
-      width: 40px;
-      height: 40px;
+      width: 30px;
+      height: 30px;
       z-index: 610;
     }
 
@@ -420,7 +439,7 @@ crossorigin=""></script>
       padding: 16px;
       font-size: 16px;
       border: none;
-      display: inline-block;
+      display: block;
       top: 10px;
       left: 100px;
       width: 300px;
@@ -465,6 +484,11 @@ crossorigin=""></script>
     }
     .chorOption:focus {
       background-color: #000000;
+    }
+    .chorOption i {
+        width: 25px;
+        height: 25px;
+        float: left;
     }
     .show {display:block;}
 
@@ -696,6 +720,29 @@ crossorigin=""></script>
       100% {opacity:0;}
     }
 
+    .addLayerBtn {
+      font: 14px/16px 'Poppins', Helvetica, sans-serif;
+      background-color: #FFFFFF;
+      color: #000000;
+      padding: 16px;
+      font-size: 16px;
+      border: none;
+      display: inline-block;
+      top: 10px;
+      left: 100px;
+      width: 300px;
+      height: 60px;
+      position: absolute;
+      z-index: 800;
+      cursor: pointer;
+      text-align: center;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      border-radius: 3px;
+    }
+    .addLayerBtn:hover, .addLayerBtn:focus {
+      background-color: #2980B9;
+      color: #FFFFFF;
+    }
 
   </style>
 </head>
@@ -714,15 +761,24 @@ crossorigin=""></script>
   </div>
   <div class="designMenu" id="designMenu">
     <button onclick="toggleChorDropdown('designDropdown')" class="dropbtn" style="top:90px;">View Options ▽</button>
-    <div id="designDropdown" class="dropdown-content" style="left:100px;top:140px;z-index:800;">
+    <div id="designDropdown" class="dropdown-content" style="left:100px;top:150px;z-index:800;">
       <div class='chorOption' id='fillBtn' onclick = "toggleOpacity('fill')">Fill</div>
       <div class='chorOption' id='outlineBtn' onclick = "toggleOpacity('outline')">Outline</div>
     </div>
   </div>
-  <div class="designMenu" id="designMenu"><a href="https://forms.gle/pdiqNVtPRMa8fYNp9" target="_blank" rel="noopener noreferrer"><button class="dropbtn" style="top:170px;height:60px;z-index:799;">Provide Feedback</button></a></div>
+  <div class="designMenu" id="designMenu2"><a href="https://forms.gle/pdiqNVtPRMa8fYNp9" target="_blank" rel="noopener noreferrer"><button class="dropbtn" style="top:170px;height:60px;z-index:799;">Provide Feedback</button></a></div>
 
-  <button class="button" id="button1" onclick="setPalette(1)"><h2>Palette 1</h2><i id="a0"></i><i id="a1"></i><i id="a2"></i><i id="a3"></i></button>
-  <button class="button" id="button2" onclick="setPalette(2)" ><h2>Palette 2</h2><i id="b0"></i><i id="b1"></i><i id="b2"></i><i id="b3"></i></button>
+  <div class="chorMenu" id="sourcesBtn"><button onclick="toggleLayer('sources')" class="addLayerBtn" style="top:250px;">NOx Sources</button></div>
+
+  <!--<button class="button" id="button1" onclick="setPalette(1)"><h2>Palette 1</h2><i id="a0"></i><i id="a1"></i><i id="a2"></i><i id="a3"></i></button>
+  <button class="button" id="button2" onclick="setPalette(2)" ><h2>Palette 2</h2><i id="b0"></i><i id="b1"></i><i id="b2"></i><i id="b3"></i></button> -->
+  <div class="designMenu" id="designMenu3">
+    <button onclick="toggleChorDropdown('paletteDropdown')" class="dropbtn" style="top:330px;">Color Palette ▽</button>
+    <div id="paletteDropdown" class="dropdown-content" style="left:100px;top:390px;z-index:5000;">
+      <div class='chorOption' id='button1' onclick = "setPalette(1)">1<i id="a0"></i><i id="a1"></i><i id="a2"></i><i id="a3"></i></div>
+      <div class='chorOption' id='button2' onclick = "setPalette(2)">2<i id="b0"></i><i id="b1"></i><i id="b2"></i><i id="b3"></i></div>
+    </div>
+  </div>
   <div id="map"></div>
   <div id="myModal" class="modal">
 
@@ -883,6 +939,12 @@ crossorigin=""></script>
     weightVal = opacitySetting[1];
     colorVal = opacitySetting[2];
 
+    var sourcesWasOn = false;
+    if (sourcesIsOn) {
+      sourcesWasOn = true;
+      toggleLayer(sources);
+    }
+
       if (houstonIsOn) { // Repaint Houston layer
         if (singleLayerOn == "") {
           map.removeLayer(houston);
@@ -916,6 +978,10 @@ crossorigin=""></script>
         var layer = dc.addTo(map);
 
         geojson = layer;
+      }
+
+      if (sourcesWasOn) {
+        toggleLayer(sources);
       }
 
       zoom = false;
@@ -1087,6 +1153,13 @@ crossorigin=""></script>
   var nhLayer;
 
   function addChoropleth(cityName) {
+
+    var sourcesWasOn = false;
+    if (sourcesIsOn) {
+      sourcesWasOn = true;
+      toggleLayer(sources);
+    }
+
     if (firstTimeInCity) {
       clickedTract = "";
       previousTarget = "";
@@ -1100,6 +1173,7 @@ crossorigin=""></script>
       //document.getElementById(donutLegendID).style.display = "none";
       //document.getElementById(donutLegendID + "Button").style.display = "none";
       document.getElementById("chorMenu").style.display = "inline-block";
+      document.getElementById("sourcesBtn").style.display = "inline-block";
 
       if (countCityClicks == 1) {
         colors = paletteA;
@@ -1222,6 +1296,11 @@ crossorigin=""></script>
 
       info.addTo(map);
     }
+
+    if (sourcesWasOn) {
+      toggleLayer(sources);
+    }
+
   }
 
   function paint(feature, latlng) {
@@ -1317,6 +1396,7 @@ crossorigin=""></script>
       document.getElementById("button1").style.display = "none";
       document.getElementById("button2").style.display = "none";
       document.getElementById("chorMenu").style.display = "none";
+      document.getElementById("sourcesBtn").style.display = "none";
 
   }
 
@@ -1604,7 +1684,7 @@ crossorigin=""></script>
           smoothFactor: 1,
           fillOpacity: fillOpacityVal
       };
-      if (feature.properties.comboRank <= 25) {
+      /*if (feature.properties.comboRank <= 25) {
         if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
             layer.bringToFront();
         }
@@ -1613,7 +1693,7 @@ crossorigin=""></script>
         if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
             layer.bringToBack();
         }
-      }
+      }*/
     }
 
     function highlightFeature(e) {
@@ -1628,11 +1708,11 @@ crossorigin=""></script>
             //fillColor: '#FFFFFF'
             fillOpacity: 0.4
           });
-          if (layer.feature.properties.comboRank <= 15) {
+          /*if (layer.feature.properties.comboRank <= 15) {
             if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
                 layer.bringToFront();
             }
-          }
+          }*/
 
         }
         info.update(layer.feature.properties);
@@ -1669,9 +1749,9 @@ crossorigin=""></script>
           fillOpacity: 0
         });
 
-        if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+        /*if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
             layer.bringToFront();
-        }
+        }*/
 
         info.update(layer.feature.properties);
 
@@ -1735,6 +1815,11 @@ crossorigin=""></script>
     }//"#f3f3f3 url('img_tree.png') no-repeat right top";*/
 
     function setPalette(num) {
+      var sourcesWasOn = false;
+      if (sourcesIsOn) {
+        sourcesWasOn = true;
+        toggleLayer(sources);
+      }
       if (num == 1) {
         colors = paletteA;
         //select button1
@@ -1802,6 +1887,9 @@ crossorigin=""></script>
           geojson = layer;
         }
 
+        if (sourcesWasOn) {
+          toggleLayer(sources);
+        }
 
         zoom = false;
         zoomToFeature(clickEvent);
@@ -1830,6 +1918,113 @@ crossorigin=""></script>
     div.style.lineHeight = "20px";
 
     return div;
+  }
+
+  // NOx Point Sources
+  var maxEmissions = 5658.8332;
+  var minEmissions = 0.0000325;
+  var rangeEmissions = maxEmissions - minEmissions;
+  var numStepsEmissions = 100;
+
+  function paintPointSources(feature, latlng) {
+    var r = getCircleRadius(feature.properties.total_emissions);
+      return L.circleMarker(latlng, {
+        fillColor: '#000000',
+        color: '#FFFFFF',
+        weight: 1,
+        opacity: 0.5,
+        fillOpacity: 1,
+        radius: r
+    });
+  }
+
+  function onEachFeaturePointSources(feature, layer) {
+      var book = feature.properties.company_name;
+      if (book != "") log = "</br>Company name: " + book;
+      else log = "";
+      layer.bindPopup("Site name: " + titleCase(feature.properties.site_name.toLowerCase()) + log + "</br>Total Emissions: " + feature.properties.total_emissions + " tons\n");
+  }
+
+  /*L.geoJson(houSources,
+    {
+      pointToLayer: paintPointSources,
+      onEachFeature: onEachFeaturePointSources
+    }).addTo(map);*/
+
+
+  /* secondary functions */
+
+  function titleCase(phrase) {
+    var words = phrase.split(" ");
+    var title = "";
+
+    for (var i = 0; i < words.length; i++) {
+      title += words[i][0].toUpperCase() + words[i].substr(1) + " ";
+    }
+
+    return title;
+  }
+
+  function getCircleRadius(x) {
+    /*for (var i = numStepsEmissions; i >= 0; i--) {
+      if (num >= scaleStep(i)) return circleAreaToRadius(scaleStep(num));
+    }
+    return circleAreaToRadius(scaleStep(numStepsEmissions));*/
+    var a = getArea(x)*30;
+    var r = circleAreaToRadius(a);
+    return r;
+  }
+
+  function getArea(x) {
+    var m = maxEmissions;
+    var n = 10;
+    return x >= m - (m/n)  ? 30 :
+           x >= m - 2*(m/n)  ? 27 :
+           x >= m - 3*(m/n)  ? 24 :
+           x >= m - 4*(m/n)  ? 21 :
+           x >= m - 5*(m/n)  ? 18 :
+           x >= m - 6*(m/n)  ? 15 :
+           x >= m - 7*(m/n)  ? 12 :
+           x >= m - 8*(m/n)  ? 9 : //high
+           x >= m - 9*(m/n)  ? 6 : //mid
+                    3; //low
+  }
+
+  function scaleStep(stepNum) {
+    //var range = Math.round(maxEmissions - minEmissions);
+    var range = 50;
+
+    //var range = 50;
+    var segment = range/numStepsEmissions;
+    return segment*stepNum;
+  }
+
+  function circleAreaToRadius(area) {
+    var radius = area/Math.PI;
+    radius = Math.sqrt(radius);
+    return (Math.round(radius * 100)/100);
+  }
+
+  var log = "";
+  var sourcesIsOn = false;
+  var sources;
+  function toggleLayer(layer) {
+    if (!sourcesIsOn) {
+      sources = L.geoJson(houSources,
+        {
+          pointToLayer: paintPointSources,
+          onEachFeature: onEachFeaturePointSources
+        });
+
+      sources.addTo(map);
+      //alert(log);
+      sourcesIsOn = true;
+    }
+    else {
+      map.removeLayer(sources);
+      sourcesIsOn = false;
+    }
+
   }
 
 </script>
