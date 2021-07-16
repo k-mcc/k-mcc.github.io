@@ -18,7 +18,7 @@ var config = {
             description: 'The energy industry plays a primary role in Houston\'s economy.',
             location: {
                 center: [29.749907, -95.358421],
-                zoom: 8,
+                zoom: 11,
                 pitch: 0.00,
                 bearing: 0.00
             },
@@ -47,7 +47,7 @@ var config = {
             description: '<h2>What is nitrogen dioxide?</h2><p>Nitrogen dioxide is a gaseous air pollutant. It comes from the burning of fossil fuels.</br></br><b>Common sources of nitrogen dioxide</b></br><ul><li>Cars, trucks, and buses</li><li>Power plants</li><li>Industrial sources</li><li>Off-road equipment (e.g. construction vehicles, lawn and garden equipment)</li></ul></br><a href="https://www.epa.gov/no2-pollution/basic-information-about-no2#What%20is%20NO2" target="_blank" rel="noopener noreferrer">Learn more about nitrogen dioxide</a></p>',
             location: {
                 center: [29.749907, -95.358421],
-                zoom: 8,//12.92,
+                zoom: 11,//12.92,
                 pitch: 0.00,//39.50,
                 bearing: 0.00//36.00
             },
