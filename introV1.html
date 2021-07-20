@@ -2066,10 +2066,19 @@ crossorigin=""></script>
   }
 
   function onEachFeaturePointSources(feature, layer) {
+      var address = "";
+      if (feature.properties.address != "Unknown" && feature.properties.address != "UNKNOWN") {
+        address = feature.properties.company_name + " " + feature.properties.address + " " + feature.properties.city + " " + feature.properties.postal_abbreviation;
+        address = address.replace(" ", "+");
+        address = "</br><a href='https://maps.google.com/?q=" + address + "'>See the Site</a>";
+      }
+      /*var search = feature.properties.site_name + " " + feature.properties.company_name + " " + feature.properties.city + " " + feature.properties.state;
+      search = search.replace(" ", "+");*/
       var book = feature.properties.company_name;
       if (book != "") log = "</br>Company name: " + book;
       else log = "";
-      layer.bindPopup("Site name: " + titleCase(feature.properties.site_name.toLowerCase()) + log + "</br>Total Emissions: " + feature.properties.total_emissions + " tons\n");
+      layer.bindPopup("Site name: " + titleCase(feature.properties.site_name.toLowerCase()) + log + "</br>Total Emissions: " + feature.properties.total_emissions + " tons\n" + address);
+      //"<a href='http://www.google.com/search?q=" + search + "&btnI'>See the site</a>"
   }
 
   /*L.geoJson(houSources,
