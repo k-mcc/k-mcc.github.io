@@ -745,6 +745,19 @@ crossorigin=""></script>
 .topnav .icon {
   display: none;
 }
+
+.leaflet-verticalcenter {
+    position: absolute;
+    z-index: 1000;
+    pointer-events: none;
+    top: 10%; /* possible because the placeholder's parent is the map */
+    transform: translateY(-50%); /* using the CSS3 Transform technique */
+    padding-top: 10px;
+}
+
+.leaflet-verticalcenter .leaflet-control {
+    margin-bottom: 10px;
+}
 </style>
 
 </head>
@@ -1171,7 +1184,7 @@ crossorigin=""></script>
   });
   var searchBar = L.Control.geocoder({position: 'topright'}); //change
   searchBar.addTo(map);
-  var countryViewButton = L.easyButton('<img src="images/countryView.png" alt="Zoom out to country" style="width:24px;height:20px;position:absolute;left: -1; right: -3px; top: 4px; bottom: 0px;">', function(btn, map){ //change
+  /*var countryViewButton = L.easyButton('<img src="images/countryView.png" alt="Zoom out to country" style="width:24px;height:20px;position:absolute;left: -1; right: -3px; top: 4px; bottom: 0px;">', function(btn, map){ //change
       var central = ([38.449907, -98.358421]);
       map.options.minZoom = countryMin;
       map.options.maxZoom = countryMax;
@@ -1185,7 +1198,57 @@ crossorigin=""></script>
       }
 
       firstTimeInCity = true;
+  });*/
+
+  var countryViewButton = L.easyButton({
+    id: 'countryView',  // an id for the generated button
+    position: 'topright',      // inherited from L.Control -- the corner it goes in
+    //type: 'replace',          // set to animate when you're comfy with css
+    leafletClasses: true,     // use leaflet classes to style the button?
+    states:[{                 // specify different icons and responses for your button
+      stateName: 'view-country',
+      onClick: function(btn, map){
+        var central = ([38.449907, -98.358421]);
+        map.options.minZoom = countryMin;
+        map.options.maxZoom = countryMax;
+        map.setView(central, 4.5);
+        removeChoroplethControls();
+
+        //remove sources
+        if (sourcesIsOn) {
+          map.removeLayer(sources);
+          sourcesIsOn = false;
+        }
+
+        firstTimeInCity = true;
+      },
+      title: 'show me the country',
+      icon: '<img src="images/countryView.png" alt="Expand" style="width:22px;height:24px;position:absolute;left: -1; right: -3px; top: 1px;">'
+    }]
   });
+
+  // Create additional Control placeholders
+  function addControlPlaceholders(map) {
+      var corners = map._controlCorners,
+          l = 'leaflet-',
+          container = map._controlContainer;
+
+      function createCorner(vSide, hSide) {
+          var className = l + vSide + ' ' + l + hSide;
+
+          corners[vSide + hSide] = L.DomUtil.create('div', className, container);
+      }
+
+      createCorner('verticalcenter', 'left');
+      createCorner('verticalcenter', 'right');
+  }
+  addControlPlaceholders(map);
+
+  // Change the position of the Zoom Control to a newly created placeholder.
+  map.zoomControl.setPosition('verticalcenterright');
+  countryViewButton.setPosition('verticalcenterright');
+  searchBar.setPosition('verticalcenterright');
+
   var numVars;
   var singleVariable;
   var univariateChoropleth;
@@ -1233,7 +1296,7 @@ crossorigin=""></script>
         document.getElementById("button2").style.color = "#000000";
       }
 
-      expandButton.addTo(map);
+      //expandButton.addTo(map); // change
       //univariateButton.addTo(map);
       countryViewButton.addTo(map);
       singleLayerOn = "";
