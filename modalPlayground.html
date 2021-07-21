@@ -47,783 +47,683 @@ crossorigin=""></script>
 <script src="geoJSON/dcNHPoints.js"></script>
 <script src="geoJSON/houSources.js"></script>
 <script src="js/Layer.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
 <style>
-  body { margin: 0; padding: 0; }
-  #map {
-    position: absolute;
-    top: 50px;
-    bottom: 0;
-    width: 100%;
-  }
-  /* city markers */
-  .cityMarker {
-    position: absolute;
-  }
+body { margin: 0; padding: 0; }
+#map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+}
+/* city markers */
+.cityMarker {
+  position: absolute;
+}
 
-  /* bivariate choropleths */
+/* bivariate choropleths */
 
-  .info {
-    height: 800px;
-    width: 400px;
-    padding: 6px 8px;
-    font: 14px/16px 'Poppins', Helvetica, sans-serif;
-    /*font-family: 'Poppins', sans-serif;*/
+.info {
+  height: 800px;
+  width: 400px;
+  padding: 6px 8px;
+  font: 14px/16px 'Poppins', Helvetica, sans-serif;
+  /*font-family: 'Poppins', sans-serif;*/
+  background: white;
+  background: rgba(255,255,255);
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  border-radius: 3px;
+  display: "inline-block";
+  text-align: center;
+  justify-content: center;
+  overflow: auto;
+}
+.info h2 {
+    margin: 0 0 5px;
+    color: #000000;
+    text-align: center;
+}
+.littleDiv {
+  text-align: center;
+}
+.info h3 {
+    margin: 0 0 5px;
+    font-size: 1.2em;
+    color: #000000;
+}
+.info h4 {
+    margin: 0 0 5px;
+    font-size: 1.2em;
+    color: #000000;
+}
+
+.donut-legend {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  width: 350px;
+  height: 350px;
+  font: 14px/16px 'Poppins', Helvetica, sans-serif;
+  color: '#000000';
+  z-index: 700;
+  padding: 5px;
+  display: block;
+  background: rgba(255,255,255);
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  border-radius: 3px;
+}
+.donut-legend p {
+  font: 14px/16px 'Poppins', Helvetica, sans-serif;
+  color: '#000000';
+  padding: 5px;
+  margin-left: 7px;
+  line-height: 20px;
+  font-size: 1.2em;
+}
+.donut-legend-scale {
+  font: 14px/16px 'Poppins', Helvetica, sans-serif;
+  color: '#000000';
+  top: 150px;
+  position: absolute;
+  font-size: 1.2em;
+  margin-left: 10px;
+  left: 50px;
+}
+.donut-legend i {
+  left: -50px;
+  margin-left: 10px;
+  margin-right: 20px;
+  line-height: 40px;
+  height: 20px;
+  width: 40px;
+  position: absolute;
+}
+
+.img {
+    color: #555;
     background: white;
     background: rgba(255,255,255);
     box-shadow: 0 0 15px rgba(0,0,0,0.2);
     border-radius: 3px;
-    display: "inline-block";
-    text-align: center;
-    justify-content: center;
-    overflow: auto;
-  }
-  .info h2 {
-      margin: 0 0 5px;
-      color: #000000;
-      text-align: center;
-  }
-  .littleDiv {
-    text-align: center;
-  }
-  .info h3 {
-      margin: 0 0 5px;
-      font-size: 1.2em;
-      color: #000000;
-  }
-  .info h4 {
-      margin: 0 0 5px;
-      font-size: 1.2em;
-      color: #000000;
-  }
-
-  .donut-legend {
-    position: absolute;
-    right: 10px; /*change*/
-    bottom: 10px;
-    width: 350px;
-    height: 350px;
-    font: 14px/16px 'Poppins', Helvetica, sans-serif;
-    color: '#000000';
-    z-index: 700;
-    padding: 5px;
-    display: block;
-    background: rgba(255,255,255);
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
-    border-radius: 3px;
-  }
-  .donut-legend p {
-    font: 14px/16px 'Poppins', Helvetica, sans-serif;
-    color: '#000000';
-    padding: 5px;
-    margin-left: 7px;
-    line-height: 20px;
-    font-size: 1.2em;
-  }
-  .donut-legend-scale {
-    font: 14px/16px 'Poppins', Helvetica, sans-serif;
-    color: '#000000';
-    top: 150px;
-    position: absolute;
-    font-size: 1.2em;
-    margin-left: 10px;
-    right: 50px; /*change*/
-  }
-  .donut-legend i {
-    left: -50px;
-    margin-left: 10px;
-    margin-right: 20px;
-    line-height: 40px;
-    height: 20px;
-    width: 40px;
-    position: absolute;
-  }
-
-  .img {
-      color: #555;
-      background: white;
-      background: rgba(255,255,255);
-      box-shadow: 0 0 15px rgba(0,0,0,0.2);
-      border-radius: 3px;
-  }
-  /*grid*/
-  .grid-container {
-    grid-template-columns: auto auto auto;
-    background-color: #FFFFFF;
-    padding: 30px 18px;
-    margin: 40px 0;
-    bottom: 5px;
-    right: 5px;  /*change*/
-    position: relative;
-    border-left: 50px solid #FFFFFF;
-    border-bottom: 50px solid #FFFFFF;
-    border-radius: 3px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
-  }
-  .grid-item {
-    background-color: #FFFFFF;
-    border: 1px solid #FFFFFF;
-    padding: 40px;
-    text-align: center;
-  }
-  .grid-titem {
-    border: 1px solid #FFFFFF;
-    text-align: center;
-  }
-  .grid-container h3 {
-    font: 14px/16px 'Poppins', Helvetica, sans-serif;
-    color: #000000;
-    padding: 5px 10px;
-    margin: 30px 0 15px 0;
-    line-height: 24px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    background: none;
-    transform-origin: 0 0;
-    transform: rotate(90deg);
-    font-size: 1.5em;
-  }
-  .grid-container h2 {
-    font: 14px/16px 'Poppins', Helvetica, sans-serif;
-    color: #000000;
-    padding: 0 10px;
-    margin: 60px 10px 0 0;
-    line-height: 2px;
-    position: absolute;
-    bottom: 0;
-    top: 257px;
-    left: 0;
-    background: none;
-    font-size: 1.5em;
-  }
-
-  .grid-container i {
-    width: 20px;
-    height: 20px;
-    float: left;
-    margin-right: 8px;
-    opacity: 0.7;
-  }
-
-  .button {
-    position: relative;
-    background: #FFFFFF;
-    border-radius: 1px;
-    right: 10px; /*change*/
-    top: 230px;
-    width: 120px;
-    height: 80px;
-    text-align: left;
-    font: 14px/16px 'Poppins', Helvetica, sans-serif;
-    color: '#000000';
-    transition-duration: 0.4s;
-    z-index: 600;
-    line-height: 0px;
-    display: none;
-  }
-
-  .iconButton {
-    position: relative;
-    width: 40px;
-    height: 40px;
-    z-index: 610;
-  }
-
-  i {
-      width: 25px;
-      height: 30px;
-      float: left;
-  }
-
-  .axis {
-      font: 14px/16px 'Poppins', Helvetica, sans-serif;
-      font-size: 0.001em;
-      color: #FFFFFF;
-  }
-
-  .pie {
-    /* Basic layout */
-    /*display: inline-block;*/
-    width: 3.75em;
-    height: 3.75em;
-    border-radius: 50%;
-    /* A little styling */
-    border: .15em solid #fff;
-    box-shadow: 0 .075em .2em .05em rgba(0,0,0,.25);
-
-    /* fixes a minor clipping issue in Chrome */
-    background-origin: border-box;
-    margin: -5px;
-  }
-  .piecon {
-    left: 100px;
-    top: 78px;
-    /* Basic layout */
-    display: inline-block;
-    background: conic-gradient(#E81D26 0% 25%, #FFF81F 25% 50%, #5EC2EF 50% 75%, #0FB223 75% 100%);
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-
-    /* A little styling */
-    border: .15em solid #fff;
-    box-shadow: 0 .075em .2em .05em rgba(0,0,0,.25);
-
-    /* fixes a minor clipping issue in Chrome */
-    background-origin: border-box;
-    position: absolute;
-    margin-right: 20px;
-    z-index: 800;
-  }
-  .targetIcon {
-    width: 4.5px;
-    height: 4.5px;
-    border-radius: 50%;
-    background-color: #E81D26;
-    border: 4.5px solid #FFF81F;
-    box-shadow: 0 0 0 4.5px #5EC2EF, 0 0 0 9px #0FB223;
-    padding: 5px;
-    margin-left: 5px;
-  }
-  .targetIconHolder {
-    width: 50px;
-    height: 50px;
-    margin-left: 20px;
-    left: 140px;
-    top: 73px;
-    position: absolute;
-    background-color: #fff;
-    border: 0px;
-    z-index: 800;
-  }
-  h4 {
-    font: 14px/16px 'Poppins', Helvetica, sans-serif;
-    color: #000000;
-    padding: 5px 10px;
-    background: none;
-    margin-left: -20px;
-  }
-
-  .donutColorLegend {
-    line-height: 0;
-    padding: 0;
-  }
-
-  .xButton {
-    position: absolute;
-    display: inline-block;
-    cursor: pointer;
-    right: 5px;
-    top: -8px;
-    z-index: 850;
-    font: 14px/16px 'Poppins', Helvetica, sans-serif;
-    color: #FF0000;
-  }
-
-  .xButton h2 {
-    position: absolute;
-    display: inline-block;
-    cursor: pointer;
-    right: 0px;
-    top: -8px;
-    z-index: 850;
-    font: 14px/16px 'Poppins', Helvetica, sans-serif;
-    color: #FF0000;
-    font-size: 1.8em;
-  }
-
-  .popup {
-    position: absolute;
-    display: inline-block;
-    cursor: pointer;
-    right: 50px;
-    top: 130px;
-    z-index: 900;
-  }
-
-  /* The actual popup (appears on top) */
-  .popup .popuptext {
-    visibility: hidden;
-    width: 320px;
-    background-color: #212121;
-    color: #ffffff;
-    text-align: center;
-    border-radius: 6px;
-    border: 2px solid #212121;
-    padding: 8px 0;
-    position: absolute;
-    z-index: 900;
-    bottom: 125%;
-    /*box-shadow: 0 0 15px rgba(0,0,0,0.2);*/
-    /*left: 50%;*/
-    margin-left: -177px;
-  }
-
-  /* Popup arrow */
-  .popup .popuptext::after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color:  #212121 transparent transparent transparent;
-    /*box-shadow: 0 0 15px rgba(0,0,0,0.2);*/
-  }
-
-  /* Toggle this class when clicking on the popup container (hide and show the popup) */
-  .popup .show {
-    visibility: visible;
-    -webkit-animation: fadeIn 0.5s;
-    animation: fadeIn 0.5s
-  }
-
-  /* Add animation (fade in the popup) */
-  @-webkit-keyframes fadeIn {
-    from {opacity: 0;}
-    to {opacity: 1;}
-  }
-
-  @keyframes fadeIn {
-    from {opacity: 0;}
-    to {opacity:1 ;}
-  }
-
-  .showLegendButton {
-    font: 14px/16px 'Poppins', Helvetica, sans-serif;
-    color: #000000;
-    background: #FFFFFF;
-    position: absolute;
-    border: 5px solid #FFFFFF;
-    border-radius: 3px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
-    padding: 5px;
-    right: 30px; /*change*/
-    bottom: -1px;
-    z-index: 800;
-    display: none;
-    width: 100;
-    height: 100;
-    cursor: pointer;
-  }
-
-  .chorMenu {
-    /*font: 14px/16px 'Poppins', Helvetica, sans-serif;
-    color: #000000;
-    background: #FFFFFF;
-    position: absolute;
-    border: 5px solid #FFFFFF;
-    border-radius: 3px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
-    padding: 5px;
-    left: 10px;
-    bottom: 350px;
-    z-index: 800;
-    width: 100;
-    height: 100;
-    cursor: pointer;*/
-    display: none;
-    top: 10px;
-    right: 40%; /*change*/
-    z-index: 800;
-  }
-  .dropbtn {
-    font: 14px/16px 'Poppins', Helvetica, sans-serif;
-    background-color: #FFFFFF;
-    color: #000000;
-    padding: 16px;
-    font-size: 16px;
-    border: none;
-    display: inline-block;
-    top: 60px;
-    right: 40%; /*change*/
-    width: 300px;
-    height: 60px;
-    position: absolute;
-    z-index: 800;
-    cursor: pointer;
-    text-align: center;
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
-    border-radius: 3px;
-  }
-  .dropbtn:hover, .dropbtn:focus {
-    background-color: #2980B9;
-    color: #FFFFFF;
-  }
-  .dropdown-content {
-    font: 14px/16px 'Poppins', Helvetica, sans-serif;
-    display: none;
-    position: absolute;
-    background-color: #FFFFFF;
-    color: #000000;
-    min-width: 300px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 800;
-    top: 70px;
-    right: 40%; /*change*/
-    z-index: 801;
-  }
-  /*start change*/
-  .activated {
-    font: 14px/16px 'Poppins', Helvetica, sans-serif;
-    background-color: #2980B9;
-    color: #FFFFFF;
-    padding: 16px;
-    font-size: 16px;
-    border: none;
-    display: inline-block;
-    top: 60px;
-    right: 30%; /*change*/
-    width: 300px;
-    height: 60px;
-    position: absolute;
-    z-index: 800;
-    cursor: pointer;
-    text-align: center;
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
-    border-radius: 3px;
-  }
-  .activated:hover, .activated:focus {
-    background-color: #2980B9;
-    color: #FFFFFF;
-  }
-  /*end change*/
-  .dropdown-content {
-    font: 14px/16px 'Poppins', Helvetica, sans-serif;
-    display: none;
-    position: absolute;
-    background-color: #FFFFFF;
-    color: #000000;
-    min-width: 300px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 800;
-    top: 120px;
-    right: 40%; /*change*/
-    z-index: 801;
-  }
-
-  .chorOption {
-    display: block;
-    background-color: #FFFFFF;
-    font: 14px/16px 'Poppins', Helvetica, sans-serif;
-    color: black;
-    padding: 12px 16px;
-    /*cursor: pointer;*/
-  }
-  .chorOption:hover {
-    background-color: #ddd
-  }
-  .show {display:block;}
-
-  .neighborhoodLabel {
-    display: none;
-    font-size: 14px;
-    opacity: 0;
-    text-shadow: 0px 0px 6px rgba(0, 0, 0);
-    font-family: 'Asap', sans-serif;
-    color: #FFFFFF;
-    text-transform: uppercase;
-
-  }
-
-  .top10 {
-    opacity: 1;
-    font-size: 18px;
-    text-shadow: 0px 0px 6px rgba(0, 0, 0);
-    font-family: 'Asap', sans-serif;
-    color: #FFFFFF;
-    line-height: 20px;
-    text-transform: uppercase;
-  }
-
-  .fade-in-text {
-    opacity: 1;
-
-    animation: fadeIn ease-out 1s;
-    -webkit-animation: fadeIn ease-out 1s;
-    -moz-animation: fadeIn ease-out 1s;
-    -o-animation: fadeIn ease-out 1s;
-    -ms-animation: fadeIn ease-out 1s;
-  }
-
-  .fade-in-text-top10 {
-    display: inline-block;
-    opacity: 1;
-
-    animation: fadeIn ease-out 1s;
-    -webkit-animation: fadeIn ease-out 1s;
-    -moz-animation: fadeIn ease-out 1s;
-    -o-animation: fadeIn ease-out 1s;
-    -ms-animation: fadeIn ease-out 1s;
-  }
-
-  .fade-out-text {
-    display: inline-block;
-    opacity: 0;
-
-    animation: fadeOut ease-out 1s;
-    -webkit-animation: fadeOut ease-out 1s;
-    -moz-animation: fadeOut ease-out 1s;
-    -o-animation: fadeOut ease-out 1s;
-    -ms-animation: fadeOut ease-out 1s;
-  }
-
-  .fade-out-text-top10 {
-    display: inline-block;
-    opacity: 0;
-
-    animation: fadeOut ease-out 1s;
-    -webkit-animation: fadeOut ease-out 1s;
-    -moz-animation: fadeOut ease-out 1s;
-    -o-animation: fadeOut ease-out 1s;
-    -ms-animation: fadeOut ease-out 1s;
-  }
-
-  /* FADE IN */
-
-  @keyframes fadeIn {
-    0% {opacity:0;}
-    100% {opacity:1;}
-  }
-
-  @-moz-keyframes fadeIn {
-    0% {opacity:0;}
-    100% {opacity:1;}
-  }
-
-  @-webkit-keyframes fadeIn {
-    0% {opacity:0;}
-    100% {opacity:1;}
-  }
-
-  @-o-keyframes fadeIn {
-    0% {opacity:0;}
-    100% {opacity:1;}
-  }
-
-  @-ms-keyframes fadeIn {
-    0% {opacity:0;}
-    100% {opacity:1;}
-  }
-
-  /* FADE OUT */
-  @keyframes fadeOut {
-    0% {opacity:1;}
-    100% {opacity:0;}
-  }
-
-  @-moz-keyframes fadeOut {
-    0% {opacity:1;}
-    100% {opacity:0;}
-  }
-
-  @-webkit-keyframes fadeOut {
-    0% {opacity:1;}
-    100% {opacity:0;}
-  }
-
-  @-o-keyframes fadeOut {
-    0% {opacity:1;}
-    100% {opacity:0;}
-  }
-
-  @-ms-keyframes fadeOut {
-    0% {opacity:1;}
-    100% {opacity:0;}
-  }
-
-  /*additions from hou-no2-injustice.html*/
-  .legend-key {
-    display: inline-block;
-    border-radius: 20%;
-    width: 20px;
-    height: 20px;
-    margin-right: 5px;
-    opacity: 0.8;
-  }
-  .designMenu {
-    display: block;
-    top: 10px;
-    margin-left: 100px;
-    z-index: 800;
-  }
-
-  .modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1000; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
-    text-align: center;
-    justify-content: center;
-  }
-
-  /* Modal Content/Box */
-  .modal-content {
-    background-color: #FFFFFF;
-    margin: 2% auto; /* 15% from the top and centered */
-    padding: 10px;
-    border: 1px solid #888;
-    width: 80%; /* Could be more or less, depending on screen size */
-    font: 14px/16px 'Poppins', Helvetica, sans-serif;
-    font-size: 25px;
-    line-height: 30px;
-    text-align: center;
-  }
-
-  .modal-content p {
-    padding: 10px;
-    margin-right: 20px;
-    margin-left: 20px;
-    font: 14px/16px 'Poppins', Helvetica, sans-serif;
-    font-size: 25px;
-    line-height: 35px;
-    text-align: left;
-  }
-
-  .modal-content h3 {
-    background-color: #FFFFFF;
-    color: #3B4994;
-    margin: 2% auto; /* 15% from the top and centered */
-    padding: 10px;
-    font: 14px/16px 'Poppins', Helvetica, sans-serif;
-    font-size: 50px;
-    line-height: 25px;
-    text-align: center;
-  }
-
-  /* The Close Button */
-  .close {
-    color: #aaa;
-    float: right;
-    font-size: 40px;
-    font-weight: bold;
-  }
-
-  .close:hover,
-  .close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
-  }
-
-  .exploreBtn {
-    background-color: '#3B4994';
-    border-radius: 2px solid white;
-    font: 14px/16px 'Poppins', Helvetica, sans-serif;
-    text-align: center;
-    display: inline-block;
-    font-size: 2em;
-  }
-
-  .exploreBtnContainer:hover {
-    background: #1c2970;
-    color: white;
-    box-shadow: 0 0 0px rgba(0,0,0,0.2);
-    border-radius: 3px;
-  }
-
-  .exploreBtnContainer {
-    height: 85px;
-    width: 300px;
-    font: 14px/16px 'Poppins', Helvetica, sans-serif;
-    background: #3B4994;
-    color: white;
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
-    border-radius: 3px;
-    display: "inline-block";
-    text-align: center;
-    justify-content: center;
-    margin: 2% auto;
-    padding:10px;
-    cursor: pointer;
-  }
-
-  /* Add a black background color to the top navigation */
-.topnav {
-  height: 50px;
-  background-color: #000000;
-  overflow: hidden;
 }
-
-/* Style the links inside the navigation bar */
-.topnav a {
-  height: 50px;
-  float: right;
-  display: block;
-  color: #FFFFFF;/*#f2f2f2;*/
+/*grid*/
+.grid-container {
+  grid-template-columns: auto auto auto;
+  background-color: #FFFFFF;
+  padding: 30px 18px;
+  margin: 40px 0;
+  bottom: 5px;
+  left: 5px
+  position: relative;
+  border-left: 50px solid #FFFFFF;
+  border-bottom: 50px solid #FFFFFF;
+  border-radius: 3px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}
+.grid-item {
+  background-color: #FFFFFF;
+  border: 1px solid #FFFFFF;
+  padding: 40px;
   text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
+}
+.grid-titem {
+  border: 1px solid #FFFFFF;
+  text-align: center;
+}
+.grid-container h3 {
   font: 14px/16px 'Poppins', Helvetica, sans-serif;
-  font-size: 20px;
+  color: #000000;
+  padding: 5px 10px;
+  margin: 30px 0 15px 0;
+  line-height: 24px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: none;
+  transform-origin: 0 0;
+  transform: rotate(90deg);
+  font-size: 1.5em;
+}
+.grid-container h2 {
+  font: 14px/16px 'Poppins', Helvetica, sans-serif;
+  color: #000000;
+  padding: 0 10px;
+  margin: 60px 10px 0 0;
+  line-height: 2px;
+  position: absolute;
+  bottom: 0;
+  top: 257px;
+  left: 0;
+  background: none;
+  font-size: 1.5em;
 }
 
-/* Change the color of links on hover */
-.topnav a:hover {
-  background-color: #707070;
-  color: black;
+.grid-container i {
+  width: 20px;
+  height: 20px;
+  float: left;
+  margin-right: 8px;
+  opacity: 0.7;
 }
 
-/* Add an active class to highlight the current page */
-.topnav a.active {
-  background-color: #ffd519;
-  color: black;
-}
-
-/* Hide the link that should open and close the topnav on small screens */
-.topnav .icon {
+.button {
+  position: relative;
+  background: #FFFFFF;
+  border-radius: 1px;
+  left: 10px;
+  top: 230px;
+  width: 120px;
+  height: 80px;
+  text-align: left;
+  font: 14px/16px 'Poppins', Helvetica, sans-serif;
+  color: '#000000';
+  transition-duration: 0.4s;
+  z-index: 600;
+  line-height: 0px;
   display: none;
 }
 
-.leaflet-verticalcenter {
-    position: absolute;
-    z-index: 1000;
-    pointer-events: none;
-    top: 10%; /* possible because the placeholder's parent is the map */
-    transform: translateY(-50%); /* using the CSS3 Transform technique */
-    padding-top: 10px;
+.iconButton {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  z-index: 610;
 }
 
-.leaflet-verticalcenter .leaflet-control {
-    margin-bottom: 10px;
+i {
+    width: 25px;
+    height: 30px;
+    float: left;
+}
+
+.axis {
+    font: 14px/16px 'Poppins', Helvetica, sans-serif;
+    font-size: 0.001em;
+    color: #FFFFFF;
+}
+
+.pie {
+  /* Basic layout */
+  /*display: inline-block;*/
+  width: 3.75em;
+  height: 3.75em;
+  border-radius: 50%;
+  /* A little styling */
+  border: .15em solid #fff;
+  box-shadow: 0 .075em .2em .05em rgba(0,0,0,.25);
+
+  /* fixes a minor clipping issue in Chrome */
+  background-origin: border-box;
+  margin: -5px;
+}
+.piecon {
+  left: 100px;
+  top: 78px;
+  /* Basic layout */
+  display: inline-block;
+  background: conic-gradient(#E81D26 0% 25%, #FFF81F 25% 50%, #5EC2EF 50% 75%, #0FB223 75% 100%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+
+  /* A little styling */
+  border: .15em solid #fff;
+  box-shadow: 0 .075em .2em .05em rgba(0,0,0,.25);
+
+  /* fixes a minor clipping issue in Chrome */
+  background-origin: border-box;
+  position: absolute;
+  margin-right: 20px;
+  z-index: 800;
+}
+.targetIcon {
+  width: 4.5px;
+  height: 4.5px;
+  border-radius: 50%;
+  background-color: #E81D26;
+  border: 4.5px solid #FFF81F;
+  box-shadow: 0 0 0 4.5px #5EC2EF, 0 0 0 9px #0FB223;
+  padding: 5px;
+  margin-left: 5px;
+}
+.targetIconHolder {
+  width: 50px;
+  height: 50px;
+  margin-left: 20px;
+  left: 140px;
+  top: 73px;
+  position: absolute;
+  background-color: #fff;
+  border: 0px;
+  z-index: 800;
+}
+h4 {
+  font: 14px/16px 'Poppins', Helvetica, sans-serif;
+  color: #000000;
+  padding: 5px 10px;
+  background: none;
+  margin-left: -20px;
+}
+
+.donutColorLegend {
+  line-height: 0;
+  padding: 0;
+}
+
+.xButton {
+  position: absolute;
+  display: inline-block;
+  cursor: pointer;
+  right: 5px;
+  top: -8px;
+  z-index: 850;
+  font: 14px/16px 'Poppins', Helvetica, sans-serif;
+  color: #FF0000;
+}
+
+.xButton h2 {
+  position: absolute;
+  display: inline-block;
+  cursor: pointer;
+  right: 0px;
+  top: -8px;
+  z-index: 850;
+  font: 14px/16px 'Poppins', Helvetica, sans-serif;
+  color: #FF0000;
+  font-size: 1.8em;
+}
+
+.popup {
+  position: absolute;
+  display: inline-block;
+  cursor: pointer;
+  right: 50px;
+  top: 130px;
+  z-index: 900;
+}
+
+/* The actual popup (appears on top) */
+.popup .popuptext {
+  visibility: hidden;
+  width: 320px;
+  background-color: #212121;
+  color: #ffffff;
+  text-align: center;
+  border-radius: 6px;
+  border: 2px solid #212121;
+  padding: 8px 0;
+  position: absolute;
+  z-index: 900;
+  bottom: 125%;
+  /*box-shadow: 0 0 15px rgba(0,0,0,0.2);*/
+  /*left: 50%;*/
+  margin-left: -177px;
+}
+
+/* Popup arrow */
+.popup .popuptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color:  #212121 transparent transparent transparent;
+  /*box-shadow: 0 0 15px rgba(0,0,0,0.2);*/
+}
+
+/* Toggle this class when clicking on the popup container (hide and show the popup) */
+.popup .show {
+  visibility: visible;
+  -webkit-animation: fadeIn 0.5s;
+  animation: fadeIn 0.5s
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity:1 ;}
+}
+
+.showLegendButton {
+  font: 14px/16px 'Poppins', Helvetica, sans-serif;
+  color: #000000;
+  background: #FFFFFF;
+  position: absolute;
+  border: 5px solid #FFFFFF;
+  border-radius: 3px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  padding: 5px;
+  left: 30px;
+  bottom: -1px;
+  z-index: 800;
+  display: none;
+  width: 100;
+  height: 100;
+  cursor: pointer;
+}
+
+.chorMenu {
+  /*font: 14px/16px 'Poppins', Helvetica, sans-serif;
+  color: #000000;
+  background: #FFFFFF;
+  position: absolute;
+  border: 5px solid #FFFFFF;
+  border-radius: 3px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  padding: 5px;
+  left: 10px;
+  bottom: 350px;
+  z-index: 800;
+  width: 100;
+  height: 100;
+  cursor: pointer;*/
+  display: none;
+  top: 10px;
+  left: 100px;
+  z-index: 800;
+}
+.dropbtn {
+  font: 14px/16px 'Poppins', Helvetica, sans-serif;
+  background-color: #FFFFFF;
+  color: #000000;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  display: inline-block;
+  top: 10px;
+  left: 100px;
+  width: 300px;
+  height: 60px;
+  position: absolute;
+  z-index: 800;
+  cursor: pointer;
+  text-align: center;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  border-radius: 3px;
+}
+.dropbtn:hover, .dropbtn:focus {
+  background-color: #2980B9;
+  color: #FFFFFF;
+}
+.dropdown-content {
+  font: 14px/16px 'Poppins', Helvetica, sans-serif;
+  display: none;
+  position: absolute;
+  background-color: #FFFFFF;
+  color: #000000;
+  min-width: 300px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 800;
+  top: 70px;
+  left: 100px;
+  z-index: 801;
+}
+
+.chorOption {
+  display: block;
+  background-color: #FFFFFF;
+  font: 14px/16px 'Poppins', Helvetica, sans-serif;
+  color: black;
+  padding: 12px 16px;
+  /*cursor: pointer;*/
+}
+.chorOption:hover {
+  background-color: #ddd
+}
+.show {display:block;}
+
+.neighborhoodLabel {
+  display: none;
+  font-size: 14px;
+  opacity: 0;
+  text-shadow: 0px 0px 6px rgba(0, 0, 0);
+  font-family: 'Asap', sans-serif;
+  color: #FFFFFF;
+  text-transform: uppercase;
+
+}
+
+.top10 {
+  opacity: 1;
+  font-size: 18px;
+  text-shadow: 0px 0px 6px rgba(0, 0, 0);
+  font-family: 'Asap', sans-serif;
+  color: #FFFFFF;
+  line-height: 20px;
+  text-transform: uppercase;
+}
+
+.fade-in-text {
+  opacity: 1;
+
+  animation: fadeIn ease-out 1s;
+  -webkit-animation: fadeIn ease-out 1s;
+  -moz-animation: fadeIn ease-out 1s;
+  -o-animation: fadeIn ease-out 1s;
+  -ms-animation: fadeIn ease-out 1s;
+}
+
+.fade-in-text-top10 {
+  display: inline-block;
+  opacity: 1;
+
+  animation: fadeIn ease-out 1s;
+  -webkit-animation: fadeIn ease-out 1s;
+  -moz-animation: fadeIn ease-out 1s;
+  -o-animation: fadeIn ease-out 1s;
+  -ms-animation: fadeIn ease-out 1s;
+}
+
+.fade-out-text {
+  display: inline-block;
+  opacity: 0;
+
+  animation: fadeOut ease-out 1s;
+  -webkit-animation: fadeOut ease-out 1s;
+  -moz-animation: fadeOut ease-out 1s;
+  -o-animation: fadeOut ease-out 1s;
+  -ms-animation: fadeOut ease-out 1s;
+}
+
+.fade-out-text-top10 {
+  display: inline-block;
+  opacity: 0;
+
+  animation: fadeOut ease-out 1s;
+  -webkit-animation: fadeOut ease-out 1s;
+  -moz-animation: fadeOut ease-out 1s;
+  -o-animation: fadeOut ease-out 1s;
+  -ms-animation: fadeOut ease-out 1s;
+}
+
+/* FADE IN */
+
+@keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+@-moz-keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+@-webkit-keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+@-o-keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+@-ms-keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
+}
+
+/* FADE OUT */
+@keyframes fadeOut {
+  0% {opacity:1;}
+  100% {opacity:0;}
+}
+
+@-moz-keyframes fadeOut {
+  0% {opacity:1;}
+  100% {opacity:0;}
+}
+
+@-webkit-keyframes fadeOut {
+  0% {opacity:1;}
+  100% {opacity:0;}
+}
+
+@-o-keyframes fadeOut {
+  0% {opacity:1;}
+  100% {opacity:0;}
+}
+
+@-ms-keyframes fadeOut {
+  0% {opacity:1;}
+  100% {opacity:0;}
+}
+
+/*additions from hou-no2-injutice.html*/
+.legend-key {
+  display: inline-block;
+  border-radius: 20%;
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+  opacity: 0.8;
+}
+.designMenu {
+  display: block;
+  top: 10px;
+  margin-left: 100px;
+  z-index: 800;
+}
+
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1000; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+  text-align: center;
+  justify-content: center;
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: white;
+  margin: 2% auto; /* 15% from the top and centered */
+  padding: 10px;
+  border: 1px solid #000000;
+  width: 80%; /* Could be more or less, depending on screen size */
+  font: 14px/16px 'Poppins', Helvetica, sans-serif;
+  color: black;
+  font-size: 25px;
+  line-height: 30px;
+  text-align: center;
+}
+
+.modal-content p {
+  padding: 10px;
+  margin-right: 20px;
+  margin-left: 20px;
+  font: 14px/16px 'Poppins', Helvetica, sans-serif;
+  font-size: 25px;
+  line-height: 35px;
+  text-align: left;
+}
+
+.modal-content h3 {
+  color: #3B4994;
+  margin: 2% auto; /* 15% from the top and centered */
+  padding: 10px;
+  font: 14px/16px 'Poppins', Helvetica, sans-serif;
+  font-size: 50px;
+  line-height: 25px;
+  text-align: center;
+}
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 40px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.exploreBtn {
+  background-color: '#3B4994';
+  border-radius: 2px solid white;
+  font: 14px/16px 'Poppins', Helvetica, sans-serif;
+  text-align: center;
+  display: inline-block;
+  font-size: 2em;
+}
+
+.exploreBtnContainer:hover {
+  background: #1c2970;
+  color: white;
+  box-shadow: 0 0 0px rgba(0,0,0,0.2);
+  border-radius: 3px;
+}
+
+.exploreBtnContainer {
+  height: 85px;
+  width: 300px;
+  font: 14px/16px 'Poppins', Helvetica, sans-serif;
+  background: #3B4994;
+  color: white;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  border-radius: 3px;
+  display: "inline-block";
+  text-align: center;
+  justify-content: center;
+  margin: 2% auto;
+  padding:10px;
+  cursor: pointer;
 }
 </style>
-
 </head>
 <body>
-  <div class="topnav" id="myTopnav">
-  <a href="#home" class="active">Home</a>
-  <a href="#news">News</a>
-  <a href="#contact">Contact</a>
-  <a href="#about">About</a>
-  <a href="javascript:void(0);" class="icon" onclick="myFunction()">
-    <i class="fa fa-bars"></i>
-  </a>
-</div>
   <div class='showLegendButton' id='donutLegendButton' ><h2>Legend</h2></div>
   <div class='showLegendButton' id='gridContainerButton' ><h2>Legend</h2></div>
   <div class="chorMenu" id="chorMenu">
     <button onclick="toggleChorDropdown()" class="dropbtn">Maps ▽</button>
     <div id="myDropdown" class="dropdown-content">
-      <div class='chorOption' id='returnBtn' onclick = "returnToBivariate()">NO<sub>2</sub> Equality (Default)</div>
+      <div class='chorOption' id='returnBtn' onclick = "returnToBivariate()">NO<sub>2</sub> Equality Index (Default)</div>
       <div class='chorOption' id='popAsianBtn' onclick = "toggleUnivariateChoropleth('popAsian')">Asian</div>
       <div class='chorOption' id='popBlackOrAfrAmerBtn' onclick = "toggleUnivariateChoropleth('popBlackOrAfrAmer')">Black or African American</div>
-      <div class='chorOption' id='popHispanicBtn' onclick = "toggleUnivariateChoropleth('popHispanic')">Hispanic or Latino</div>
-      <div class='chorOption' id='popWhiteBtn' onclick = "toggleUnivariateChoropleth('popWhite')">White (Non-Hispanic)</div>
+      <div class='chorOption' id='popHispanicBtn' onclick = "toggleUnivariateChoropleth('popHispanic')">Hispanic</div>
+      <div class='chorOption' id='popWhiteBtn' onclick = "toggleUnivariateChoropleth('popWhite')">White</div>
     </div>
   </div>
   <div class="donut-legend" id="donutLegend"><button class="piecon" id="pieButton" onclick="changeCityMarkerIcon('pie')"></button><button class="targetIconHolder" onclick="changeCityMarkerIcon('target')" ><div class="targetIcon" id="targetButton"></div></button></div>
 
-  <div class="chorMenu" id="sourcesBtnHolder"><button id="sourcesBtn" onclick="toggleLayer('sources')" class="dropbtn" style="right: 15%;">NOx Sources</button></div> <!--change-->
+  <div class="chorMenu" id="sourcesBtn"><button onclick="toggleLayer('sources')" class="dropbtn" style="top:90px;">NOx Sources</button></div>
 
   <button class="button" id="button1" onclick="setPalette(1)"><h2>Palette 1</h2><i id="a0"></i><i id="a1"></i><i id="a2"></i><i id="a3"></i></button>
   <button class="button" id="button2" onclick="setPalette(2)" ><h2>Palette 2</h2><i id="b0"></i><i id="b1"></i><i id="b2"></i><i id="b3"></i></button>
@@ -832,12 +732,22 @@ crossorigin=""></script>
   <div id="myModal" class="modal">
 
     <!-- Modal content -->
-    <div class="modal-content">
+    <div class="modal-content" id="modalPg1">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h3>NO<sub>2</sub> Equality Map</h3>
+      <p>Where we live, work, and spend our time affects how much nitrogen dioxide (NO<sub>2</sub>) and other air pollutants we breathe. Many primary pollutants, including NO<sub>2</sub>, vary between neighborhoods in the same city. For example, on average, Houston’s low-income residents and residents of color experience 30% higher burdens of NO<sub>2</sub>.</br></br>The NO<sub>2</sub> Equality Map aims to draw attention to this injustice as it compares NO<sub>2</sub> column densities and socio-demographic vulnerability. The NO<sub>2</sub> Equality Map currently displays data measured from space by <a href="http://www.tropomi.eu/" target="_blank" rel="noopener noreferrer">TROPOMI</a> on weekdays (June 2018–February 2020) at the census tract level. In the future, the NO<sub>2</sub> Equality Map will update in real time.</p>
+      <img src="images/IntroSlide4.png" alt="Introduction" style="width:1000px;height:600px;"> <!--2150px x 1350px-->
+      <!--<div class='exploreBtnContainer' onclick="closeModal()"><div class='exploreBtn' id='exploreBtn' onclick="closeModal()"><h2>Explore</h2></div></div>-->
+      <div class='exploreBtnContainer'  onclick="viewModalPage(1,2)" ><div onclick="viewModalPage(1,2)" class='exploreBtn'><h2>Next</h2></div></div>
+    </div>
+
+    <div class="modal-content" id="modalPg2" style="display:none;">
       <span class="close" onclick="closeModal()">&times;</span>
       <h3>NO<sub>2</sub> Equality Map</h3>
       <p>Where we live, work, and spend our time affects how much nitrogen dioxide (NO<sub>2</sub>) and other air pollutants we breathe. Many primary pollutants, including NO<sub>2</sub>, vary between neighborhoods in the same city. For example, on average, Houston’s low-income residents and residents of color experience 30% higher burdens of NO<sub>2</sub>.</br></br>The NO<sub>2</sub> Equality Map aims to draw attention to this injustice as it compares NO<sub>2</sub> column densities and socio-demographic vulnerability. The NO<sub>2</sub> Equality Map currently displays data measured from space by <a href="http://www.tropomi.eu/" target="_blank" rel="noopener noreferrer">TROPOMI</a> on weekdays (June 2018–February 2020) at the census tract level. In the future, the NO<sub>2</sub> Equality Map will update in real time.</p>
       <img src="images/IntroSlide4.png" alt="Introduction" style="width:1000px;height:600px;"> <!--2150px x 1350px-->
       <div class='exploreBtnContainer' onclick="closeModal()"><div class='exploreBtn' id='exploreBtn' onclick="closeModal()"><h2>Explore</h2></div></div>
+      <div><div onclick="viewModalPage(2,1)">Back</div></div>
     </div>
 
   </div>
@@ -899,6 +809,11 @@ crossorigin=""></script>
   var donutLegendID = "donutLegend";
   var cityOn = "";
   //var cities = L.layerGroup(hou, wdc);
+
+  function viewModalPage(pgFrom, pgTo) {
+    document.getElementById("modalPg" + pgFrom).style.display = "none";
+    document.getElementById("modalPg" + pgTo).style.display = "block";
+  }
 
   function toggleChorDropdown() {
     document.getElementById("myDropdown").classList.toggle("show");
@@ -1214,15 +1129,15 @@ crossorigin=""></script>
   var clickedTract;
   var previousTarget;
   var clickEvent;
-  var img = L.control({position: 'bottomright'}); //change
-  var info = L.control({position: 'bottomleft'}); //change
+  var img = L.control({position: 'bottomleft'});
+  var info = L.control();
   var expandButton = L.easyButton('<img src="images/expand.png" alt="Expand" style="width:22px;height:24px;position:absolute;left: -1; right: -3px; top: 1px;">', function(btn, map){
       var central = [29.749907, -95.358421];
       map.setView(map.getCenter(), 12);
   });
-  var searchBar = L.Control.geocoder({position: 'topright'}); //change
+  var searchBar = L.Control.geocoder({position: 'topleft'});
   searchBar.addTo(map);
-  /*var countryViewButton = L.easyButton('<img src="images/countryView.png" alt="Zoom out to country" style="width:24px;height:20px;position:absolute;left: -1; right: -3px; top: 4px; bottom: 0px;">', function(btn, map){ //change
+  var countryViewButton = L.easyButton('<img src="images/countryView.png" alt="Zoom out to country" style="width:24px;height:20px;position:absolute;left: -1; right: -3px; top: 4px; bottom: 0px;">', function(btn, map){
       var central = ([38.449907, -98.358421]);
       map.options.minZoom = countryMin;
       map.options.maxZoom = countryMax;
@@ -1236,57 +1151,7 @@ crossorigin=""></script>
       }
 
       firstTimeInCity = true;
-  });*/
-
-  var countryViewButton = L.easyButton({
-    id: 'countryView',  // an id for the generated button
-    position: 'topright',      // inherited from L.Control -- the corner it goes in
-    //type: 'replace',          // set to animate when you're comfy with css
-    leafletClasses: true,     // use leaflet classes to style the button?
-    states:[{                 // specify different icons and responses for your button
-      stateName: 'view-country',
-      onClick: function(btn, map){
-        var central = ([38.449907, -98.358421]);
-        map.options.minZoom = countryMin;
-        map.options.maxZoom = countryMax;
-        map.setView(central, 4.5);
-        removeChoroplethControls();
-
-        //remove sources
-        if (sourcesIsOn) {
-          map.removeLayer(sources);
-          sourcesIsOn = false;
-        }
-
-        firstTimeInCity = true;
-      },
-      title: 'show me the country',
-      icon: '<img src="images/countryView.png" alt="Expand" style="width:22px;height:24px;position:absolute;left: -1; right: -3px; top: 1px;">'
-    }]
   });
-
-  // Create additional Control placeholders
-  function addControlPlaceholders(map) {
-      var corners = map._controlCorners,
-          l = 'leaflet-',
-          container = map._controlContainer;
-
-      function createCorner(vSide, hSide) {
-          var className = l + vSide + ' ' + l + hSide;
-
-          corners[vSide + hSide] = L.DomUtil.create('div', className, container);
-      }
-
-      createCorner('verticalcenter', 'left');
-      createCorner('verticalcenter', 'right');
-  }
-  addControlPlaceholders(map);
-
-  // Change the position of the Zoom Control to a newly created placeholder.
-  map.zoomControl.setPosition('verticalcenterright');
-  countryViewButton.setPosition('verticalcenterright');
-  searchBar.setPosition('verticalcenterright');
-
   var numVars;
   var singleVariable;
   var univariateChoropleth;
@@ -1324,7 +1189,7 @@ crossorigin=""></script>
       document.getElementById(donutLegendID).style.display = "none";
       document.getElementById(donutLegendID + "Button").style.display = "none";
       document.getElementById("chorMenu").style.display = "inline-block";
-      document.getElementById("sourcesBtnHolder").style.display = "inline-block"; //change
+      document.getElementById("sourcesBtn").style.display = "inline-block";
 
       if (countCityClicks == 1) {
         colors = paletteA;
@@ -1334,7 +1199,7 @@ crossorigin=""></script>
         document.getElementById("button2").style.color = "#000000";
       }
 
-      //expandButton.addTo(map); // change
+      expandButton.addTo(map);
       //univariateButton.addTo(map);
       countryViewButton.addTo(map);
       singleLayerOn = "";
@@ -1607,7 +1472,7 @@ crossorigin=""></script>
       document.getElementById("button1").style.display = "none";
       document.getElementById("button2").style.display = "none";
       document.getElementById("chorMenu").style.display = "none";
-      document.getElementById("sourcesBtnHolder").style.display = "none"; //change
+      document.getElementById("sourcesBtn").style.display = "none";
 
       if (hiddenLegends.includes(donutLegendID)) {
         document.getElementById(donutLegendID).style.display = "none";
@@ -2104,19 +1969,10 @@ crossorigin=""></script>
   }
 
   function onEachFeaturePointSources(feature, layer) {
-      var address = "";
-      if (feature.properties.address != "Unknown" && feature.properties.address != "UNKNOWN") {
-        address = feature.properties.company_name + " " + feature.properties.address + " " + feature.properties.city + " " + feature.properties.postal_abbreviation;
-        address = address.replace(" ", "+");
-        address = "</br><a href='https://maps.google.com/?q=" + address + "'>See it in Google Maps</a>";
-      }
-      /*var search = feature.properties.site_name + " " + feature.properties.company_name + " " + feature.properties.city + " " + feature.properties.state;
-      search = search.replace(" ", "+");*/
       var book = feature.properties.company_name;
       if (book != "") log = "</br>Company name: " + book;
       else log = "";
-      layer.bindPopup("Site name: " + titleCase(feature.properties.site_name.toLowerCase()) + log + "</br>Total Emissions: " + feature.properties.total_emissions + " tons\n" + address);
-      //"<a href='http://www.google.com/search?q=" + search + "&btnI'>See the site</a>"
+      layer.bindPopup("Site name: " + titleCase(feature.properties.site_name.toLowerCase()) + log + "</br>Total Emissions: " + feature.properties.total_emissions + " tons\n");
   }
 
   /*L.geoJson(houSources,
@@ -2194,7 +2050,7 @@ crossorigin=""></script>
     return (Math.round(radius * 100)/100);
   }
 
-  var log = "ff";
+  var log = "";
   var sourcesIsOn = false;
   var sources;
   function toggleLayer(layer) {
@@ -2206,16 +2062,12 @@ crossorigin=""></script>
         });
 
       sources.addTo(map);
-      sourcesIsOn = true;
-      //document.getElementById("sourcesBtn").style.backgroundColor = "#2980B9";
       //alert(log);
-      document.getElementById("sourcesBtn").classList.toggle("activated");
+      sourcesIsOn = true;
     }
     else {
       map.removeLayer(sources);
       sourcesIsOn = false;
-      //document.getElementById("sourcesBtn").style.backgroundColor = "#FFFFFF";
-      document.getElementById("sourcesBtn").classList.toggle("activated");
     }
 
     /*var layerIsOn = layer.getMapped();
