@@ -51,7 +51,7 @@ crossorigin=""></script>
 body { margin: 0; padding: 0; }
 #map {
   position: absolute;
-  top: 0;
+  top: 50px;
   bottom: 0;
   width: 100%;
 }
@@ -424,7 +424,7 @@ h4 {
   height: 100;
   cursor: pointer;*/
   display: none;
-  top: 10px;
+  top: 60px;
   left: 100px;
   z-index: 800;
 }
@@ -436,8 +436,8 @@ h4 {
   font-size: 16px;
   border: none;
   display: inline-block;
-  top: 10px;
-  left: 100px;
+  top: 60px;
+  left: 5%;
   width: 300px;
   height: 60px;
   position: absolute;
@@ -460,7 +460,7 @@ h4 {
   min-width: 300px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 800;
-  top: 70px;
+  top: 120px;
   left: 100px;
   z-index: 801;
 }
@@ -606,7 +606,7 @@ h4 {
 }
 .designMenu {
   display: block;
-  top: 10px;
+  top: 60px;
   margin-left: 100px;
   z-index: 800;
 }
@@ -706,9 +706,68 @@ h4 {
   padding:10px;
   cursor: pointer;
 }
+
+/* Add a black background color to the top navigation */
+.topnav {
+height: 50px;
+font-family: 'Helvetica Light', 'Helvetica', Arial, sans-serif;
+background-color: #000000;
+overflow: hidden;
+}
+
+/* Style the links inside the navigation bar */
+.topnav a {
+height: 50px;
+font-family: 'Helvetica Light', 'Helvetica', Arial, sans-serif;
+float: left;
+display: block;
+color: #FFFFFF;/*#f2f2f2;*/
+text-align: center;
+padding: 14px 16px;
+text-decoration: none;
+font-size: 20px;
+}
+
+/* Change the color of links on hover */
+.topnav a:hover {
+background-color: #707070;
+color: black;
+}
+
+/* Add an active class to highlight the current page */
+.topnav a.active {
+background-color: #ffd519;
+color: black;
+}
+
+/* Hide the link that should open and close the topnav on small screens */
+.topnav .icon {
+display: none;
+}
+
+.leaflet-verticalcenter {
+  position: absolute;
+  z-index: 1000;
+  pointer-events: none;
+  top: 10%; /* possible because the placeholder's parent is the map */
+  transform: translateY(-50%); /* using the CSS3 Transform technique */
+  padding-top: 10px;
+}
+
+.leaflet-verticalcenter .leaflet-control {
+  margin-bottom: 10px;
+}
 </style>
 </head>
 <body>
+  <div class="topnav" id="myTopnav">
+    <a href="https://k-mcc.github.io" class="active">Nitrogen Dioxide Injustice Map</a>
+    <a href="https://k-mcc.github.io">About the Data</a>
+    <a href="#news">Story Map</a>
+    <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+      <i class="fa fa-bars"></i>
+    </a>
+  </div>
   <div class='showLegendButton' id='donutLegendButton' ><h2>Legend</h2></div>
   <div class='showLegendButton' id='gridContainerButton' ><h2>Legend</h2></div>
   <div class="chorMenu" id="chorMenu">
@@ -723,7 +782,7 @@ h4 {
   </div>
   <div class="donut-legend" id="donutLegend"><button class="piecon" id="pieButton" onclick="changeCityMarkerIcon('pie')"></button><button class="targetIconHolder" onclick="changeCityMarkerIcon('target')" ><div class="targetIcon" id="targetButton"></div></button></div>
 
-  <div class="chorMenu" id="sourcesBtn"><button onclick="toggleLayer('sources')" class="dropbtn" style="top:90px;">NOx Sources</button></div>
+  <div class="chorMenu" id="sourcesBtn"><button onclick="toggleLayer('sources')" class="dropbtn" style="top:60px;left:30%;">NOx Sources</button></div>
 
   <button class="button" id="button1" onclick="setPalette(1)"><h2>Palette 1</h2><i id="a0"></i><i id="a1"></i><i id="a2"></i><i id="a3"></i></button>
   <button class="button" id="button2" onclick="setPalette(2)" ><h2>Palette 2</h2><i id="b0"></i><i id="b1"></i><i id="b2"></i><i id="b3"></i></button>
