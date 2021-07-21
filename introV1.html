@@ -427,7 +427,7 @@ crossorigin=""></script>
     cursor: pointer;*/
     display: none;
     top: 10px;
-    right: 100px; /*change*/
+    right: 40%; /*change*/
     z-index: 800;
   }
   .dropbtn {
@@ -439,7 +439,7 @@ crossorigin=""></script>
     border: none;
     display: inline-block;
     top: 60px;
-    right: 30%; /*change*/
+    right: 40%; /*change*/
     width: 300px;
     height: 60px;
     position: absolute;
@@ -463,10 +463,10 @@ crossorigin=""></script>
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 800;
     top: 70px;
-    right: 100px; /*change*/
+    right: 40%; /*change*/
     z-index: 801;
   }
-
+  /*start change*/
   .activated {
     font: 14px/16px 'Poppins', Helvetica, sans-serif;
     background-color: #2980B9;
@@ -490,6 +490,7 @@ crossorigin=""></script>
     background-color: #2980B9;
     color: #FFFFFF;
   }
+  /*end change*/
   .dropdown-content {
     font: 14px/16px 'Poppins', Helvetica, sans-serif;
     display: none;
@@ -499,8 +500,8 @@ crossorigin=""></script>
     min-width: 300px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 800;
-    top: 70px;
-    right: 100px; /*change*/
+    top: 120px;
+    right: 40%; /*change*/
     z-index: 801;
   }
 
@@ -634,7 +635,7 @@ crossorigin=""></script>
     100% {opacity:0;}
   }
 
-  /*additions from hou-no2-injutice.html*/
+  /*additions from hou-no2-injustice.html*/
   .legend-key {
     display: inline-block;
     border-radius: 20%;
@@ -813,16 +814,16 @@ crossorigin=""></script>
   <div class="chorMenu" id="chorMenu">
     <button onclick="toggleChorDropdown()" class="dropbtn">Maps ▽</button>
     <div id="myDropdown" class="dropdown-content">
-      <div class='chorOption' id='returnBtn' onclick = "returnToBivariate()">NO<sub>2</sub> Equality Index (Default)</div>
+      <div class='chorOption' id='returnBtn' onclick = "returnToBivariate()">NO<sub>2</sub> Equality (Default)</div>
       <div class='chorOption' id='popAsianBtn' onclick = "toggleUnivariateChoropleth('popAsian')">Asian</div>
       <div class='chorOption' id='popBlackOrAfrAmerBtn' onclick = "toggleUnivariateChoropleth('popBlackOrAfrAmer')">Black or African American</div>
-      <div class='chorOption' id='popHispanicBtn' onclick = "toggleUnivariateChoropleth('popHispanic')">Hispanic</div>
-      <div class='chorOption' id='popWhiteBtn' onclick = "toggleUnivariateChoropleth('popWhite')">White</div>
+      <div class='chorOption' id='popHispanicBtn' onclick = "toggleUnivariateChoropleth('popHispanic')">Hispanic or Latino</div>
+      <div class='chorOption' id='popWhiteBtn' onclick = "toggleUnivariateChoropleth('popWhite')">White (Non-Hispanic)</div>
     </div>
   </div>
   <div class="donut-legend" id="donutLegend"><button class="piecon" id="pieButton" onclick="changeCityMarkerIcon('pie')"></button><button class="targetIconHolder" onclick="changeCityMarkerIcon('target')" ><div class="targetIcon" id="targetButton"></div></button></div>
 
-  <div class="chorMenu" id="sourcesBtnHolder"><button id="sourcesBtn" onclick="toggleLayer('sources')" class="dropbtn" style="top:90px;">NOx Sources</button></div> <!--change-->
+  <div class="chorMenu" id="sourcesBtnHolder"><button id="sourcesBtn" onclick="toggleLayer('sources')" class="dropbtn" style="right: 15%;">NOx Sources</button></div> <!--change-->
 
   <button class="button" id="button1" onclick="setPalette(1)"><h2>Palette 1</h2><i id="a0"></i><i id="a1"></i><i id="a2"></i><i id="a3"></i></button>
   <button class="button" id="button2" onclick="setPalette(2)" ><h2>Palette 2</h2><i id="b0"></i><i id="b1"></i><i id="b2"></i><i id="b3"></i></button>
