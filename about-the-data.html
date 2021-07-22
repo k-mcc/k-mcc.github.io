@@ -10,28 +10,50 @@
     body {
         padding: 0;
         margin: 0;
-        background: #f2f6e9;
+        background: #000;
       }
       .navbar {
-        background:#6ab446;
+        background:#000000;
+        height: 60px;
       }
-      .nav-link,
+      .nav-link {
+        color: #fff;
+        cursor: pointer;
+        font-size: 20px;
+        font-family: 'Helvetica Light', 'Helvetica', Arial, sans-serif;
+        background-color: #000000;
+        border-top: 3px solid #ffffff;
+        width: 100px;
+        text-align:center;
+      }
       .navbar-brand {
         color: #fff;
         cursor: pointer;
+        font-size: 20px;
+        font-family: 'Helvetica Light', 'Helvetica', Arial, sans-serif;
+        background-color: #000000;
       }
-      .nav-link {
+      /*.nav-link {
         margin-right: 1em !important;
-      }
+      }*/
       .nav-link:hover {
-        color: #000;
+        color: #a3a3a3;
+        border-top: 3px solid #a3a3a3;
+      }
+      .navbar-brand:hover {
+        color: #ffffff;
       }
       .navbar-collapse {
         justify-content: flex-end;
       }
+      .navbar .active {
+        border-top: 3px solid #ffd519;
+        color: #ffd519;
+      }
       .header {
-        background-image: url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80');
-        background-size: cover;
+        /*background-image: url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80');*/
+        background-color: #262626;
+        /*background-size: full;*/
         background-position: center;
         position: relative;
       }
@@ -89,14 +111,14 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" crossorigin="anonymous"></script>
 
       <nav class="navbar navbar-expand-md">
-      	<a class="navbar-brand" href="#">Logo</a>
+      	<a class="navbar-brand" href="#">Nitrogen Dioxide Injustice</a>
       	<button class="navbar-toggler navbar-dark" type="button" data-toggle="collapse" data-target="#main-navigation">
       		<span class="navbar-toggler-icon"></span>
       	</button>
       	<div class="collapse navbar-collapse" id="main-navigation">
       		<ul class="navbar-nav">
       			<li class="nav-item">
-      				<a class="nav-link" href="#">Home</a>
+      				<a class="nav-link active" href="#">Home</a>
       			</li>
       			<li class="nav-item">
       				<a class="nav-link" href="#">About</a>
@@ -107,16 +129,23 @@
       		</ul>
       	</div>
       </nav>
+      <!-- Background image -->
+    <div class="jumbotron" style="margin-left:10%;margin-right:10%;border-radius:1px;">
 
+      	<h1 class="display-4" style="text-align:center;">About the Data</h1>
+      	<p>1. </p>
+        <p>2. </p>
+        <p>3. </p>
+    </div>
     <header class="page-header header container-fluid">
-    <div class="overlay">
+    <!--<div class="overlay">-->
       <div class="description">
       	<h1>About the Data</h1>
       	<p>1. </p>
         <p>2. </p>
         <p>3. </p>
       </div>
-    </div>
+    <!--</div>-->
     </header>
     <script>
     $(document).ready(function(){
