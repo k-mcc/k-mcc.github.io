@@ -68,6 +68,56 @@ crossorigin=""></script>
     </div>
   </nav>
 
+  <nav class="navbar fixed-bottom navbar-light bg-light" style="z-index:900; justify-content:left;">
+
+    <!-- Maps -->
+    <div class="btn-group dropup" style="float:left;">
+      <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Maps
+      </button>
+      <div class="dropdown-menu">
+        <!-- Dropdown menu links -->
+        <div class='chorOption' id='returnBtn' onclick = "returnToBivariate()">NO<sub>2</sub> Equality Index (Default)</div>
+        <div class='chorOption' id='popAsianBtn' onclick = "showUniChoropleth('popAsian',2)">Asian</div>
+        <div class='chorOption' id='popBlackOrAfrAmerBtn' onclick = "showUniChoropleth('popBlackOrAfrAmer',3)">Black or African American</div>
+        <div class='chorOption' id='popHispanicBtn' onclick = "showUniChoropleth('popHispanic',4)">Hispanic or Latino</div>
+        <div class='chorOption' id='popWhiteBtn' onclick = "showUniChoropleth('popWhite',5)">White (Non-Hispanic)</div>
+      </div>
+    </div>
+
+    <!-- View Options -->
+    <div class="btn-group dropup">
+      <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        View Options
+      </button>
+      <div class="dropdown-menu">
+        <!-- Dropdown menu links -->
+        <div class='chorOption' id='fillBtn' onclick = "toggleOpacity('fill')">Fill</div>
+        <div class='chorOption' id='outlineBtn' onclick = "toggleOpacity('outline')">Outline</div>
+      </div>
+    </div>
+
+    <!-- View Options -->
+    <div class="btn-group dropup">
+      <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Colors
+      </button>
+      <div class="dropdown-menu">
+        <!-- Dropdown menu links -->
+        <div class='chorOption' id='button1' onclick = "setPalette(1)">1<i id="a0"></i><i id="a1"></i><i id="a2"></i><i id="a3"></i></div>
+        <div class='chorOption' id='button2' onclick = "setPalette(2)">2<i id="b0"></i><i id="b1"></i><i id="b2"></i><i id="b3"></i></div>
+      </div>
+    </div>
+
+    <div class="toggleBtnHolder">
+      <button id="sources" type="button" class="btn toggleBtn" onclick="toggleLayer('sources')">
+        NO<sub>X</sub> Sources
+      </button>
+    </div>
+
+
+  </nav>
+
   <body onload="load()">
   <div class='showLegendButton' id='gridContainerButton' ><h2>Legend</h2></div>
   <div class="chorMenu" id="chorMenu">
