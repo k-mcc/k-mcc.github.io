@@ -180,7 +180,7 @@ crossorigin=""></script>
   function load() {
     addChoropleth("Houston");
     currentOpacity = "";
-    toggleOpacity("fill");
+    toggleOpacity("outline"); //"fill"
   }
 
   var firstZoom = true;
@@ -347,7 +347,7 @@ crossorigin=""></script>
   //countCityClicks = 1;
 
   var tileL = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + mapboxAccessToken, {
-      id: 'mapbox/light-v9',
+      id: 'mapbox/dark-v9', //light
       attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
       tileSize: 512,
       zoomOffset: -1
