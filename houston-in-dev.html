@@ -68,7 +68,11 @@ crossorigin=""></script>
     </div>
   </nav>
 
-  <nav class="navbar fixed-bottom navbar-light bg-light" style="z-index:1001; justify-content:left;">
+  <nav class="navbar fixed-bottom navbar-light bg-light navbar-expand-md" style="z-index:1001; justify-content:left;">
+    <button class="navbar-toggler navbar-dark" type="button" data-toggle="collapse" data-target="#toolbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="toolbar">
     <!-- Maps -->
     <div class="btn-group dropup" style="float:left;">
       <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -112,6 +116,8 @@ crossorigin=""></script>
       <button id="sources" type="button" class="btn" onclick="toggleLayer('sources')">
         NO<sub>X</sub> Sources
       </button>
+    </div>
+
     </div>
 
   </nav>
@@ -445,10 +451,7 @@ crossorigin=""></script>
   var clickEvent;
   var img = L.control({position: 'bottomleft'});
   var info = L.control();
-  var expandButton = L.easyButton('<img src="images/expand.png" alt="Expand" style="width:22px;height:24px;position:absolute;left: -1; right: -3px; top: 1px;">', function(btn, map){
-      var central = [29.749907, -95.358421];
-      map.setView(map.getCenter(), 12);
-  });
+
   var searchBar = L.Control.geocoder({position: 'topleft'});
   searchBar.addTo(map);
 
@@ -489,9 +492,6 @@ crossorigin=""></script>
         changeButtonSelection("button1","button2");
       }
 
-      expandButton.addTo(map);
-      //univariateButton.addTo(map);
-      //countryViewButton.addTo(map);
       singleLayerOn = "";
       firstTimeInCity = false;
     }
@@ -660,12 +660,9 @@ crossorigin=""></script>
   }
 
   function removeChoroplethControls() {
-      map.removeControl(expandButton);
-      //map.removeControl(countryViewButton);
 
       document.getElementById(gridContainerID).style.display = "none";
       document.getElementById(gridContainerID + "Button").style.display = "none";
-      //legend.style.maxHeight = null;
       var squares = document.getElementsByClassName("grid-item");
       for (i = 0; i < squares.length; i++) {
         squares[i].style.display = "none";
