@@ -100,8 +100,8 @@ body { margin: 0; padding: 0; }
   background-color: #FFFFFF;
   padding: 30px 18px;
   margin: 40px 0;
-  bottom: 5px;
-  left: 5px
+  bottom: 60px;
+  left: 0px;
   position: relative;
   border-left: 50px solid #FFFFFF;
   border-bottom: 50px solid #FFFFFF;
@@ -366,8 +366,8 @@ h4 {
   border-radius: 3px;
   box-shadow: 0 0 15px rgba(0,0,0,0.2);
   padding: 5px;
-  left: 30px;
-  bottom: -1px;
+  left: 0px;
+  bottom: 60px;
   z-index: 800;
   display: none;
   width: 100;
@@ -471,7 +471,7 @@ h4 {
 }
 
 .modal {
-  display: none; /* Hidden by default */
+  display: block; /* Hidden by default */
   position: fixed; /* Stay in place */
   z-index: 1000; /* Sit on top */
   left: 0;
@@ -798,16 +798,6 @@ h4 {
   margin: 10px;
 }
 
-.activated {
-  background-color: #2980B9;
-  color: #FFFFFF;
-  border: none;
-}
-.activated:hover, .activated:focus {
-  background-color: #2980B9;
-  color: #FFFFFF;
-}
-
 .dropup {
   margin-left: 20px;
 }
@@ -828,3 +818,23 @@ h4 {
 .toggleBtnHolder {
   margin-left: 20px;
 }
+
+.activated {
+  background-color: #37db7b;
+  color: #000;
+  font: 14px/16px 'Poppins', Helvetica, sans-serif;
+  font-size: 20px;
+  width: 200px;
+}
+
+.selected {
+  background-color: #000;
+  color: #FFF;
+  font: 14px/16px 'Poppins', Helvetica, sans-serif;
+  font-size: 20px;
+}
+
+/*.activated:hover, .activated:focus {
+  background-color: #c7ffde;
+  color: #000;
+}*/

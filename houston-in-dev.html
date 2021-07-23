@@ -110,7 +110,7 @@ crossorigin=""></script>
     </div>
 
     <div class="toggleBtnHolder">
-      <button id="sources" type="button" class="btn toggleBtn" onclick="toggleLayer('sources')">
+      <button id="sources" type="button" class="btn" onclick="toggleLayer('sources')">
         NO<sub>X</sub> Sources
       </button>
     </div>
@@ -120,36 +120,8 @@ crossorigin=""></script>
 
   <body onload="load()">
   <div class='showLegendButton' id='gridContainerButton' ><h2>Legend</h2></div>
-  <div class="chorMenu" id="chorMenu">
-    <button onclick="toggleChorDropdown('myDropdown')" class="dropbtn">Maps ▽</button>
-    <div id="myDropdown" class="dropdown-content">
-      <div class='chorOption' id='returnBtn' onclick = "returnToBivariate()">NO<sub>2</sub> Equality Index (Default)</div>
-      <div class='chorOption' id='popAsianBtn' onclick = "showUniChoropleth('popAsian',2)">Asian</div>
-      <div class='chorOption' id='popBlackOrAfrAmerBtn' onclick = "showUniChoropleth('popBlackOrAfrAmer',3)">Black or African American</div>
-      <div class='chorOption' id='popHispanicBtn' onclick = "showUniChoropleth('popHispanic',4)">Hispanic or Latino</div>
-      <div class='chorOption' id='popWhiteBtn' onclick = "showUniChoropleth('popWhite',5)">White (Non-Hispanic)</div>
-    </div>
-  </div>
-  <div class="designMenu" id="designMenu">
-    <button onclick="toggleChorDropdown('designDropdown')" class="dropbtn" style="top:90px;">View Options ▽</button>
-    <div id="designDropdown" class="dropdown-content" style="left:100px;top:150px;z-index:800;">
-      <div class='chorOption' id='fillBtn' onclick = "toggleOpacity('fill')">Fill</div>
-      <div class='chorOption' id='outlineBtn' onclick = "toggleOpacity('outline')">Outline</div>
-    </div>
-  </div>
-  <div class="designMenu" id="designMenu2"><a href="https://forms.gle/pdiqNVtPRMa8fYNp9" target="_blank" rel="noopener noreferrer"><button class="dropbtn" style="top:170px;height:60px;z-index:799;">Provide Feedback</button></a></div>
 
-  <div class="chorMenu" id="sourcesBtn"><button onclick="toggleLayer('sources')" class="addLayerBtn" style="top:250px;">NOx Sources</button></div>
 
-  <!--<button class="button" id="button1" onclick="setPalette(1)"><h2>Palette 1</h2><i id="a0"></i><i id="a1"></i><i id="a2"></i><i id="a3"></i></button>
-  <button class="button" id="button2" onclick="setPalette(2)" ><h2>Palette 2</h2><i id="b0"></i><i id="b1"></i><i id="b2"></i><i id="b3"></i></button> -->
-  <div class="designMenu" id="designMenu3">
-    <button onclick="toggleChorDropdown('paletteDropdown')" class="dropbtn" style="top:330px;">Color Palette ▽</button>
-    <div id="paletteDropdown" class="dropdown-content" style="left:100px;top:390px;z-index:5000;">
-      <div class='chorOption' id='button1' onclick = "setPalette(1)">1<i id="a0"></i><i id="a1"></i><i id="a2"></i><i id="a3"></i></div>
-      <div class='chorOption' id='button2' onclick = "setPalette(2)">2<i id="b0"></i><i id="b1"></i><i id="b2"></i><i id="b3"></i></div>
-    </div>
-  </div>
   <div id="map"></div>
   <div id="myModal" class="modal">
 
@@ -167,48 +139,23 @@ crossorigin=""></script>
 
   var mapboxAccessToken = 'pk.eyJ1Ijoia2F0ZW1hcCIsImEiOiJja3A0NWV0ZTkwNjBtMm5vdWxzcXR6dWxjIn0.7rYO_pPmtvwuWUb0cG3QXQ';
   var map = L.map('map').setView([29.7604, -95.3698], 12);
-  // set initial zoom limits for country view
-  var countryMin = 0;
-  var countryMax = 7;
-  //map.options.minZoom = countryMin;
-  // map.options.maxZoom = countryMax;
+  var nhLayerIsOn;
+
   map.doubleClickZoom.disable();
 
   function load() {
     addChoropleth("Houston");
-    modal.style.display = "block";
-    opacitySetting = opacityFills;
     currentOpacity = "";
     toggleOpacity("fill");
-    //document.getElementById("gridContainer").style.display = "none";
-    //addNeighborhoods();
   }
 
   var firstZoom = true;
   map.on('zoom', function () {
-      /*var i = 0;
-      var done = false;
-      while (i < zoomLevels.length && !done) {
-        if (map.getZoom() <= zoomLevels[i]) {
-          var arr = document.getElementsByClassName("neighborhoodLabel");
-          for (var j = 0; j < arr.length; j++) {
-            arr[j].style.fontSize = fontSizes[i];
-          }
-          done = true;
-        }
-        i++;
-      }*/
-
-      //10px on 12zoom
-      //var size = getFontSize(map.getZoom());
 
       var opacity;
 
       var arr = document.getElementsByClassName("neighborhoodLabel");
 
-      /*for (var i = 0; i < arr.length; i++) {
-        arr[i].style.opacity = opacity;
-      }*/
       var display = "";
       var className = "neighborhoodLabel";
       if (map.getZoom() < 14 && !firstZoom) {
@@ -231,7 +178,16 @@ crossorigin=""></script>
 
       var className = "top10";
       if (map.getZoom() < 12) className = 'top10 fade-out-text-top10';
-      else if (map.getZoom() >= 12) className = 'top10 fade-in-text-top10';
+      else if (map.getZoom() >= 12) {
+        className = 'top10 fade-in-text-top10';
+        if (!nhLayerIsOn) {
+          nhLayer = L.geoJson(houNHs, {
+            pointToLayer: paint
+          }); //{layout: layout}
+          nhLayer.addTo(map);
+          nhLayerIsOn = true;
+        }
+      }
 
       arr = document.getElementsByClassName("top10");
 
@@ -298,10 +254,10 @@ crossorigin=""></script>
       if (currentOpacity == "fill") return "";
       opacitySetting = opacityFills;
       currentOpacity = "fill";
-      document.getElementById("fillBtn").style.background = "#000000";
+      /*document.getElementById("fillBtn").style.background = "#000000";
       document.getElementById("fillBtn").style.color = "#FFFFFF";
       document.getElementById("outlineBtn").style.background = "#FFFFFF";
-      document.getElementById("outlineBtn").style.color = "#000000";
+      document.getElementById("outlineBtn").style.color = "#000000";*/
     }
 
     numVars = 2;
@@ -541,10 +497,6 @@ crossorigin=""></script>
       document.getElementById("button2").style.display = "block";
       document.getElementById("fillBtn").style.display = "block";
       document.getElementById("outlineBtn").style.display = "block";
-      //document.getElementById(donutLegendID).style.display = "none";
-      //document.getElementById(donutLegendID + "Button").style.display = "none";
-      document.getElementById("chorMenu").style.display = "inline-block";
-      document.getElementById("sourcesBtn").style.display = "inline-block";
 
       if (countCityClicks == 1) {
         colors = paletteA;
@@ -579,11 +531,15 @@ crossorigin=""></script>
       var layer = houston.addTo(map);
 
       geojson = layer;
-
-      nhLayer = L.geoJson(houNHs, {
-        pointToLayer: paint
-      }); //{layout: layout}
-      nhLayer.addTo(map);
+      if (map.getZoom >= 12) {
+        nhLayer = L.geoJson(houNHs, {
+          pointToLayer: paint
+        }); //{layout: layout}
+        nhLayer.addTo(map);
+        nhLayerIsOn = true;
+      } else {
+        nhLayerIsOn = false;
+      }
 
       img.addTo(map);
 
@@ -662,8 +618,6 @@ crossorigin=""></script>
         document.getElementById(gridContainerID).style.display = "none";
         document.getElementById(gridContainerID + "Button").style.display = "block";
       }
-
-      //document.getElementById("chorMenu").style.display = "inline-block";
 
       info.addTo(map);
     }
@@ -766,8 +720,6 @@ crossorigin=""></script>
 
       document.getElementById("button1").style.display = "none";
       document.getElementById("button2").style.display = "none";
-      document.getElementById("chorMenu").style.display = "none";
-      document.getElementById("sourcesBtn").style.display = "none";
 
   }
 
@@ -1194,20 +1146,12 @@ crossorigin=""></script>
       if (num == 1) {
         colors = paletteA;
         //select button1
-        document.getElementById("button1").style.backgroundColor = "#5B616B";
-        document.getElementById("button1").style.color = "#FFFFFF";
-        //deselect button2
-        document.getElementById("button2").style.backgroundColor = "#FFFFFF";
-        document.getElementById("button2").style.color = "#000000";
+        changeButtonSelection("button1", "button2");
       }
       if (num == 2) {
         colors = paletteB;
         //select button2
-        document.getElementById("button2").style.backgroundColor = "#5B616B";
-        document.getElementById("button2").style.color = "#FFFFFF";
-        //deselect button1
-        document.getElementById("button1").style.backgroundColor = "#FFFFFF";
-        document.getElementById("button1").style.color = "#000000";
+        changeButtonSelection("button2", "button1");
       }
 
       updateImg();
@@ -1217,18 +1161,6 @@ crossorigin=""></script>
       }
 
       numVars = 2;
-      /*
-      geojson.eachLayer(function (layer) {
-          layer.setStyle({
-            fillColor : getColor(layer.feature.properties.no2Perc, layer.feature.properties.demographicIndex, 0),
-            weight: 0.5,
-            opacity: 1,
-            color: 'white',
-            dashArray: '0',
-            smoothFactor: 1,
-            fillOpacity: 0.9
-          })
-        });*/
 
         if (houstonIsOn) { // Repaint Houston layer
           map.removeLayer(houston);
@@ -1265,6 +1197,27 @@ crossorigin=""></script>
         zoom = false;
         zoomToFeature(clickEvent);
         zoom = true;
+  }
+
+  /*
+  idOn    id of button to select
+  idOff   id of button to deselect
+  */
+  function changeButtonSelection(idOn, idOff) {
+    var eleOn = document.getElementById(idOn);
+    var eleOff = document.getElementById(idOff);
+
+    //if eleOn does not have selected class, add it
+    if (!(eleOn.classList.contains("selected"))) {
+      eleOn.classList.add("selected");
+    }
+    //if eleOff has selected class, remove it
+    if (eleOff.classList.contains("selected")) {
+      eleOff.classList.remove("selected");
+    }
+
+    //return true
+    return true;
   }
 
   // univariate choropleth legend
@@ -1391,13 +1344,13 @@ crossorigin=""></script>
       //alert(log);
       sourcesIsOn = true;
 
-      document.getElementById("sourcesBtn").classList.toggle("activated");
+      document.getElementById("sources").classList.toggle("activated");
     }
     else {
       map.removeLayer(sources);
       sourcesIsOn = false;
 
-      document.getElementById("sourcesBtn").classList.toggle("activated");
+      document.getElementById("sources").classList.toggle("activated");
     }
 
   }
