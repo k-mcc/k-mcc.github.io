@@ -48,7 +48,7 @@ crossorigin=""></script>
 
   <nav class="navbar navbar-expand-md" style="z-index:1001;">
     <a class="navbar-brand" href="houston-in-dev.html">Air Pollution Injustice</a>
-    <a class="navbar-brand" href="https://forms.gle/pdiqNVtPRMa8fYNp9" target="_blank" rel="noopener noreferrer"><span class="nav-ref">Provide Feedback</span></a>
+    <!--<a class="navbar-brand" href="https://forms.gle/pdiqNVtPRMa8fYNp9" target="_blank" rel="noopener noreferrer"><span class="nav-ref">Provide Feedback</span></a>-->
     <button class="navbar-toggler navbar-dark" type="button" data-toggle="collapse" data-target="#main-navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -754,8 +754,8 @@ crossorigin=""></script>
     div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[0],"") + "\" id:\"a2\"></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[1],"") + "\" id:\"b2\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[2],"") + "\" id:\"c2\" ></div>";
     div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0],"") + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1],"") + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2],"") + "\" id:\"c1\" ></div><h2 class='axis' >Socio-Demographic Index</h2>";
 
-    //var draggable = new L.Draggable(div);
-    //draggable.enable();
+    var draggable = new L.Draggable(div);
+    draggable.enable();
 
     return div;
   }
