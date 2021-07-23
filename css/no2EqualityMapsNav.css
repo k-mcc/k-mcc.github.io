@@ -13,8 +13,8 @@ body { margin: 0; padding: 0; }
 /* bivariate choropleths */
 
 .info {
-    height: 800px;
-    width: 400px;
+    height: 80%;
+    width: 70%;
     padding: 6px 8px;
     font: 14px/16px 'Poppins', Helvetica, sans-serif;
     /*font-family: 'Poppins', sans-serif;*/
@@ -37,12 +37,12 @@ body { margin: 0; padding: 0; }
 }
 .info h3 {
     margin: 0 0 5px;
-    font-size: 1.2em;
+    font-size: 2vw;
     color: #000000;
 }
 .info h4 {
     margin: 0 0 5px;
-    font-size: 1.2em;
+    font-size: 1.2vw;
     color: #000000;
 }
 .donut-legend {
@@ -101,19 +101,19 @@ body { margin: 0; padding: 0; }
   grid-template-columns: auto auto auto;
   background-color: #FFFFFF;
   padding: 30px 18px;
-  margin: 40px 0;
-  bottom: 60px;
+  margin: 3vw 0;
+  bottom: 4vw;
   left: 0px;
   position: relative;
-  border-left: 50px solid #FFFFFF;
-  border-bottom: 50px solid #FFFFFF;
+  border-left: 3vw solid #FFFFFF;
+  border-bottom: 3vw solid #FFFFFF;
   border-radius: 3px;
   box-shadow: 0 0 15px rgba(0,0,0,0.2);
 }
 .grid-item {
   background-color: #FFFFFF;
   border: 1px solid #FFFFFF;
-  padding: 40px;
+  padding: 2.8vw;
   text-align: center;
 }
 .grid-titem {
@@ -124,35 +124,35 @@ body { margin: 0; padding: 0; }
   font: 14px/16px 'Poppins', Helvetica, sans-serif;
   color: #000000;
   padding: 5px 10px;
-  margin: 30px 0 15px 0;
-  line-height: 24px;
+  margin: 1.8vw 0 1vw 0;
+  line-height: normal;
   position: absolute;
   top: 0;
   left: 0;
   background: none;
   transform-origin: 0 0;
   transform: rotate(90deg);
-  font-size: 1.5em;
+  font-size: 1.3vw;
 }
 .grid-container h2 {
   font: 14px/16px 'Poppins', Helvetica, sans-serif;
   color: #000000;
   padding: 0 10px;
-  margin: 60px 10px 0 0;
-  line-height: 2px;
+  margin: 3vw 1vw 0 0;
+  line-height: normal;
   position: absolute;
   bottom: 0;
   top: 257px;
   left: 0;
   background: none;
-  font-size: 1.5em;
+  font-size: 1.3vw;
 }
 
 .grid-container i {
-  width: 20px;
-  height: 20px;
+  width: 2vw;
+  height: 2vw;
   float: left;
-  margin-right: 8px;
+  margin-right: 2vw;
   opacity: 0.7;
 }
 
@@ -282,8 +282,8 @@ h4 {
   position: absolute;
   display: inline-block;
   cursor: pointer;
-  right: 5px;
-  top: -8px;
+  right: 0.8vw;
+  top: 0.8vw;
   z-index: 850;
   font: 14px/16px 'Poppins', Helvetica, sans-serif;
   color: #FF0000;
@@ -293,12 +293,10 @@ h4 {
   position: absolute;
   display: inline-block;
   cursor: pointer;
-  right: 0px;
-  top: -8px;
   z-index: 850;
   font: 14px/16px 'Poppins', Helvetica, sans-serif;
   color: #FF0000;
-  font-size: 1.8em;
+  font-size: 2vw;
 }
 
 .popup {
@@ -496,7 +494,7 @@ h4 {
   width: 80%; /* Could be more or less, depending on screen size */
   font: 14px/16px 'Poppins', Helvetica, sans-serif;
   color: black;
-  font-size: 25px;
+  font-size: 20px;
   line-height: 30px;
   text-align: center;
 }
@@ -506,18 +504,17 @@ h4 {
   margin-right: 20px;
   margin-left: 20px;
   font: 14px/16px 'Poppins', Helvetica, sans-serif;
-  font-size: 25px;
-  line-height: 35px;
+  font-size: 1.5vw;
+  line-height: normal;
   text-align: left;
 }
-
 .modal-content h3 {
   color: #3B4994;
   margin: 2% auto; /* 15% from the top and centered */
   padding: 10px;
   font: 14px/16px 'Poppins', Helvetica, sans-serif;
-  font-size: 50px;
-  line-height: 25px;
+  font-size: 3vw;
+  line-height: normal;
   text-align: center;
 }
 
