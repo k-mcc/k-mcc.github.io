@@ -68,7 +68,7 @@ crossorigin=""></script>
     </div>
   </nav>
 
-  <nav class="navbar fixed-bottom navbar-light bg-light" style="z-index:900; justify-content:left;">
+  <nav class="navbar fixed-bottom navbar-light bg-light" style="z-index:1001; justify-content:left;">
 
     <!-- Maps -->
     <div class="btn-group dropup" style="float:left;">
@@ -104,8 +104,8 @@ crossorigin=""></script>
       </button>
       <div class="dropdown-menu">
         <!-- Dropdown menu links -->
-        <div class='chorOption' id='button1' onclick = "setPalette(1)">1<i id="a0"></i><i id="a1"></i><i id="a2"></i><i id="a3"></i></div>
-        <div class='chorOption' id='button2' onclick = "setPalette(2)">2<i id="b0"></i><i id="b1"></i><i id="b2"></i><i id="b3"></i></div>
+        <div class='chorOption selected' id='button1' onclick = "setPalette(1)">&nbsp; 1<i id="a0"></i><i id="a1"></i><i id="a2"></i><i id="a3"></i></div>
+        <div class='chorOption' id='button2' onclick = "setPalette(2)">&nbsp; 2<i id="b0"></i><i id="b1"></i><i id="b2"></i><i id="b3"></i></div>
       </div>
     </div>
 
@@ -245,19 +245,13 @@ crossorigin=""></script>
       if (currentOpacity == "outline") return "";
       opacitySetting = opacityOutlines;
       currentOpacity = "outline";
-      document.getElementById("outlineBtn").style.background = "#000000";
-      document.getElementById("outlineBtn").style.color = "#FFFFFF";
-      document.getElementById("fillBtn").style.background = "#FFFFFF";
-      document.getElementById("fillBtn").style.color = "#000000";
+      changeButtonSelection("outlineBtn", "fillBtn");
     }
     else  if (setting == "fill") {
       if (currentOpacity == "fill") return "";
       opacitySetting = opacityFills;
       currentOpacity = "fill";
-      /*document.getElementById("fillBtn").style.background = "#000000";
-      document.getElementById("fillBtn").style.color = "#FFFFFF";
-      document.getElementById("outlineBtn").style.background = "#FFFFFF";
-      document.getElementById("outlineBtn").style.color = "#000000";*/
+      changeButtonSelection("fillBtn", "outlineBtn");
     }
 
     numVars = 2;
@@ -356,8 +350,7 @@ crossorigin=""></script>
     if (singleLayerOn != "") {
       explodedPieSect = 0;
       toggleUnivariateChoropleth(singleVariable);
-      document.getElementById("returnBtn").style.background = "#000000";
-      document.getElementById("returnBtn").style.color = "#FFFFFF";
+      changeButtonSelection("returnBtn", singleVariable + "Btn");
       singleVariable = "";
     }
   }
@@ -493,17 +486,9 @@ crossorigin=""></script>
       clickEvent = "";
       zoom = true;
 
-      document.getElementById("button1").style.display = "block";
-      document.getElementById("button2").style.display = "block";
-      document.getElementById("fillBtn").style.display = "block";
-      document.getElementById("outlineBtn").style.display = "block";
-
       if (countCityClicks == 1) {
         colors = paletteA;
-        document.getElementById("button1").style.backgroundColor = "#5B616B";
-        document.getElementById("button1").style.color = "#FFFFFF";
-        document.getElementById("button2").style.backgroundColor = "#FFFFFF";
-        document.getElementById("button2").style.color = "#000000";
+        changeButtonSelection("button1","button2");
       }
 
       expandButton.addTo(map);
@@ -549,11 +534,7 @@ crossorigin=""></script>
       }
       info.addTo(map);
 
-      document.getElementById("returnBtn").style.background = "#000000";
-      document.getElementById("returnBtn").style.color = "#FFFFFF";
-
-      document.getElementById("button1").style.display = "block";
-      document.getElementById("button2").style.display = "block";
+      changeButtonSelection("returnBtn","");
     }
     else if (cityName == "Washington, D.C.") {  // Add DC layer
       numVars = 2;
@@ -582,22 +563,14 @@ crossorigin=""></script>
 
       info.addTo(map);
 
-      document.getElementById("returnBtn").style.background = "#000000";
-      document.getElementById("returnBtn").style.color = "#FFFFFF";
-
-      document.getElementById("button1").style.display = "block";
-      document.getElementById("button2").style.display = "block";
+      changeButtonSelection("returnBtn","");
     }
     else {
       numVars = 1;
       singleVariable = cityName;
 
       var buttonID = singleVariable + "Btn";
-      document.getElementById(buttonID).style.background = "#000000";
-      document.getElementById(buttonID).style.color = "#FFFFFF";
-
-      document.getElementById("button1").style.display = "none";
-      document.getElementById("button2").style.display = "none";
+      changeButtonSelection(buttonID,"");
 
       if (houstonIsOn) { // Remove Houston layer
         map.removeLayer(houston);
@@ -659,8 +632,7 @@ crossorigin=""></script>
 
     if (singleLayerOn == propName) {
       map.removeLayer(univariateChoropleth);
-      document.getElementById(propName + "Btn").style.background = "#FFFFFF";
-      document.getElementById(propName + "Btn").style.color = "#000000";
+      changeButtonSelection(propName + "Btn", "");
       //remove uni legend, too
       singleLayerOn = "";
       addChoropleth(houName);
@@ -669,10 +641,8 @@ crossorigin=""></script>
 
     else if (singleLayerOn != "") {
       map.removeLayer(univariateChoropleth);
-      document.getElementById(singleVariable + "Btn").style.background = "#FFFFFF";
-      document.getElementById(singleVariable + "Btn").style.color = "#000000";
-      document.getElementById("returnBtn").style.background = "#FFFFFF";
-      document.getElementById("returnBtn").style.color = "#000000";
+      changeButtonSelection("", singleVariable + "Btn");
+      changeButtonSelection("", "returnBtn");
 
       map.removeLayer(univariateChoropleth);
 
@@ -683,8 +653,7 @@ crossorigin=""></script>
     }
 
     else {
-      document.getElementById("returnBtn").style.background = "#FFFFFF";
-      document.getElementById("returnBtn").style.color = "#000000";
+      changeButtonSelection(propName + "Btn", "returnBtn");
       singleLayerOn = propName;
       addChoropleth(propName);
       uniLegend();
@@ -761,6 +730,7 @@ crossorigin=""></script>
     var div = L.DomUtil.create('div', 'grid-container');
     div.id = gridContainerID;
     div.style.display = "inline-grid";
+    div.style.zIndex = 200;
     var grades = [1, 40, 99];
     //<div class='popup' onclick='popItUp(\"no2AxisPopup\")' style='bottom:5px; left:5px;'><img src='images/info.png' style='width:30px;height:30px;'></img><span class='popuptext' id='no2AxisPopup'><p><strong>Title: </strong></br>Description</p></span></div>
     //div.innerHTML += '<img src="images/no2dLegend.png" alt="Legend" style="width:300px;height:300px;">';
@@ -768,8 +738,8 @@ crossorigin=""></script>
     div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[0],"") + "\" id:\"a2\"></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[1],"") + "\" id:\"b2\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[2],"") + "\" id:\"c2\" ></div>";
     div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0],"") + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1],"") + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2],"") + "\" id:\"c1\" ></div><h2 class='axis' >Socio-Demographic Index</h2>";
 
-    var draggable = new L.Draggable(div);
-    draggable.enable();
+    //var draggable = new L.Draggable(div);
+    //draggable.enable();
 
     return div;
   }
@@ -1204,16 +1174,23 @@ crossorigin=""></script>
   idOff   id of button to deselect
   */
   function changeButtonSelection(idOn, idOff) {
-    var eleOn = document.getElementById(idOn);
-    var eleOff = document.getElementById(idOff);
 
-    //if eleOn does not have selected class, add it
-    if (!(eleOn.classList.contains("selected"))) {
-      eleOn.classList.add("selected");
+    if (idOn != "") {
+      var eleOn = document.getElementById(idOn);
+
+      //if eleOn does not have selected class, add it
+      if (!(eleOn.classList.contains("selected"))) {
+        eleOn.classList.add("selected");
+      }
     }
-    //if eleOff has selected class, remove it
-    if (eleOff.classList.contains("selected")) {
-      eleOff.classList.remove("selected");
+
+    if (idOff != "") {
+      var eleOff = document.getElementById(idOff);
+
+      //if eleOff has selected class, remove it
+      if (eleOff.classList.contains("selected")) {
+        eleOff.classList.remove("selected");
+      }
     }
 
     //return true
