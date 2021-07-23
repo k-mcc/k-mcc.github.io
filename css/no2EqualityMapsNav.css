@@ -14,19 +14,19 @@ body { margin: 0; padding: 0; }
 /* bivariate choropleths */
 
 .info {
-    height: 80%;
-    width: 70%;
-    padding: 6px 8px;
-    font: 14px/16px 'Poppins', Helvetica, sans-serif;
-    /*font-family: 'Poppins', sans-serif;*/
-    background: white;
-    background: rgba(255,255,255);
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
-    border-radius: 3px;
-    display: "inline-block";
-    text-align: center;
-    justify-content: center;
-    overflow: auto;
+  height: 800px;
+  width: 400px;
+  padding: 6px 8px;
+  font: 14px/16px 'Poppins', Helvetica, sans-serif;
+  /*font-family: 'Poppins', sans-serif;*/
+  background: white;
+  background: rgba(255,255,255);
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  border-radius: 3px;
+  display: "inline-block";
+  text-align: center;
+  justify-content: center;
+  overflow: auto;
 }
 .info h2 {
     margin: 0 0 5px;
@@ -38,14 +38,15 @@ body { margin: 0; padding: 0; }
 }
 .info h3 {
     margin: 0 0 5px;
-    font-size: 2vw;
+    font-size: 1.2em;
     color: #000000;
 }
 .info h4 {
     margin: 0 0 5px;
-    font-size: 1.2vw;
+    font-size: 1.2em;
     color: #000000;
 }
+
 .donut-legend {
   position: absolute;
   left: 10px;
