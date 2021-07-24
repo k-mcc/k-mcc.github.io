@@ -790,15 +790,15 @@ crossorigin=""></script>
         */
 
         '<h4 style="text-align: center;">Tract #' + props.TRACT + '</h4>' +
-        '</br><div style="display: inline-grid;grid-template-columns: auto auto; height:5vh;"><div class=\"grid-titem\" style="padding-left:3vw;text-align:center;justify-content:center;width: 100%;"><h1 style="color:' + adjustColor(props.no2Perc, 0) + ';">' + props.no2Perc + '</br></h1><h4>NO<sub>2</sub> Percentile</h4></div><div class=\"grid-titem\" style="padding-left:3vw;text-align:center;justify-content:center;width: 100%;"><h1 style="color:' + adjustColor(0, props.demographicIndex) + ';">' + props.demographicIndex + '</h1><h4>Socio-Demographic Percentile</h4></div></div>' +
+        '</br><div style="display: inline-grid;grid-template-columns: auto auto; height:5vh;"><div class="col-xs-12" style="justify-content: center;"><h1 style="color:' + adjustColor(props.no2Perc, 0) + ';">' + props.no2Perc + '</br></h1><h4>NO<sub>2</sub> Percentile</h4></div><div class="col-xs-12" style="justify-content: center;"><h1 style="color:' + adjustColor(0, props.demographicIndex) + ';">' + props.demographicIndex + '</h1><h4>Socio-Demographic Percentile</h4></div></div>' +
         '' +
-        '<div style="margin-top: 40px;display: inline-grid;grid-template-columns: auto auto; height:2em;padding-right:0px;"><div class=\"grid-titem\" style="padding-left:0px;text-align:center;width=150px;max-width: 100%;min-width: 100%;"><h1>$' + numberWithCommas(props.medianHHIncome) + '</h1></br><h4>Tract\'s Median Household Income</h4></div>' +
-        '<div class=\"grid-titem\" style="padding-left:0px;text-align:center;width=150px;max-width: 100%;min-width: 100%;"><h1>$52,338</h1></br><h4>Houston\'s Median Household Income</h4>' +
+        '<div style="margin-top: 60px;display: inline-grid;grid-template-columns: auto auto; height:5vh;padding-right:0px;"><div class="col-xs-12" style="justify-content: center;"><h1>$' + numberWithCommas(props.medianHHIncome) + '</h1></br><h4>Tract\'s Median Household Income</h4></div>' +
+        '<div class="col-xs-12" style="justify-content: center;"><h1>$52,338</h1></br><h4>Houston\'s Median Household Income</h4>' +
         '</br></br>'
         : 'Click on a census tract');
 
         //this._div.innerHTML += '<br /><br /><br /><br /><br /><br /><div id="infoBox" style="height: 400px;" ><br /></div>';
-        this._div.innerHTML += '<div id="piechart" style="margin-top:100px;width: 500px; height: 300px;"></div>';
+        this._div.innerHTML += '<div id="piechart" style="left:0px;margin-left: 0px; padding: 0px;margin-top:100px;height: 300px;"></div>';
         /*var data = [
             {x: "American Indian/Alaska Native", value: (props ? props.popNativeAmer : 0)},
             {x: "Asian", value: (props ? props.popAsian : 0)},
@@ -858,6 +858,18 @@ crossorigin=""></script>
     var titleStr = '';
     if (pieDataArr[6] > 0) titleStr = numberWithCommas(pieDataArr[6]) + ' People Live Here';
 
+     var width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
+     var legendPosition;
+     var ignoreBounds;
+
+     if (width <= 800) {
+       legendPosition = 'none';
+       ignoreBounds = false;
+     } else {
+       legendPosition = 'labeled';
+       ignoreBounds = true;
+     }
+
     var options = {
       title: titleStr,
       titleTextStyle: {color: 'black', fontSize: 20},
@@ -865,10 +877,11 @@ crossorigin=""></script>
       backgroundColor: "#FFF",
       fontName: "Poppins",
       fontSize: "16",
-      chartArea:{width:'90%'},
-      legend:{position: 'left', textStyle: {color: 'black'}},
+      sliceVisibilityThreshold: 0,
+      chartArea:{width:'100%'},
+      legend:{position: legendPosition, textStyle: {color: 'black', fontSize: 13}},
       //tooltip:{trigger:'selection'}
-      tooltip:{ignoreBounds: true, textStyle: {fontSize: '12'}}
+      tooltip:{ignoreBounds: ignoreBounds, textStyle: {fontSize: '12'}}
     };
 
     var chart = new google.visualization.PieChart(document.getElementById('piechart'));

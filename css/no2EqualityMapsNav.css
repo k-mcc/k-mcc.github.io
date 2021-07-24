@@ -31,7 +31,7 @@ body { margin: 0; padding: 0; }
 .info h2 {
     margin: 0 0 5px;
     color: #000000;
-    font-size: 1.8vw;
+    font-size: 1em;
     text-align: center;
 }
 .littleDiv {
@@ -39,16 +39,16 @@ body { margin: 0; padding: 0; }
 }
 .info h3 {
     margin: 0 0 5px;
-    font-size: 1.2vw;
+    font-size: 1em;
     color: #000000;
 }
 .info h4 {
     margin: 0 0 5px;
-    font-size: 1.2vw;
+    font-size: 1em;
     color: #000000;
 }
 .info h1 {
-    font-size: 2vw;
+    font-size: 1.5em;
 }
 
 .donut-legend {
@@ -161,8 +161,8 @@ body { margin: 0; padding: 0; }
   font-size: 1.3vw;
 }
 
-.grid-titem h1 {
-  font-size: 3vw;
+.col-xs-12 h1 {
+  font-size: 2em;
 }
 
 .grid-container i {
