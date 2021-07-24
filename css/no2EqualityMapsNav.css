@@ -16,7 +16,7 @@ body { margin: 0; padding: 0; }
 .info {
   height: 100vh;
   width: 50%;
-  padding: 6px 8px;
+  padding: 2vw 4vh;
   font: 14px/16px 'Poppins', Helvetica, sans-serif;
   /*font-family: 'Poppins', sans-serif;*/
   background: white;
@@ -31,6 +31,7 @@ body { margin: 0; padding: 0; }
 .info h2 {
     margin: 0 0 5px;
     color: #000000;
+    font-size: 1.8vw;
     text-align: center;
 }
 .littleDiv {
@@ -38,13 +39,16 @@ body { margin: 0; padding: 0; }
 }
 .info h3 {
     margin: 0 0 5px;
-    font-size: 1.2em;
+    font-size: 1.2vw;
     color: #000000;
 }
 .info h4 {
     margin: 0 0 5px;
-    font-size: 1.2em;
+    font-size: 1.2vw;
     color: #000000;
+}
+.info h1 {
+    font-size: 2vw;
 }
 
 .donut-legend {
@@ -104,7 +108,7 @@ body { margin: 0; padding: 0; }
   background-color: #FFFFFF;
   padding: 30px 18px;
   margin: 3vw 0;
-  bottom: 5vh;
+  bottom: 10vh;
   left: 0px;
   position: relative;
   border-left: 3vw solid #FFFFFF;
@@ -112,6 +116,12 @@ body { margin: 0; padding: 0; }
   border-radius: 3px;
   box-shadow: 0 0 15px rgba(0,0,0,0.2);
 }
+
+.uniLegend {
+  width: 15vw;
+  height: 30vw;
+}
+
 .grid-item {
   background-color: #FFFFFF;
   border: 0.1vw solid #FFFFFF;
@@ -121,6 +131,7 @@ body { margin: 0; padding: 0; }
 .grid-titem {
   border: 1px solid #FFFFFF;
   text-align: center;
+  width: 50%;
 }
 .grid-container h3 {
   font: 14px/16px 'Poppins', Helvetica, sans-serif;
@@ -148,6 +159,10 @@ body { margin: 0; padding: 0; }
   right: 0;
   background: none;
   font-size: 1.3vw;
+}
+
+.grid-titem h1 {
+  font-size: 3vw;
 }
 
 .grid-container i {
@@ -552,18 +567,18 @@ h4 {
 }
 
 .exploreBtnContainer {
-  height: 85px;
-  width: 300px;
+  height: 5vw;
+  width: 20vw;
+  padding: 1%;
   font: 14px/16px 'Poppins', Helvetica, sans-serif;
   background: #3B4994;
   color: white;
   box-shadow: 0 0 15px rgba(0,0,0,0.2);
   border-radius: 3px;
   display: "inline-block";
-  text-align: center;
   justify-content: center;
+  text-align: center;
   margin: 2% auto;
-  padding:10px;
   cursor: pointer;
 }
 

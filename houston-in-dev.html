@@ -790,10 +790,10 @@ crossorigin=""></script>
         */
 
         '<h4 style="text-align: center;">Tract #' + props.TRACT + '</h4>' +
-        '</br><div style="display: inline-grid;grid-template-columns: auto auto; height:3em;"><div class=\"grid-titem\" style="padding-left:10px;text-align:center;justify-content:center;width=150px;max-width: 100%;min-width: 100%;"><h4 style="font-size:3em; color:' + adjustColor(props.no2Perc, 0) + ';">' + props.no2Perc + '</br></h4><h4>NO<sub>2</sub> Percentile</h4></div><div class=\"grid-titem\" style="padding-right:0px;justify-content:center;text-align:center;width=150px;max-width: 100%;min-width: 100%;padding-left:0px;"><h4 style="font-size:3em; color:' + adjustColor(0, props.demographicIndex) + ';">' + props.demographicIndex + '</h4><h4>Socio-Demographic Percentile</h4></div></div>' +
+        '</br><div style="display: inline-grid;grid-template-columns: auto auto; height:5vh;"><div class=\"grid-titem\" style="padding-left:3vw;text-align:center;justify-content:center;width: 100%;"><h1 style="color:' + adjustColor(props.no2Perc, 0) + ';">' + props.no2Perc + '</br></h1><h4>NO<sub>2</sub> Percentile</h4></div><div class=\"grid-titem\" style="padding-left:3vw;text-align:center;justify-content:center;width: 100%;"><h1 style="color:' + adjustColor(0, props.demographicIndex) + ';">' + props.demographicIndex + '</h1><h4>Socio-Demographic Percentile</h4></div></div>' +
         '' +
-        '<div style="margin-top: 40px;display: inline-grid;grid-template-columns: auto auto; height:2em;padding-right:0px;"><div class=\"grid-titem\" style="padding-left:0px;text-align:center;width=150px;max-width: 100%;min-width: 100%;"><h4 style="font-size:2em;">$' + numberWithCommas(props.medianHHIncome) + '</h4></br><h4>Tract\'s Median Household Income</h4></div>' +
-        '<div class=\"grid-titem\" style="padding-left:0px;text-align:center;width=150px;max-width: 100%;min-width: 100%;"><h4 style="font-size:2em;">$52,338</h4></br><h4>Houston\'s Median Household Income</h4>' +
+        '<div style="margin-top: 40px;display: inline-grid;grid-template-columns: auto auto; height:2em;padding-right:0px;"><div class=\"grid-titem\" style="padding-left:0px;text-align:center;width=150px;max-width: 100%;min-width: 100%;"><h1>$' + numberWithCommas(props.medianHHIncome) + '</h1></br><h4>Tract\'s Median Household Income</h4></div>' +
+        '<div class=\"grid-titem\" style="padding-left:0px;text-align:center;width=150px;max-width: 100%;min-width: 100%;"><h1>$52,338</h1></br><h4>Houston\'s Median Household Income</h4>' +
         '</br></br>'
         : 'Click on a census tract');
 
@@ -1295,7 +1295,7 @@ crossorigin=""></script>
     //<div class='popup' onclick='popItUp(\"no2AxisPopup\")' style='bottom:5px; left:5px;' ><img src='images/info.png' style='width:30px;height:30px;'></img><span class='popuptext' id='no2AxisPopup'><p><strong>Title: </strong></br>Description</p></span></div>
     //div.innerHTML += '<img src="images/no2dLegend.png" alt="Legend" style="width:300px;height:300px;">';
 
-    div.innerHTML = '<img src="images/uniLegend.png" alt="Legend" style="width:200px;height:370px;margin-right:50px;margin-top:30px;"></img>';
+    div.innerHTML = '<img src="images/uniLegend.png" alt="Legend"class="uniLegend"></img>';
     //<div class="xButton" onclick="xButton(\"gridContainer\", \"inline-grid\")" style="right:35px;top:-43px;"><h2>✕</h2></div>
     /*for (var i = grades.length-1; i > 0; i--) {
         div.innerHTML +=
@@ -1307,6 +1307,7 @@ crossorigin=""></script>
     //div.style.lineHeight = '0px';
     div.style.padding = "0px";
     div.style.lineHeight = "20px";
+    div.classList.add("uniLegend");
 
     return div;
   }
