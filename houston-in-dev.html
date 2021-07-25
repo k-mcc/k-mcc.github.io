@@ -167,6 +167,55 @@ crossorigin=""></script>
   </div>
 <script>
 
+  function adaptToScreen() {
+
+    var width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
+
+    if (width <= 768) {
+      info.setPosition('bottomright');
+    } else info.setPosition('topright');
+
+    // INFO BOX
+    var infoBox = document.getElementById('info');
+    if (infoBox != null) {
+      infoBox.style.setProperty('--info-height', getElementSize(width, infoHeight) + 'px');
+      infoBox.style.setProperty('--info-width', getElementSize(width, infoWidth));
+      //info.style.setProperty('--info-display', getElementProperty(width, 768, "block", "inline-block"));
+      //infoBox.style.setProperty('--info-top', getElementProperty(width, 768, 50 + 'vh', 0 + 'px'));
+
+
+      var elem = L.DomUtil.get('info');
+      L.DomEvent.on(elem, 'mousewheel', L.DomEvent.stopPropagation);
+
+    }
+
+    var gc = document.getElementById('gridContainer');
+    if (gc != null) {
+      gc.style.setProperty('--grid-container-bottom', getElementProperty(width, 768, 400 + 'px', 10 + 'vh'));
+    }
+
+  }
+
+  var infoHeight = [600,500,400,200,200];
+  var infoWidth = [450 + 'px',300 + 'px',200 + 'px', 97 + '%', 97 + '%'];
+
+  function getElementSize(x, arr) { //x = screenWidth, arr = array of element sizes at breakpoints
+    return x > 1200  ? arr[0] :
+           x > 992  ? arr[1] :
+           x > 768  ? arr[2] :
+           x > 600  ? arr[3] :
+                      arr[4];
+  }
+
+  function getElementProperty(x, breakPt, valSm, valLg) {
+    if (x > breakPt) return valLg;
+    else return valSm;
+  }
+
+  var setDocumentVariable = function(propertyName, value) {
+    document.documentElement.style.setProperty(propertyName, value);
+  };
+
   function changePos(eleId) {
     document.getElementById(eleId).classList.toggle("popDown");
   }
@@ -180,7 +229,17 @@ crossorigin=""></script>
   function load() {
     addChoropleth("Houston");
     currentOpacity = "";
+
+
+    adaptToScreen();
+
+
+    var elem = L.DomUtil.get('info');
+    L.DomEvent.on(elem, 'mousewheel', L.DomEvent.stopPropagation);
+
+
     toggleOpacity("outline"); //"fill"
+    //adaptToScreen();
   }
 
   var firstZoom = true;
@@ -798,7 +857,7 @@ crossorigin=""></script>
         : 'Click on a census tract');
 
         //this._div.innerHTML += '<br /><br /><br /><br /><br /><br /><div id="infoBox" style="height: 400px;" ><br /></div>';
-        this._div.innerHTML += '<div id="piechart" style="left:0px;margin-left: 0px; padding: 0px;margin-top:100px;height: 300px;"></div>';
+        this._div.innerHTML += '<div id="piechart" style="left:0px;margin-left: 0px; padding: 0px;margin-top:100px;height: 300px; width: 100%;"></div>';
         /*var data = [
             {x: "American Indian/Alaska Native", value: (props ? props.popNativeAmer : 0)},
             {x: "Asian", value: (props ? props.popAsian : 0)},
@@ -863,8 +922,8 @@ crossorigin=""></script>
      var ignoreBounds;
 
      if (width <= 800) {
-       legendPosition = 'none';
-       ignoreBounds = false;
+       legendPosition = 'labeled';
+       ignoreBounds = true;
      } else {
        legendPosition = 'labeled';
        ignoreBounds = true;
@@ -1101,6 +1160,7 @@ crossorigin=""></script>
           }*/
 
         }
+        adaptToScreen();
         info.update(layer.feature.properties);
     }
 
@@ -1144,6 +1204,7 @@ crossorigin=""></script>
             layer.bringToFront();
         }*/
 
+        adaptToScreen();
         info.update(layer.feature.properties);
 
         clickedTract = layer.feature.properties.GEOID;
@@ -1227,6 +1288,7 @@ crossorigin=""></script>
         changeButtonSelection("button2", "button1");
       }
 
+      adaptToScreen();
       updateImg();
       img.addTo(map);
       if (hiddenLegends.includes(gridContainerID)) {
