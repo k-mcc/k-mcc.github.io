@@ -11,7 +11,100 @@ body { margin: 0; padding: 0; }
   position: absolute;
 }
 
-/* bivariate choropleths */
+/* DEVICE SCALING */
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+  .info {
+    height: 300px;
+    width: 20%;
+    padding: 2vw 4vh;
+    font: 14px/16px 'Poppins', Helvetica, sans-serif;
+    /*font-family: 'Poppins', sans-serif;*/
+    background: white;
+    background: rgba(255,255,255);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 3px;
+    display: "inline-block";
+    text-align: center;
+    justify-content: center;
+    overflow: auto;
+  }
+  .info h2 {
+      margin: 0 0 5px;
+      color: #000000;
+      font-size: 0.5em;
+      text-align: center;
+  }
+  .info h3 {
+      margin: 0 0 5px;
+      font-size: 0.5em;
+      color: #000000;
+  }
+  .info h4 {
+      margin: 0 0 5px;
+      font-size: 0.5em;
+      color: #000000;
+  }
+  .info h1 {
+      font-size: 1em;
+  }
+
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+  .info {
+    height: 400px;
+    width: 30%;
+    padding: 2vw 4vh;
+    font: 14px/16px 'Poppins', Helvetica, sans-serif;
+    /*font-family: 'Poppins', sans-serif;*/
+    background: white;
+    background: rgba(255,255,255);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 3px;
+    display: "inline-block";
+    text-align: center;
+    justify-content: center;
+    overflow: auto;
+  }
+  .info h2 {
+      margin: 0 0 5px;
+      color: #000000;
+      font-size: 0.5em;
+      text-align: center;
+  }
+  .info h3 {
+      margin: 0 0 5px;
+      font-size: 0.5em;
+      color: #000000;
+  }
+  .info h4 {
+      margin: 0 0 5px;
+      font-size: 0.5em;
+      color: #000000;
+  }
+  .info h1 {
+      font-size: 1em;
+  }
+
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+
+}
+/* DEVICE SCALING */
 
 .info {
   height: 100vh;
