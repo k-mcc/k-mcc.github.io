@@ -747,6 +747,78 @@ crossorigin=""></script>
       color: #FFFFFF;
     }
 
+
+    .navbar {
+      background:#000000;
+      height: 60px;
+    }
+    .nav-link {
+      color: #fff;
+      cursor: pointer;
+      font-size: 20px;
+      font-family: 'Helvetica Light', 'Helvetica', Arial, sans-serif;
+      background-color: #000000;
+      border-top: 3px solid #ffffff;
+      width: 100px;
+      text-align:center;
+    }
+    .navbar-brand {
+      color: #fff;
+      cursor: pointer;
+      font-size: 20px;
+      font-family: 'Helvetica Light', 'Helvetica', Arial, sans-serif;
+      background-color: #000000;
+    }
+    .nav-ref {
+      color: #fff;
+      cursor: pointer;
+      font-size: 20px;
+      font-family: 'Helvetica Light', 'Helvetica', Arial, sans-serif;
+      background-color: #000000;
+      font-style: italic;
+      margin-left:50px;
+    }
+    .nav-ref:hover {
+      color: #a3a3a3;
+    }
+    .nav-link:hover {
+      color: #a3a3a3;
+      border-top: 3px solid #a3a3a3;
+    }
+    .navbar-brand:hover {
+      color: #ffffff;
+    }
+    .navbar-collapse {
+      justify-content: flex-end;
+    }
+    .navbar .active {
+      border-top: 3px solid #ffd519;
+      color: #ffd519;
+    }
+
+    @media (max-width: 575.98px) {
+        .description {
+            left: 0;
+            padding: 0 15px;
+            position: absolute;
+            top: 10%;
+            transform: none;
+            text-align: center;
+        }
+
+        .description h1 {
+            font-size: 2em;
+        }
+
+        .description p {
+            font-size: 1.2rem;
+        }
+
+        .features {
+            margin: 0;
+        }
+    }
+
   </style>
 </head>
 <body>
@@ -773,7 +845,7 @@ crossorigin=""></script>
       </ul>
     </div>
   </nav>
-  
+
   <body onload="load()">
   <div class='showLegendButton' id='gridContainerButton' ><h2>Legend</h2></div>
   <div class="chorMenu" id="chorMenu">
