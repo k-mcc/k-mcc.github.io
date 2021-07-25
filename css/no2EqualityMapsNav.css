@@ -172,7 +172,7 @@ body { margin: 0; padding: 0; }
   background: none;
   transform-origin: 0 0;
   transform: rotate(90deg);
-  font-size: 1.3vw;
+  font-size: var(--grid-container-font-size, 1.3vw);
 }
 .grid-container h2 {
   font: 14px/16px 'Poppins', Helvetica, sans-serif;
@@ -185,7 +185,7 @@ body { margin: 0; padding: 0; }
   /*left: 0;*/
   right: 0;
   background: none;
-  font-size: 1.3vw;
+  font-size: var(--grid-container-font-size, 1.3vw);
 }
 
 .col-xs-12 h1 {
@@ -411,7 +411,7 @@ h4 {
   box-shadow: 0 0 15px rgba(0,0,0,0.2);
   padding: 5px;
   left: 0px;
-  bottom: 60px;
+  bottom: var(--show-legend-button-bottom, 60px);
   font-size: 16px;
   z-index: 800;
   display: none;
