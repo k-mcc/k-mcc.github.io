@@ -189,7 +189,7 @@ crossorigin=""></script>
     var gc = document.getElementById('gridContainer');
     if (gc != null) {
       gc.style.setProperty('--grid-container-bottom', getElementProperty(width, 768, 300 + 'px', 10 + 'vh'));
-      gc.style.setProperty('--grid-container-font-size', getElementProperty(width, 768, 11 + 'px', 1.3 + 'vw'));
+      gc.style.setProperty('--grid-container-font-size', getElementProperty(width, 768, 10 + 'px', 1.2 + 'vw'));
     }
 
     var showLegendButton = document.getElementById('gridContainerButton');
@@ -226,8 +226,8 @@ crossorigin=""></script>
 
   }
 
-  var infoHeight = [600,500,400,200,200];
-  var infoWidth = [450 + 'px',300 + 'px',200 + 'px', 97 + '%', 97 + '%'];
+  var infoHeight = [600,550,500,200,200];
+  var infoWidth = [450 + 'px',400 + 'px',350 + 'px', 97 + '%', 97 + '%'];
   var mcH3Size = [50, 45, 40, 35, 30];
 
   function getElementSize(x, arr) { //x = screenWidth, arr = array of element sizes at breakpoints
@@ -498,9 +498,10 @@ crossorigin=""></script>
   // When the user clicks on <span> (x), close the modal
   function closeModal() {
     document.getElementById('myModal').style.display = "none";
-    //var infoBoxDiv =document.getElementById("info");
-    //infoBoxDiv.style.display = "block";
-    //document.getElementById("gridContainer").style.display = "inline-grid";
+  }
+
+  function openModal() {
+    document.getElementById('myModal').style.display = "block";
   }
 
   // When the user clicks anywhere outside of the modal, close it
@@ -651,6 +652,7 @@ crossorigin=""></script>
         document.getElementById(gridContainerID + "Button").style.display = "block";
       }
       info.addTo(map);
+      adaptToScreen();
 
       changeButtonSelection("returnBtn","");
     }
@@ -680,6 +682,7 @@ crossorigin=""></script>
       }
 
       info.addTo(map);
+      adaptToScreen();
 
       changeButtonSelection("returnBtn","");
     }
@@ -711,6 +714,7 @@ crossorigin=""></script>
       }
 
       info.addTo(map);
+      adaptToScreen();
     }
 
     if (sourcesWasOn) {
@@ -841,9 +845,9 @@ crossorigin=""></script>
     var grades = [1, 40, 99];
     //<div class='popup' onclick='popItUp(\"no2AxisPopup\")' style='bottom:5px; left:5px;'><img src='images/info.png' style='width:30px;height:30px;'></img><span class='popuptext' id='no2AxisPopup'><p><strong>Title: </strong></br>Description</p></span></div>
     //div.innerHTML += '<img src="images/no2dLegend.png" alt="Legend" style="width:300px;height:300px;">';
-    div.innerHTML += "<div class='xButton' onclick='xButton(\"gridContainer\", \"inline-grid\")' ><h2 style='top: -47px; left: -26px'>✕</h2></div><h3 class='axis'>Nitrogen Dioxide Percentile</h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0],"") + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1],"") + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2],"") + "\" id:\"c3\" ></div>";
+    div.innerHTML += "<div class='xButton' onclick='xButton(\"gridContainer\", \"inline-grid\")' ><h2 style='top: -47px; left: -26px'>✕</h2></div><h3 class='axis'>Nitrogen Dioxide Percentile &#9432;</h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0],"") + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1],"") + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2],"") + "\" id:\"c3\" ></div>";
     div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[0],"") + "\" id:\"a2\"></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[1],"") + "\" id:\"b2\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[2],"") + "\" id:\"c2\" ></div>";
-    div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0],"") + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1],"") + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2],"") + "\" id:\"c1\" ></div><h2 class='axis' >Socio-Demographic Index</h2>";
+    div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0],"") + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1],"") + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2],"") + "\" id:\"c1\" ></div><h2 class='axis' >Socio-Demographic Index &#9432</h2>";
 
     var draggable = new L.Draggable(div);
     draggable.enable();
@@ -854,11 +858,13 @@ crossorigin=""></script>
   info.onAdd = function (map) {
       this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
       this._div.id = "info";
-      this.update();
+      this._div.innerHTML = '<h2>NO<sub>2</sub> Equality Index</h2></br>Hover or click on a census tract to get started.';
       var draggable = new L.Draggable(this._div);
       draggable.enable();
       return this._div;
   };
+
+  window.addEventListener('resize', adaptToScreen);
 
   info.update = function (props) {
     this._div.innerHTML = '<h2>NO<sub>2</sub> Equality Index</h2>' +  (props ?
@@ -1259,9 +1265,9 @@ crossorigin=""></script>
       var grades = [1, 40, 90];
       //<div class='popup' onclick='popItUp(\"no2AxisPopup\")' style='bottom:5px; left:5px;' ><img src='images/info.png' style='width:30px;height:30px;'></img><span class='popuptext' id='no2AxisPopup'><p><strong>Title: </strong></br>Description</p></span></div>
       //div.innerHTML += '<img src="images/no2dLegend.png" alt="Legend" style="width:300px;height:300px;">';
-      div.innerHTML += "<div class='xButton' onclick='xButton(\"gridContainer\", \"inline-grid\")' ><h2>✕</h2></div><h3 class='axis' >Nitrogen Dioxide Percentile</h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0],"") + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1],"") + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2],"") + "\" id:\"c3\" ></div>";
+      div.innerHTML += "<div class='xButton' onclick='xButton(\"gridContainer\", \"inline-grid\")' ><h2>✕</h2></div><h3 class='axis' >Nitrogen Dioxide Percentile &#9432</h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0],"") + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1],"") + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2],"") + "\" id:\"c3\" ></div>";
       div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[0],"") + "\" id:\"a2\"></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[1],"") + "\" id:\"b2\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[2],"") + "\" id:\"c2\" ></div>";
-      div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0],"") + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1],"") + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2],"") + "\" id:\"c1\" ></div><h2 class='axis' >Socio-Demographic Index</h2>";
+      div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0],"") + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1],"") + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2],"") + "\" id:\"c1\" ></div><h2 class='axis' >Socio-Demographic Index &#9432</h2>";
 
       //<button type=\"button\" class=\"collapsible\" id=\"collapse1\" onclick=\"toggleLegend()\"  >
 
