@@ -10,26 +10,54 @@ body { margin: 0; padding: 0; }
   position: absolute;
 }
 
-/* bivariate choropleths */
+/* DEVICE SCALING */
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+
+}
+/* DEVICE SCALING */
 
 .info {
-    height: 800px;
-    width: 400px;
-    padding: 6px 8px;
-    font: 14px/16px 'Poppins', Helvetica, sans-serif;
-    /*font-family: 'Poppins', sans-serif;*/
-    background: white;
-    background: rgba(255,255,255);
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
-    border-radius: 3px;
-    display: "inline-block";
-    text-align: center;
-    justify-content: center;
-    overflow: auto;
+  height: var(--info-height, 500px);
+  width: var(--info-width, 300px);
+  padding: 2vw 4vh;
+  font: 14px/16px 'Poppins', Helvetica, sans-serif;
+  background: rgba(255,255,255);
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  border-radius: 3px;
+  display: var(--info-display, "inline-block");
+  text-align: center;
+  justify-content: center;
+  overflow: auto;
+  top: 0px;
+  right: 0px;
+  /*top: var(--info-top, 0px);*/
 }
+
 .info h2 {
     margin: 0 0 5px;
     color: #000000;
+    font-size: 1em;
     text-align: center;
 }
 .littleDiv {
@@ -37,14 +65,18 @@ body { margin: 0; padding: 0; }
 }
 .info h3 {
     margin: 0 0 5px;
-    font-size: 1.2em;
+    font-size: 1em;
     color: #000000;
 }
 .info h4 {
     margin: 0 0 5px;
-    font-size: 1.2em;
+    font-size: 1em;
     color: #000000;
 }
+.info h1 {
+    font-size: 1.5em;
+}
+
 .donut-legend {
   position: absolute;
   left: 10px;
@@ -93,64 +125,77 @@ body { margin: 0; padding: 0; }
     background: rgba(255,255,255);
     box-shadow: 0 0 15px rgba(0,0,0,0.2);
     border-radius: 3px;
+    z-index: 100;
 }
 /*grid*/
 .grid-container {
+  z-index: 100;
   grid-template-columns: auto auto auto;
   background-color: #FFFFFF;
   padding: 30px 18px;
-  margin: 40px 0;
-  bottom: 5px;
-  left: 5px
+  margin: 3vw 0;
+  bottom: var(--grid-container-bottom, 10vh);
+  left: 0px;
   position: relative;
-  border-left: 50px solid #FFFFFF;
-  border-bottom: 50px solid #FFFFFF;
+  border-left: 3vw solid #FFFFFF;
+  border-bottom: 3vw solid #FFFFFF;
   border-radius: 3px;
   box-shadow: 0 0 15px rgba(0,0,0,0.2);
 }
+
+.uniLegend {
+  width: 15vw;
+  height: 30vw;
+}
+
 .grid-item {
   background-color: #FFFFFF;
-  border: 1px solid #FFFFFF;
-  padding: 40px;
+  border: 0.1vw solid #FFFFFF;
+  padding: var(--grid-item-padding, 2.8vw);
   text-align: center;
 }
 .grid-titem {
   border: 1px solid #FFFFFF;
   text-align: center;
+  width: 100%;
 }
 .grid-container h3 {
   font: 14px/16px 'Poppins', Helvetica, sans-serif;
   color: #000000;
-  padding: 5px 10px;
-  margin: 30px 0 15px 0;
-  line-height: 24px;
+  padding: 0.1vw 1vh;
+  margin: 1.8vw 0 1vw 0;
+  line-height: normal;
   position: absolute;
   top: 0;
   left: 0;
   background: none;
   transform-origin: 0 0;
   transform: rotate(90deg);
-  font-size: 1.5em;
+  font-size: var(--grid-container-font-size, 1.3vw);
 }
 .grid-container h2 {
   font: 14px/16px 'Poppins', Helvetica, sans-serif;
   color: #000000;
-  padding: 0 10px;
-  margin: 60px 10px 0 0;
-  line-height: 2px;
+  padding: 0 1vh;
+  margin: 0 1vh 0 0;
+  line-height: 0px;
   position: absolute;
-  bottom: 0;
-  top: 257px;
-  left: 0;
+  bottom: 0px;
+  /*left: 0;*/
+  right: 0;
   background: none;
-  font-size: 1.5em;
+  font-size: var(--grid-container-font-size, 1.3vw);
+}
+
+.col-xs-12 h1 {
+  font-size: 2em;
 }
 
 .grid-container i {
-  width: 20px;
-  height: 20px;
+  width: 2vw;
+  height: 2vw;
   float: left;
-  margin-right: 8px;
+  margin-right: 2vw;
   opacity: 0.7;
 }
 
@@ -280,8 +325,8 @@ h4 {
   position: absolute;
   display: inline-block;
   cursor: pointer;
-  right: 5px;
-  top: -8px;
+  right: 0.8vw;
+  top: 55px;
   z-index: 850;
   font: 14px/16px 'Poppins', Helvetica, sans-serif;
   color: #FF0000;
@@ -291,12 +336,10 @@ h4 {
   position: absolute;
   display: inline-block;
   cursor: pointer;
-  right: 0px;
-  top: -8px;
   z-index: 850;
   font: 14px/16px 'Poppins', Helvetica, sans-serif;
   color: #FF0000;
-  font-size: 1.8em;
+  font-size: 2vw;
 }
 
 .popup {
@@ -366,8 +409,9 @@ h4 {
   border-radius: 3px;
   box-shadow: 0 0 15px rgba(0,0,0,0.2);
   padding: 5px;
-  left: 30px;
-  bottom: -1px;
+  left: 0px;
+  bottom: var(--show-legend-button-bottom, 60px);
+  font-size: 16px;
   z-index: 800;
   display: none;
   width: 100;
@@ -390,7 +434,7 @@ h4 {
   width: 100;
   height: 100;
   cursor: pointer;*/
-  display: var(--chorMenu-display, none);
+  display: none;
   top: 60px;
   left: 100px;
   z-index: 800;
@@ -403,7 +447,7 @@ h4 {
   font-size: 16px;
   border: none;
   display: block;
-  top: 10px;
+  top: 60px;
   left: 100px;
   width: 300px;
   height: 60px;
@@ -437,13 +481,13 @@ h4 {
   font: 14px/16px 'Poppins', Helvetica, sans-serif;
   color: black;
   padding: 12px 16px;
-  /*cursor: pointer;*/
+  font-size: 20px;
+  line-height: normal;
+  cursor: pointer;
 }
 .chorOption:hover {
   background-color: #ddd;
-}
-.chorOption:visited {
-  background-color: #FFFFFF;
+  color: #000;
 }
 .chorOption:focus {
   background-color: #000000;
@@ -464,58 +508,54 @@ h4 {
   opacity: 0.8;
 }
 .designMenu {
-  display: var(--designMenu-display, none);
+  display: block;
   top: 10px;
   margin-left: 100px;
   z-index: 800;
 }
 
 .modal {
-  display: block; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1002; /* Sit on top */
+  display: block;
+  position: fixed;
+  z-index: 1002;
   left: 0;
   top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.7);
   text-align: center;
   justify-content: center;
 }
 
 /* Modal Content/Box */
 .modal-content {
-  background-color: #FFFFFF;
+  background-color: white;
   margin: 2% auto; /* 15% from the top and centered */
   padding: 10px;
-  border: 1px solid #888;
+  border: 1px solid #000000;
   width: 80%; /* Could be more or less, depending on screen size */
   font: 14px/16px 'Poppins', Helvetica, sans-serif;
-  font-size: 25px;
+  color: black;
+  font-size: 20px;
   line-height: 30px;
   text-align: center;
 }
 
 .modal-content p {
-  padding: 10px;
-  margin-right: 20px;
-  margin-left: 20px;
+  margin-right: 2%;
+  margin-top: 2%;
+  margin-left: 2%;
   font: 14px/16px 'Poppins', Helvetica, sans-serif;
-  font-size: 25px;
-  line-height: 35px;
+  font-size: var(--modal-content-p-size, 24px);
+  line-height: normal;
   text-align: left;
 }
-
 .modal-content h3 {
-  background-color: #FFFFFF;
   color: #3B4994;
   margin: 2% auto; /* 15% from the top and centered */
-  padding: 10px;
   font: 14px/16px 'Poppins', Helvetica, sans-serif;
-  font-size: 50px;
-  line-height: 25px;
+  font-size: var(--modal-content-h3-size, 50px);
   text-align: center;
 }
 
@@ -540,7 +580,8 @@ h4 {
   font: 14px/16px 'Poppins', Helvetica, sans-serif;
   text-align: center;
   display: inline-block;
-  font-size: 2em;
+  font-size: var(--explore-btn-font-size, 50px);
+  line-height: var(--explore-btn-font-size, 50px);
 }
 
 .exploreBtnContainer:hover {
@@ -551,18 +592,18 @@ h4 {
 }
 
 .exploreBtnContainer {
-  height: 85px;
-  width: 300px;
+  height: var(--explore-btn-c-h, 60px);
+  width: var(--explore-btn-c-w, 300px);
+  padding: var(--explore-btn-c-p, 1%);
   font: 14px/16px 'Poppins', Helvetica, sans-serif;
   background: #3B4994;
   color: white;
   box-shadow: 0 0 15px rgba(0,0,0,0.2);
   border-radius: 3px;
   display: "inline-block";
-  text-align: center;
   justify-content: center;
-  margin: 2% auto;
-  padding:10px;
+  text-align: center;
+  margin: var(--explore-btn-c-m, 2%) auto;
   cursor: pointer;
 }
 
@@ -585,6 +626,7 @@ h4 {
   color: #FFFFFF;
   line-height: 20px;
   text-transform: uppercase;
+  display: none;
 }
 
 .fade-in-text {
@@ -707,6 +749,7 @@ h4 {
   color: #FFFFFF;
 }
 
+
 .navbar {
   background:#000000;
   height: 60px;
@@ -728,9 +771,18 @@ h4 {
   font-family: 'Helvetica Light', 'Helvetica', Arial, sans-serif;
   background-color: #000000;
 }
-/*.nav-link {
-  margin-right: 1em !important;
-}*/
+.nav-ref {
+  color: #fff;
+  cursor: pointer;
+  font-size: 20px;
+  font-family: 'Helvetica Light', 'Helvetica', Arial, sans-serif;
+  background-color: #000000;
+  font-style: italic;
+  margin-left:50px;
+}
+.nav-ref:hover {
+  color: #a3a3a3;
+}
 .nav-link:hover {
   color: #a3a3a3;
   border-top: 3px solid #a3a3a3;
@@ -745,36 +797,7 @@ h4 {
   border-top: 3px solid #ffd519;
   color: #ffd519;
 }
-.header {
-  /*background-image: url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80');*/
-  background-color: #262626;
-  /*background-size: full;*/
-  background-position: center;
-  position: relative;
-}
-.overlay {
-    position: absolute;
-    min-height: 100%;
-    min-width: 100%;
-    left: 0;
-    top: 0;
-    background: rgba(0, 0, 0, 0.6);
-}
-.description {
-  left: 50%;
-  position: absolute;
-  top: 45%;
-  transform: translate(-50%, -55%);
-  text-align: center;
-}
-.description h1 {
-  color: #6ab446;
-}
-.description p {
-  color: #fff;
-  font-size: 1.3rem;
-  line-height: 1.5;
-}
+
 @media (max-width: 575.98px) {
     .description {
         left: 0;
@@ -806,9 +829,8 @@ h4 {
 .jumbotron h2 {
   font-size: 2em;
   text-align:left;
+  line-height: 3;
   margin: 10px;
-  padding-top:20px;
-  padding-bottom:10px;
 }
 
 .jumbotron p {
@@ -816,17 +838,6 @@ h4 {
   line-height: 1.5;
   margin: 10px;
 }
-
-.square div {
-  float: right;
-  margin: 5px;
-  padding-left:30px;
-}
-.square p {
-  text-align: justify;
-  font-size: 25px;
-}
-
 
 .dropup {
   margin-left: 20px;
@@ -888,4 +899,3 @@ h4 {
     position: absolute;
     width: 100%;
 }
-/* var(--grid-item-padding, 2.8vw); */
