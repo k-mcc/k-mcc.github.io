@@ -132,6 +132,18 @@
         font-size: 25px;
       }
 
+      .in-text-img {
+        width: var(--in-text-img-width, 30vw);
+      }
+
+      .caption {
+        width: var(--caption-width, 30vw);
+        margin: 0px;
+        color: grey;
+        font-style: italic;
+        padding-bottom: var(--caption-padding-bottom, 0px);
+      }
+
     </style>
   </head>
   <body>
@@ -173,13 +185,13 @@
           In contrast, satellite-based air quality measurements offer global coverage.
           </br></br></p>
         <div class="square">
-          <div><img style="width:30vw;" src="https://www.esa.int/var/esa/storage/images/esa_multimedia/videos/2017/07/sentinel-5p/17055960-2-eng-GB/Sentinel-5P_pillars.png"></img>
-             <p style="margin:0px;color:grey;font-style:italic;width:30vw;" class="text-wrap">Sentinel-5 Precursor monitors the Earth's atmosphere.
+          <div><img class="in-text-img" src="https://www.esa.int/var/esa/storage/images/esa_multimedia/videos/2017/07/sentinel-5p/17055960-2-eng-GB/Sentinel-5P_pillars.png"></img>
+             <p style="margin:0px;color:grey;font-style:italic;" class="caption">Sentinel-5 Precursor monitors the Earth's atmosphere.
                <a href="https://www.esa.int/Applications/Observing_the_Earth/Copernicus/Sentinel-5P/Introducing_Sentinel-5P">Image: ESA</a>
              </p>
           </div>
 
-          <p>
+          <p style="text-align: left;">
             The <a href="https://www.esa.int/Applications/Observing_the_Earth/Copernicus/Sentinel-5P">Sentinel-5P</a> is a satellite in low Earth orbit.
             It carries <a href="http://www.tropomi.eu/">TROPOMI</a>, an instrument that measures trace gases by
             comparing the light reflected from Earth’s atmosphere with direct sunlight.
@@ -187,6 +199,7 @@
         </div>
 
         <p>
+
           </br></br>
           </br></br>
           </br></br>
@@ -208,6 +221,27 @@
     ready(() => {
         document.querySelector(".header").style.height = window.innerHeight + "px";
     })
+
+    var width = (window.innerWidth > 0) ? window.innerWidth : screen.width;
+
+    var eles = document.getElementsByClassName('in-text-img');
+    if (eles.length > 0) {
+      for (var i = 0; i < eles.length; i++) {
+        eles[i].style.setProperty('--in-text-img-width', getElementProperty(width, 1000, 100 + '%', 30 + 'vw'));
+      }
+    }
+    eles = document.getElementsByClassName('caption');
+    if (eles.length > 0) {
+      for (var i = 0; i < eles.length; i++) {
+        eles[i].style.setProperty('--caption-width', getElementProperty(width, 1000, 100 + '%', 30 + 'vw'));
+        eles[i].style.setProperty('--caption-padding-bottom', getElementProperty(width, 1000, 30 + 'px', 0 + 'px'));
+      }
+    }
+
+    function getElementProperty(x, breakPt, valSm, valLg) {
+      if (x > breakPt) return valLg;
+      else return valSm;
+    }
 
     </script>
   </body>
