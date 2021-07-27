@@ -106,7 +106,7 @@ crossorigin=""></script>
     </div>
     </li>
 
-    <li class="nav-item">
+    <li class="nav-item" id="paletteSelector">
     <!-- View Options -->
     <div class="btn-group dropup">
       <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -771,6 +771,7 @@ crossorigin=""></script>
       singleLayerOn = propName;
       addChoropleth(propName);
 
+
       uniLegend();
     }
 
@@ -1196,6 +1197,7 @@ crossorigin=""></script>
     }
 
     var zoomableFeature;
+    var previousZoom = "";
     function zoomToFeature(e) {
         var layer = e.target;
         clickEvent = e;
@@ -1239,8 +1241,11 @@ crossorigin=""></script>
     }
 
     function zoomIntoFeature() {
+      if (previousZoom != "" && previousZoom != zoomableFeature) {
+        previousZoom.unbindPopup();
+      }
+      previousZoom = zoomableFeature;
       map.fitBounds(zoomableFeature.getBounds(), {padding: [100, 100]});
-      zoomableFeature.unbindPopup();
     }
 
     function onEachFeature(feature, layer) {
@@ -1293,6 +1298,9 @@ crossorigin=""></script>
     }//"#f3f3f3 url('img_tree.png') no-repeat right top";*/
 
     function setPalette(num) {
+
+      returnToBivariate();
+
       var sourcesWasOn = false;
       if (sourcesIsOn) {
         sourcesWasOn = true;
@@ -1309,9 +1317,9 @@ crossorigin=""></script>
         changeButtonSelection("button2", "button1");
       }
 
-      adaptToScreen();
       updateImg();
       img.addTo(map);
+      adaptToScreen();
       if (hiddenLegends.includes(gridContainerID)) {
         document.getElementById(gridContainerID + "Button").style.display = "none";
       }
