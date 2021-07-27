@@ -144,6 +144,46 @@
         padding-bottom: var(--caption-padding-bottom, 0px);
       }
 
+      .central-element {
+        justify-content: center;
+        text-align: center;
+        margin-top: 30px;
+        margin-bottom: 30px;
+      }
+
+      .central-element img {
+        width: var(--central-element-width, 80%);
+      }
+
+      .central-element p {
+        margin-left: calc( calc(100 - var(--central-element-width, 80%)) / 2 );
+        margin-right: calc( calc(100 - var(--central-element-width, 80%)) / 2 );
+        color: grey;
+        font-style: italic;
+        padding-bottom: 10px;
+        font-size: 25px;
+      }
+
+      .central-element-sm {
+        justify-content: center;
+        text-align: center;
+        margin-top: 30px;
+        margin-bottom: 30px;
+      }
+
+      .central-element-sm img {
+        width: var(--central-element-width, 50%);
+      }
+
+      .central-element-sm p {
+        margin-left: var(--central-element-margin, 25%);
+        margin-right: var(--central-element-margin, 25%);
+        color: grey;
+        font-style: italic;
+        padding-bottom: 10px;
+        font-size: 25px;
+      }
+
     </style>
   </head>
   <body>
@@ -181,33 +221,57 @@
         <h2>Measuring Nitrogen Dioxide From Space</h2>
         <p>Ground-based instruments are stationed on Earth's surface and provide local measurements of air quality. Ground-based measurements are only available where
           instruments are stationed.
-          </br></br>
-          In contrast, satellite-based air quality measurements offer global coverage.
-          </br></br></p>
+        </p>
         <div class="square">
           <div><img class="in-text-img" src="https://www.esa.int/var/esa/storage/images/esa_multimedia/videos/2017/07/sentinel-5p/17055960-2-eng-GB/Sentinel-5P_pillars.png"></img>
-             <p style="margin:0px;color:grey;font-style:italic;" class="caption">Sentinel-5 Precursor monitors the Earth's atmosphere.
+             <p class="caption">Sentinel-5 Precursor monitors the Earth's atmosphere.
                <a href="https://www.esa.int/Applications/Observing_the_Earth/Copernicus/Sentinel-5P/Introducing_Sentinel-5P">Image: ESA</a>
              </p>
           </div>
 
           <p style="text-align: left;">
+          </br>
+            In contrast, satellite-based air quality measurements offer global coverage.
+            </br>
             The <a href="https://www.esa.int/Applications/Observing_the_Earth/Copernicus/Sentinel-5P">Sentinel-5P</a> is a satellite in low Earth orbit.
             It carries <a href="http://www.tropomi.eu/">TROPOMI</a>, an instrument that measures trace gases by
             comparing the light reflected from Earth’s atmosphere with direct sunlight.
           </p>
         </div>
+      <div>
+        <p>
+        </br>
+          <b>Spatial resolution</b> refers to the amount of land or water represented by one pixel in a satellite image.
+          An image with high spatial resolution is more detailed, while an image with low spatial resolution provides more generalized information.
+          TROPOMI offers a pixel size of about 7 * 3.5 km<sup>2</sup>.
+        </p>
+
+        <div class="central-element-sm">
+          <img src="https://gisgeography.com/wp-content/uploads/2015/10/Spatial-Resolution-Comparison.png"></img>
+          </br>
+          <p>The same subject captured at different levels of spatial resolution.
+            <a href="https://gisgeography.com/remote-sensing-earth-observation-guide/">Image: GISGeography</a>
+          </p>
+      </div>
+
 
         <p>
-
-          </br></br>
-          </br></br>
-          </br></br>
-          [More about the data here]
-          </br></br>
-          </br></br>
-          </br></br>
+          This spatial resolution is so high that we can compare NO<sub>2</sub> density between neighborhoods of the same city.
+          </br>
+          TROPOMI measures nitrogen dioxide in terms of its the vertical column density.
+          We take that information at the pixel level and average it to census tracts.
+          Finally, we convert that value to a percentile relative to all other census tracts in a city.
+          Houston's Air Pollution Injustice Map currently displays the average NO<sub>2</sub> density in September 2018 and September 2019.
         </p>
+      </h2>
+        Demographic Data
+      </h2>
+      <p>
+        All Demographic data in Houston's Air Pollution Injustice Map comes from the US Census Bureau.
+        To quantify demographic data, we created a demographic index.
+        The demographic index reflects the average of the percent non-white residents and the percent low-income residents in each census tract
+        as a percentile relative to all other tracts in the city.
+      </p>
     </div>
     <script>
     $(document).ready(function(){
@@ -230,11 +294,20 @@
         eles[i].style.setProperty('--in-text-img-width', getElementProperty(width, 1000, 100 + '%', 30 + 'vw'));
       }
     }
+
     eles = document.getElementsByClassName('caption');
     if (eles.length > 0) {
       for (var i = 0; i < eles.length; i++) {
         eles[i].style.setProperty('--caption-width', getElementProperty(width, 1000, 100 + '%', 30 + 'vw'));
         eles[i].style.setProperty('--caption-padding-bottom', getElementProperty(width, 1000, 30 + 'px', 0 + 'px'));
+      }
+    }
+
+    eles = document.getElementsByClassName('central-element-sm');
+    if (eles.length > 0) {
+      for (var i = 0; i < eles.length; i++) {
+        eles[i].style.setProperty('--central-element-width', getElementProperty(width, 1000, 80 + '%', 50 + '%'));
+        eles[i].style.setProperty('--central-element-margin', getElementProperty(width, 1000, 10 + '%', 25 + '%'));
       }
     }
 
