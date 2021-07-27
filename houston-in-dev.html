@@ -644,7 +644,7 @@ crossorigin=""></script>
       } else {
         nhLayerIsOn = false;
       }
-
+      map.removeControl(img);
       img.addTo(map);
 
       if (hiddenLegends.includes(gridContainerID)) {
@@ -674,6 +674,7 @@ crossorigin=""></script>
 
       geojson = layer;
 
+      map.removeControl(img);
       img.addTo(map);
 
       if (hiddenLegends.includes(gridContainerID)) {
@@ -846,9 +847,9 @@ crossorigin=""></script>
     var grades = [1, 40, 99];
     //<div class='popup' onclick='popItUp(\"no2AxisPopup\")' style='bottom:5px; left:5px;'><img src='images/info.png' style='width:30px;height:30px;'></img><span class='popuptext' id='no2AxisPopup'><p><strong>Title: </strong></br>Description</p></span></div>
     //div.innerHTML += '<img src="images/no2dLegend.png" alt="Legend" style="width:300px;height:300px;">';
-    div.innerHTML += "<div class='xButton' onclick='xButton(\"gridContainer\", \"inline-grid\")' ><h2 style='top: -47px; left: -26px'>✕</h2></div><h3 class='axis'>Nitrogen Dioxide Percentile &#9432;</h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0],"") + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1],"") + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2],"") + "\" id:\"c3\" ></div>";
+    div.innerHTML += "<div class='xButton' onclick='xButton(\"gridContainer\", \"inline-grid\")' ><h2 style='top: -47px; left: -26px'>✕</h2></div><h3 class='axis'>Nitrogen Dioxide Percentile <span onclick=\"infoPop(no2AxisPop)\">&#9432;</span></h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0],"") + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1],"") + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2],"") + "\" id:\"c3\" ></div>";
     div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[0],"") + "\" id:\"a2\"></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[1],"") + "\" id:\"b2\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[2],"") + "\" id:\"c2\" ></div>";
-    div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0],"") + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1],"") + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2],"") + "\" id:\"c1\" ></div><h2 class='axis' >Socio-Demographic Index &#9432</h2>";
+    div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0],"") + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1],"") + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2],"") + "\" id:\"c1\" ></div><h2 class='axis' >Socio-Demographic Index <span onclick=\"infoPop(demAxisPop)\">&#9432;</span></h2>";
 
     var draggable = new L.Draggable(div);
     draggable.enable();
@@ -927,6 +928,24 @@ crossorigin=""></script>
       google.charts.load('current', {'packages':['corechart']});
       google.charts.setOnLoadCallback(drawChart);
   };
+
+  function infoPopUp(elementID) { // displays popup element
+    var popup = document.getElementById(elementID);
+    if (popup != null) popup.classList.toggle("show");
+  }
+
+  var tracker = 0;
+  var no2AxisPop = "Nitrogen Dioxide Percentile\n\nTROPOMI measures nitrogen dioxide in terms of vertical column density.\n\nWe take that information at the pixel level and average it to census tracts.\n\nFinally, we convert that value to a percentile relative to all other census tracts in a city. Houston's Air Pollution Injustice Map currently displays the average NO2 density in September 2018 and September 2019.";
+  var demAxisPop = "Socio-Demographic Index\n\nThe Socio-Demographic Index is the average of %low-income residents and %non-white residents in a census tract.\n\nThis quantity is expressed as a percentile relative to all other tracts in the city.\n\nAll demographic data is from the U.S. Census Bureau."
+  function infoPop(text) {
+    if (tracker == 1) {
+      alert(text);
+      tracker = 0;
+    }
+    else {
+      tracker++;
+    }
+  }
 
   function drawChart() {
 
@@ -1270,9 +1289,9 @@ crossorigin=""></script>
       var grades = [1, 40, 90];
       //<div class='popup' onclick='popItUp(\"no2AxisPopup\")' style='bottom:5px; left:5px;' ><img src='images/info.png' style='width:30px;height:30px;'></img><span class='popuptext' id='no2AxisPopup'><p><strong>Title: </strong></br>Description</p></span></div>
       //div.innerHTML += '<img src="images/no2dLegend.png" alt="Legend" style="width:300px;height:300px;">';
-      div.innerHTML += "<div class='xButton' onclick='xButton(\"gridContainer\", \"inline-grid\")' ><h2>✕</h2></div><h3 class='axis' >Nitrogen Dioxide Percentile &#9432</h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0],"") + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1],"") + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2],"") + "\" id:\"c3\" ></div>";
+      div.innerHTML += "<div class='xButton' onclick='xButton(\"gridContainer\", \"inline-grid\")' ><h2>✕</h2></div><h3 class='axis' >Nitrogen Dioxide Percentile <span onclick=\"infoPop(no2AxisPop)\">&#9432;</span></h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0],"") + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1],"") + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2],"") + "\" id:\"c3\" ></div>";
       div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[0],"") + "\" id:\"a2\"></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[1],"") + "\" id:\"b2\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[2],"") + "\" id:\"c2\" ></div>";
-      div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0],"") + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1],"") + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2],"") + "\" id:\"c1\" ></div><h2 class='axis' >Socio-Demographic Index &#9432</h2>";
+      div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0],"") + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1],"") + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2],"") + "\" id:\"c1\" ></div><h2 class='axis' >Socio-Demographic Index <span onclick=\"infoPop(demAxisPop)\">&#9432;</span></h2>";
 
       //<button type=\"button\" class=\"collapsible\" id=\"collapse1\" onclick=\"toggleLegend()\"  >
 
@@ -1317,6 +1336,7 @@ crossorigin=""></script>
         changeButtonSelection("button2", "button1");
       }
 
+      map.removeControl(img);
       updateImg();
       img.addTo(map);
       adaptToScreen();
