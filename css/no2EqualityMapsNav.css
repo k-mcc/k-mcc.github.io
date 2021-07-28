@@ -138,7 +138,7 @@ body { margin: 0; padding: 0; }
   left: 0px;
   position: relative;
   border-left: 3vw solid #FFFFFF;
-  border-bottom: 3vw solid #FFFFFF;
+  border-bottom: 100px solid #FFFFFF;
   border-radius: 3px;
   box-shadow: 0 0 15px rgba(0,0,0,0.2);
 }
@@ -154,6 +154,7 @@ body { margin: 0; padding: 0; }
   padding: var(--grid-item-padding, 2.8vw);
   text-align: center;
 }
+
 .grid-titem {
   border: 1px solid #FFFFFF;
   text-align: center;
@@ -185,6 +186,17 @@ body { margin: 0; padding: 0; }
   right: 0;
   background: none;
   font-size: var(--grid-container-font-size, 1.3vw);
+}
+.outline-key {
+  padding: 0 1vh;
+  margin: 0 1vh 0 0;
+  font: 14px/16px 'Poppins', Helvetica, sans-serif;
+  text-align: left;
+  position: absolute;
+  bottom: -100px;
+  font-size: var(--grid-container-font-size, 1.3vw);
+  left: -2vw;
+  line-height: normal;
 }
 
 .col-xs-12 h1 {
@@ -339,7 +351,7 @@ h4 {
   z-index: 850;
   font: 14px/16px 'Poppins', Helvetica, sans-serif;
   color: #FF0000;
-  font-size: 2vw;
+  font-size: 1.5vw; /*adaptToScreen!*/
 }
 
 .popup {
@@ -877,6 +889,8 @@ h4 {
   font: 14px/16px 'Poppins', Helvetica, sans-serif;
   font-size: 20px;
   padding: 12px 16px;
+  line-height: normal;
+  cursor: pointer;
 }
 
 /*.activated:hover, .activated:focus {
@@ -899,4 +913,8 @@ h4 {
     bottom: 0px;
     position: absolute;
     width: 100%;
+}
+
+.poppins {
+  font: 14px/16px 'Poppins', Helvetica, sans-serif;
 }

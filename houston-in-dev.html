@@ -845,11 +845,13 @@ crossorigin=""></script>
     div.style.display = "inline-grid";
     div.style.zIndex = 200;
     var grades = [1, 40, 99];
-    //<div class='popup' onclick='popItUp(\"no2AxisPopup\")' style='bottom:5px; left:5px;'><img src='images/info.png' style='width:30px;height:30px;'></img><span class='popuptext' id='no2AxisPopup'><p><strong>Title: </strong></br>Description</p></span></div>
-    //div.innerHTML += '<img src="images/no2dLegend.png" alt="Legend" style="width:300px;height:300px;">';
+
     div.innerHTML += "<div class='xButton' onclick='xButton(\"gridContainer\", \"inline-grid\")' ><h2 style='top: -47px; left: -26px'>✕</h2></div><h3 class='axis'>Nitrogen Dioxide Percentile <span onclick=\"infoPop(no2AxisPop)\">&#9432;</span></h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0],"") + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1],"") + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2],"") + "\" id:\"c3\" ></div>";
     div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[0],"") + "\" id:\"a2\"></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[1],"") + "\" id:\"b2\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[2],"") + "\" id:\"c2\" ></div>";
     div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0],"") + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1],"") + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2],"") + "\" id:\"c1\" ></div><h2 class='axis' >Socio-Demographic Index <span onclick=\"infoPop(demAxisPop)\">&#9432;</span></h2>";
+
+    //div.innerHTML += "<div style='background: #000; color: " + colors[18] + ";'>&#9634;</div>";
+    div.innerHTML += "<span class='outline-key'><span style='color: " + colors[18] + "; background-color: " + colors[18] + "; padding: 2px; border: 2px solid black;'>&#9634;</span> The 25 tracts with the highest combined scores are outlined in " + outlineColorName + ".</span>";
 
     var draggable = new L.Draggable(div);
     draggable.enable();
@@ -870,13 +872,6 @@ crossorigin=""></script>
 
   info.update = function (props) {
     this._div.innerHTML = '<h2>NO<sub>2</sub> Equality Index</h2>' +  (props ?
-        /*'<h4>NO<sub>2</sub> Percentile: ' + props.no2Perc + '</h4><br /><h4>Average NO<sub>2</sub> Vertical Column Density: ' + expo(props.no2Actual, 4) + ' molecules/cm<sup>2</sup></h4></br><h4>Socio-Demographic Percentile: ' + props.demographicIndex + '</h4><br /><h4>Tract #' + props.TRACT + '</h4></br><h4> $' + numberWithCommas(props.medianHHIncome) + '</h4></br>'
-        : 'Click on a census tract');*/
-
-        /*'</br><div style="column-count:2;"><h4 style="font-size:3em; color:' + adjustColor(props.no2Perc, 0) + ';column-span: 1;bottom:0px;padding:10px;">' + props.no2Perc + '</h4><h4 style="font-size:3em; color:' + adjustColor(0, props.demographicIndex) + ';column-span: 1;top:0;padding:0px;">' + props.demographicIndex + '</h4></div><h4>NO<sub>2</sub> Percentile:</h4></br><h4>Average NO<sub>2</sub> Vertical Column Density: ' + expo(props.no2Actual, 4) + ' molecules/cm<sup>2</sup></h4></br><h4>Socio-Demographic Percentile: <h4 style="font-size:3em; color:' + adjustColor(0, props.demographicIndex) + ';">' + props.demographicIndex + '</h4><br /><h4>Tract #' + props.TRACT + '</h4></br><h4> $' + numberWithCommas(props.medianHHIncome) + '</h4></br>'
-        : 'Click on a census tract');
-        <h4 style="margin-top: 50px;"><strong>Average NO<sub>2</sub> Vertical Column Density:</strong> ' + expo(props.no2Actual, 4) + ' molecules/cm<sup>2</sup></h4>
-        */
 
         '<h4 style="text-align: center;">Tract #' + props.TRACT + '</h4>' +
         '</br><div style="display: inline-grid;grid-template-columns: auto auto; height:5vh;"><div class="col-xs-12" style="justify-content: center;"><h1 style="color:' + adjustColor(props.no2Perc, 0) + ';">' + props.no2Perc + '</br></h1><h4>NO<sub>2</sub> Percentile</h4></div><div class="col-xs-12" style="justify-content: center;"><h1 style="color:' + adjustColor(0, props.demographicIndex) + ';">' + props.demographicIndex + '</h1><h4>Socio-Demographic Percentile</h4></div></div>' +
@@ -886,28 +881,7 @@ crossorigin=""></script>
         '</br></br>'
         : 'Click on a census tract');
 
-        //this._div.innerHTML += '<br /><br /><br /><br /><br /><br /><div id="infoBox" style="height: 400px;" ><br /></div>';
         this._div.innerHTML += '<div id="piechart" style="left:0px;margin-left: 0px; padding: 0px;margin-top:100px;height: 300px; width: 100%;"></div>';
-        /*var data = [
-            {x: "American Indian/Alaska Native", value: (props ? props.popNativeAmer : 0)},
-            {x: "Asian", value: (props ? props.popAsian : 0)},
-            {x: "Black or African American", value: (props ? props.popBlackOrAfrAmer : 0)},
-            {x: "Hispanic or Latino", value: (props ? props.popHispanic : 0)},
-            {x: "White (Non-Hispanic)", value: (props ? props.popWhite : 0)}
-        ];*/
-
-        //this._div.innerHTML += (props ? props.pWhite : 'hi');
-
-        // create the chart
-        /*var chart = anychart.pie();
-        // add the data
-        chart.data(data);
-        //if (explodedPieSect != 0) chart.select([explodedPieSect]);
-        // display the chart in the container
-        chart.container('infoBox');
-        chart.draw();
-        chart.legend().itemsLayout("vertical");
-        //chart.sort("desc");*/
 
       pieDataArr = [];
       pieDataArr.push((props ? props.popNativeAmer : 0));
@@ -1139,7 +1113,7 @@ crossorigin=""></script>
     function getOutlineWeight(rank, suggestedWeight) {
       if (!(rank == null)) {
         if (singleLayerOn != "") return suggestedWeight;
-        return rank <= 25  ? suggestedWeight+3:
+        return rank <= 25  ? suggestedWeight: //+3
                              suggestedWeight;
       }
       else return suggestedWeight;
@@ -1215,7 +1189,7 @@ crossorigin=""></script>
       //info.update();
     }
 
-    var zoomableFeature;
+    var zoomableFeature = "";
     var previousZoom = "";
     function zoomToFeature(e) {
         var layer = e.target;
@@ -1224,16 +1198,6 @@ crossorigin=""></script>
         zoomableFeature = e.target;
 
         e.target.bindPopup("<a onclick='zoomIntoFeature()' style='text-decoration: underline; cursor: pointer; font: 14px/16px 'Poppins', Helvetica, sans-serif; color: #808080;'>See this area</a>");
-        e.target.bindPopup("<a onclick='zoomIntoFeature()' style='text-decoration: underline; cursor: pointer; font: 14px/16px 'Poppins', Helvetica, sans-serif; color: #808080;'>See this area</a>");
-
-        //map.fitBounds(e.target.getBounds(), {top: 50000000000000000000000, bottom: 50000000000000000000000, left: 50000000000000000000000, right: 50000000000000000000000});
-        //map.fitBounds(bounds, {padding: []})
-        /*if (zoom == true) {
-          //var latlng = layer.getLatLng();
-          var zoomLevel = 14;
-          map.setView(e.latlng, zoomLevel);
-        //map.fitBounds(e.target.getBounds(), {padding: [100, 100]});
-      }*/
 
         zoom = true;
 
@@ -1264,8 +1228,11 @@ crossorigin=""></script>
       if (previousZoom != "" && previousZoom != zoomableFeature) {
         previousZoom.unbindPopup();
       }
-      previousZoom = zoomableFeature;
-      map.fitBounds(zoomableFeature.getBounds(), {padding: [100, 100]});
+
+      if (zoomableFeature != "") {
+        previousZoom = zoomableFeature;
+        map.fitBounds(zoomableFeature.getBounds(), {padding: [100, 100]});
+      }
     }
 
     function onEachFeature(feature, layer) {
@@ -1288,13 +1255,12 @@ crossorigin=""></script>
       var div = L.DomUtil.create('div', 'grid-container');
       div.id = gridContainerID;
       var grades = [1, 40, 90];
-      //<div class='popup' onclick='popItUp(\"no2AxisPopup\")' style='bottom:5px; left:5px;' ><img src='images/info.png' style='width:30px;height:30px;'></img><span class='popuptext' id='no2AxisPopup'><p><strong>Title: </strong></br>Description</p></span></div>
-      //div.innerHTML += '<img src="images/no2dLegend.png" alt="Legend" style="width:300px;height:300px;">';
+
       div.innerHTML += "<div class='xButton' onclick='xButton(\"gridContainer\", \"inline-grid\")' ><h2>✕</h2></div><h3 class='axis' >Nitrogen Dioxide Percentile <span onclick=\"infoPop(no2AxisPop)\">&#9432;</span></h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0],"") + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1],"") + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2],"") + "\" id:\"c3\" ></div>";
       div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[0],"") + "\" id:\"a2\"></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[1],"") + "\" id:\"b2\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[2],"") + "\" id:\"c2\" ></div>";
       div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0],"") + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1],"") + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2],"") + "\" id:\"c1\" ></div><h2 class='axis' >Socio-Demographic Index <span onclick=\"infoPop(demAxisPop)\">&#9432;</span></h2>";
 
-      //<button type=\"button\" class=\"collapsible\" id=\"collapse1\" onclick=\"toggleLegend()\"  >
+      div.innerHTML += "<div style='color: " + colors[18] + ";'>&#9634;</div>";
 
       div.style.display = "inline-grid";
 
@@ -1304,18 +1270,7 @@ crossorigin=""></script>
       return div;
     }
 
-    /*img.onAdd = function (map) {
-      var div = L.DomUtil.create('div', 'grid-container');
-      div.id = "gridContainer";
-      grades = [1, 40, 80];
-      //div.innerHTML += '<img src="images/no2dLegend.png" alt="Legend" style="width:300px;height:300px;">';
-      div.innerHTML += "<h3 class='axis'>Nitrogen Dioxide Index</h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0]) + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1]) + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2]) + "\" id:\"c3\" ></div>";
-      div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[0]) + "\" id:\"a2\"></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[1]) + "\" id:\"b2\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[2]) + "\" id:\"c2\" ></div>";
-      div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0]) + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1]) + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2]) + "\" id:\"c1\" ></div><h2 class='axis' >Demographic Index</h2>";
-      var draggable = new L.Draggable(div);
-      draggable.enable();
-      return div;
-    }//"#f3f3f3 url('img_tree.png') no-repeat right top";*/
+    var outlineColorName = "yellow";
 
     function setPalette(num) {
 
@@ -1330,11 +1285,13 @@ crossorigin=""></script>
         colors = paletteA;
         //select button1
         changeButtonSelection("button1", "button2");
+        outlineColorName = "yellow";
       }
       if (num == 2) {
         colors = paletteB;
         //select button2
         changeButtonSelection("button2", "button1");
+        outlineColorName = "green";
       }
 
       map.removeControl(img);
@@ -1449,7 +1406,7 @@ crossorigin=""></script>
         fillColor: '#000000',
         color: '#FFFFFF',
         weight: 1,
-        opacity: 0.5,
+        opacity: 1,
         fillOpacity: 1,
         radius: r
     });
