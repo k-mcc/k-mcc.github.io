@@ -1138,12 +1138,17 @@ document.addEventListener(
       else return suggestedColor;
     }
     function getOutlineWeight(rank, suggestedWeight) {
-      if (!(rank == null)) {
-        if (singleLayerOn != "") return suggestedWeight;
-        return rank <= 25  ? suggestedWeight: //+3
-                             suggestedWeight;
+      if (currentOpacity == "outline") {
+        return suggestedWeight;
       }
-      else return suggestedWeight;
+      if (currentOpacity == "fill") {
+        if (!(rank == null)) {
+          if (singleLayerOn != "") return suggestedWeight;
+          return rank <= 25  ? suggestedWeight + 3 :
+                               suggestedWeight;
+        }
+        else return suggestedWeight;
+      }
     }
 
     function getOutlineOpacity(rank) {
@@ -1190,22 +1195,44 @@ document.addEventListener(
 
         if ((layer.feature.properties.GEOID) != (clickedTract)) { //if not a clicked tract
 
+          var setColor;
+          if (colorVal == "") {
+            setColor = getColor(layer.feature.properties.no2Perc, layer.feature.properties.demographicIndex, ((layer.feature.properties[singleVariable] / layer.feature.properties.popTotal)*100));
+          }
+
           layer.setStyle({
-            weight: 5,
-            color: getOutlineColor(layer.feature.properties.comboRank, getColor(layer.feature.properties.no2Perc, layer.feature.properties.demographicIndex, ((layer.feature.properties[singleVariable] / layer.feature.properties.popTotal)*100))),
+            weight: getHighlightOutlineWeight(layer.feature.properties.comboRank, weightVal),
+            color: getColorRanked(layer.feature.properties.comboRank, setColor),
+            opacity: 1,
             //fill: false
             //fillColor: '#FFFFFF'
             fillOpacity: 0.4
           });
-          /*if (layer.feature.properties.comboRank <= 15) {
-            if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-                layer.bringToFront();
-            }
-          }*/
 
         }
         adaptToScreen();
         info.update(layer.feature.properties);
+
+        if (!sourcesIsOn) {
+          if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+              layer.bringToFront();
+          }
+        }
+
+    }
+
+    function getHighlightOutlineWeight(rank, suggestedWeight) {
+      if (currentOpacity == "outline") {
+        return suggestedWeight + 3;
+      }
+      if (currentOpacity == "fill") {
+        if (!(rank == null)) {
+          if (singleLayerOn != "") return suggestedWeight;
+          return rank <= 25  ? suggestedWeight + 3 :
+                               suggestedWeight;
+        }
+        else return suggestedWeight;
+      }
     }
 
     function resetHighlight(e) {
@@ -1233,6 +1260,7 @@ document.addEventListener(
           color: getColor(layer.feature.properties.no2Perc, layer.feature.properties.demographicIndex, ((layer.feature.properties[singleVariable] / layer.feature.properties.popTotal)*100)),
           //fill: false
           //fillColor: '#FFFFFF'
+          opacity: 1,
           fillOpacity: 0
         });
 
@@ -1248,6 +1276,12 @@ document.addEventListener(
         if ((previousTarget != "") && (previousTarget != e)) resetHighlight(previousTarget);
 
         previousTarget = e;
+
+        if (!sourcesIsOn) {
+          if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+              layer.bringToFront();
+          }
+        }
 
     }
 
