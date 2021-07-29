@@ -153,6 +153,7 @@ crossorigin=""></script>
 
 
   <div id="map"></div>
+
   <div id="myModal" class="modal">
 
     <!-- Modal content -->
@@ -165,6 +166,8 @@ crossorigin=""></script>
     </div>
 
   </div>
+
+
 <script>
 
   function adaptToScreen() {
@@ -511,57 +514,20 @@ crossorigin=""></script>
     }
   }
 
-/*  function returnToBivariate(specialCase) {
-    if (singleLayerOn != "") {
-      map.removeLayer(univariateChoropleth);
-      document.getElementById(propName + "Btn").style.background = "#FFFFFF";
-      document.getElementById(propName + "Btn").style.color = "#000000";
-      singleLayerOn = "";
-    }
-  }*/
-
-  /*function load() {
-    setTimeout(
-    function() {
-      addChoropleth(houName);
-      map.options.minZoom = 10;
-      map.options.maxZoom = 30;
-      //map.setView([29.7604, -95.3698], 11);
-      countCityClicks++;
-      map.flyTo([29.7604, -95.3698], 11, {duration: 1, easeLinearity: 0.2});
-    }, 2000);
-  }*/
-  //var popped = [];
-  var popped = false;
-  function popItUp(elementID) { // displays popup element
-    var element = document.getElementById(elementID);
-    if (element != null) {
-      if (!popped) {
-        pop(element);
-        popped = true;
-      }
-      else {
-        unpop(element);
-        popped = false;
-      }
-      /*if (! (popped.includes(elementID)) ) {
-        popped.push(elementID);
-        popup.style.display = 'block';
-      }
-      else {
-        var index = popped.indexOf(elementID);
-        popped.splice(index, 1);
-        popup.style.display = 'none';
-      }*/
-    }
-    //if (popup != null) popup.style.display = "block";
-  }
-
-  function pop(ele){
+  function pop(id){
+    var ele = document.getElementById(id);
     ele.style.display = 'block';
   }
 
-  function unpop(ele){
+  var nextDispPop1 = "block";
+  function togglePop(id){
+    var ele = document.getElementById(id);
+    ele.style.display = "block";
+    //nextDispPop1 = "none";
+  }
+
+  function unpop(id){
+    var ele = document.getElementById(id);
     ele.style.display = 'none';
   }
 
@@ -841,6 +807,11 @@ crossorigin=""></script>
 
   }
 
+  function poppy() {
+    var popup = document.getElementById("myPopup");
+    popup.classList.toggle("shown");
+  }
+
   // Joshua Stevens
   //var paletteA = ['#E8E8E8', '#ACE4E4', '#5AC8C8', '#DFB0D6', '#A5ADD3', '#5698B9', '#BE64AC', '#8C62AA', '#3B4994'];     // sq1                                   sq2                                  sq3                                 top10
   var paletteA = ['#E8E8E8', '#ACE4E4', '#5AC8C8', '#DFB0D6', '#A5ADD3', '#5698B9', '#BE64AC', '#8C62AA', '#3B4994',       '#D79DCC', '#CF8AC1', '#C677B7',        '#9F9AC9', '#9988BF', '#9275B4',      '#4F84B0', '#4971A7', '#425D9D',      '#FFFF00'];
@@ -874,7 +845,7 @@ crossorigin=""></script>
     div.style.zIndex = 200;
     var grades = [1, 40, 99];
 
-    div.innerHTML += "<div class='xButton' onclick='xButton(\"gridContainer\", \"inline-grid\")' ><h2 style='top: -47px; left: -26px'>✕</h2></div><h3 class='axis'>Nitrogen Dioxide Percentile <span class='popup' id='Idiot'><span class='popupBtn' style='visibility: visible;'>🖲</span><p><strong>Combined Index Score: </strong></br>The average.</p></span></h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0],"") + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1],"") + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2],"") + "\" id:\"c3\" ></div>";
+    div.innerHTML += "<div class='xButton' onclick='xButton(\"gridContainer\", \"inline-grid\")' ><h2 style='top: -47px; left: -26px'>✕</h2></div><h3 class='axis'>Nitrogen Dioxide Percentile <span onclick='showInfoPop(\"infopop1\")'>O</span></h3><span id='infopop1' class='infopop' style='left: -20%; bottom: 5%;'><p>Hello and welcome to the info box popup. Hope you like it.</p><btn class='infopopX' onclick='hideInfoPop(\"infopop1\")'>&#x2715;</btn></span><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0],"") + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1],"") + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2],"") + "\" id:\"c3\" ></div>";
     div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[0],"") + "\" id:\"a2\"></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[1],"") + "\" id:\"b2\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[2],"") + "\" id:\"c2\" ></div>";
     div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0],"") + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1],"") + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2],"") + "\" id:\"c1\" ></div><h2 class='axis' >Socio-Demographic Index <span onclick=\"infoPop(demAxisPop)\">&#9432;</span></h2>";
 
@@ -947,6 +918,14 @@ crossorigin=""></script>
     else {
       tracker++;
     }
+  }
+  function showInfoPop(id) {
+    var ele = document.getElementById(id);
+    ele.style.display = "block";
+  }
+  function hideInfoPop(id) {
+    var ele = document.getElementById(id);
+    ele.style.display = "none";
   }
 
   function drawChart() {
@@ -1284,7 +1263,7 @@ crossorigin=""></script>
       div.id = gridContainerID;
       var grades = [1, 40, 90];
 
-      div.innerHTML += "<div class='xButton' onclick='xButton(\"gridContainer\", \"inline-grid\")' ><h2>✕</h2></div><h3 class='axis' >Nitrogen Dioxide Percentile <span onclick='popItUp(\"Idiot\")'><p>HI</p><div class='popupText' id='Idiot'><p><strong>Combined Index Score: </strong></br>The average.</p></div></span></h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0],"") + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1],"") + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2],"") + "\" id:\"c3\" ></div>";
+      div.innerHTML += "<div class='xButton' onclick='xButton(\"gridContainer\", \"inline-grid\")' ><h2>✕</h2></div><h3 class='axis' >Nitrogen Dioxide Percentile</h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0],"") + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1],"") + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2],"") + "\" id:\"c3\" ></div>";
       div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[0],"") + "\" id:\"a2\"></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[1],"") + "\" id:\"b2\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[2],"") + "\" id:\"c2\" ></div>";
       div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0],"") + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1],"") + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2],"") + "\" id:\"c1\" ></div><h2 class='axis' >Socio-Demographic Index <span onclick=\"infoPop(demAxisPop)\">&#9432;</span></h2>";
 

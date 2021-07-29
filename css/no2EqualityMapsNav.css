@@ -354,62 +354,31 @@ h4 {
   font-size: 1.5vw; /*adaptToScreen!*/
 }
 
-.popupBtn {
-  position: relative;
-  display: inline-block;
-  cursor: pointer;
-  z-index: 1003;
-  visibility: hidden;
-}
-.popup:hover {
-  background-color: #212121;
-  color: #ffffff;
-  text-align: center;
-  transform: rotate(-90deg);
-  border-radius: 6px;
-  border: 2px solid #212121;
-  padding: 8px 0;
-  position: absolute;
-  z-index: 1003;
-  bottom: 125%;
-  margin-left: -177px;
-  visibility: visible;
-}
-
-/* The actual popup (appears on top) */
-.popuptext {
-  /*visibility: hidden;*/
+.infopop {
+  background-color: rgba(255,255,255,0.9);
+  color: black;
+  border: 2px solid black;
+  border-radius: 2px;
   display: none;
-  background-color: #212121;
-  color: #ffffff;
-  text-align: center;
-  border-radius: 6px;
-  border: 2px solid #212121;
-  padding: 8px 0;
+  z-index: 1006;
   position: absolute;
-  z-index: 1003;
-  bottom: 125%;
-  /*box-shadow: 0 0 15px rgba(0,0,0,0.2);*/
-  /*left: 50%;*/
-  margin-left: -177px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+  font-size: 20px;
+  padding: 20px;
 }
 
-/* Toggle this class when clicking on the popup container (hide and show the popup) */
-.popuptext .show {
-  display: block;
-  -webkit-animation: fadeIn 0.5s;
-  animation: fadeIn 0.5s;
+.infopopX {
+  color: black;
+  top: 2px;
+  right: 10px;
+  position: absolute;
+  font-size: 24px;
+  cursor: pointer;
 }
 
-/* Add animation (fade in the popup) */
-@-webkit-keyframes fadeIn {
-  from {opacity: 0;}
-  to {opacity: 1;}
-}
-
-@keyframes fadeIn {
-  from {opacity: 0;}
-  to {opacity:1 ;}
+.infopopX:hover {
+  color: grey;
+  outline: red;
 }
 
 .showLegendButton {
