@@ -496,6 +496,8 @@ h4 {
   font-size: 20px;
   line-height: normal;
   cursor: pointer;
+  width: 200px;
+
 }
 .chorOption:hover {
   background-color: #ddd;
