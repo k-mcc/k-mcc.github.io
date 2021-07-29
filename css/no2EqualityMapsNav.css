@@ -148,6 +148,9 @@ body { margin: 0; padding: 0; }
   height: 30vw;
 }
 
+.xAxis {}
+.yAxis {}
+
 .grid-item {
   background-color: #FFFFFF;
   border: 0.1vw solid #FFFFFF;

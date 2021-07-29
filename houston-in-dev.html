@@ -845,9 +845,9 @@ crossorigin=""></script>
     div.style.zIndex = 200;
     var grades = [1, 40, 99];
 
-    div.innerHTML += "<div class='xButton' onclick='xButton(\"gridContainer\", \"inline-grid\")' ><h2 style='top: -47px; left: -26px'>✕</h2></div><h3 class='axis'>Nitrogen Dioxide Percentile <span onclick='showInfoPop(\"infopop1\")'>O</span></h3><span id='infopop1' class='infopop' style='left: -20%; bottom: 5%;'><p>Hello and welcome to the info box popup. Hope you like it.</p><btn class='infopopX' onclick='hideInfoPop(\"infopop1\")'>&#x2715;</btn></span><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0],"") + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1],"") + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2],"") + "\" id:\"c3\" ></div>";
+    div.innerHTML += "<div class='xButton' onclick='xButton(\"gridContainer\", \"inline-grid\")' ><h2 style='top: -47px; left: -26px'>✕</h2></div><h3 class='yAxis'>Nitrogen Dioxide Percentile <span onclick='showInfoPop(\"infopop1\")'>&#9432;</span></h3><span id='infopop1' class='infopop' style='left: -20%; bottom: 5%; width: 200%;'><p>" + no2AxisPop + "</p><btn class='infopopX' onclick='hideInfoPop(\"infopop1\")'>&#x2715;</btn></span><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0],"") + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1],"") + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2],"") + "\" id:\"c3\" ></div>";
     div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[0],"") + "\" id:\"a2\"></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[1],"") + "\" id:\"b2\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[2],"") + "\" id:\"c2\" ></div>";
-    div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0],"") + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1],"") + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2],"") + "\" id:\"c1\" ></div><h2 class='axis' >Socio-Demographic Index <span onclick=\"infoPop(demAxisPop)\">&#9432;</span></h2>";
+    div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0],"") + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1],"") + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2],"") + "\" id:\"c1\" ></div><h2 class='xAxis' >Socio-Demographic Index <span onclick='showInfoPop(\"infopop2\")'>&#9432;</span></h3><span id='infopop2' class='infopop' style='left: -20%; bottom: 5%; width: 200%;'><p>" + demAxisPop + "</p><btn class='infopopX' onclick='hideInfoPop(\"infopop2\")'>&#x2715;</btn></span></h2>";
 
     //div.innerHTML += "<div style='background: #000; color: " + colors[18] + ";'>&#9634;</div>";
     div.innerHTML += "<span class='outline-key'><span style='color: " + colors[18] + "; background-color: " + colors[18] + "; padding: 2px; border: 2px solid black;'>&#9634;</span> The 25 tracts with the highest combined scores are outlined in " + outlineColorName + ".</span>";
@@ -907,9 +907,29 @@ crossorigin=""></script>
     if (popup != null) popup.classList.toggle("show");
   }
 
+document.addEventListener(
+  "click",
+  function(event) {
+    // If user either clicks X button OR clicks outside the modal window, then close modal by calling closeModal()
+    if (
+      !event.target.closest(".yAxis") &&
+      !event.target.closest(".infopop")
+    ) {
+      hideInfoPop("infopop1");
+    }
+    if (
+      !event.target.closest(".xAxis") &&
+      !event.target.closest(".infopop")
+    ) {
+      hideInfoPop("infopop2");
+    }
+  },
+  false
+);
+
   var tracker = 0;
-  var no2AxisPop = "Nitrogen Dioxide Percentile\n\nTROPOMI measures nitrogen dioxide in terms of vertical column density.\n\nWe take that information at the pixel level and average it to census tracts.\n\nFinally, we convert that value to a percentile relative to all other census tracts in a city. Houston's Air Pollution Injustice Map currently displays the average NO2 density in September 2018 and September 2019.";
-  var demAxisPop = "Socio-Demographic Index\n\nThe Socio-Demographic Index is the average of %low-income residents and %non-white residents in a census tract.\n\nThis quantity is expressed as a percentile relative to all other tracts in the city.\n\nAll demographic data is from the U.S. Census Bureau."
+  var no2AxisPop = "<strong>Nitrogen Dioxide Percentile</strong></br>The average vertical column density of nitrogen dioxide in each census tract as a percentile.</br><a href='about-the-data.html' target='_blank' rel='noopener noreferrer'>About the Data</a>";
+  var demAxisPop = "<strong>Socio-Demographic Index</strong></br>The average of %low-income residents and %non-white residents in a census tract. Expressed as a percentile relative to all other tracts in Houston.</br><a href='about-the-data.html' target='_blank' rel='noopener noreferrer'>About the Data</a>"
   function infoPop(text) {
     if (tracker == 1) {
       alert(text);
@@ -1263,9 +1283,9 @@ crossorigin=""></script>
       div.id = gridContainerID;
       var grades = [1, 40, 90];
 
-      div.innerHTML += "<div class='xButton' onclick='xButton(\"gridContainer\", \"inline-grid\")' ><h2>✕</h2></div><h3 class='axis' >Nitrogen Dioxide Percentile</h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0],"") + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1],"") + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2],"") + "\" id:\"c3\" ></div>";
+      div.innerHTML += "<div class='xButton' onclick='xButton(\"gridContainer\", \"inline-grid\")' ><h2>✕</h2></div><h3 class='yAxis' >Nitrogen Dioxide Percentile</h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0],"") + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1],"") + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2],"") + "\" id:\"c3\" ></div>";
       div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[0],"") + "\" id:\"a2\"></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[1],"") + "\" id:\"b2\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[2],"") + "\" id:\"c2\" ></div>";
-      div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0],"") + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1],"") + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2],"") + "\" id:\"c1\" ></div><h2 class='axis' >Socio-Demographic Index <span onclick=\"infoPop(demAxisPop)\">&#9432;</span></h2>";
+      div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0],"") + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1],"") + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2],"") + "\" id:\"c1\" ></div><h2 class='xAxis' >Socio-Demographic Index</h2>";
 
       div.innerHTML += "<div style='color: " + colors[18] + ";'>&#9634;</div>";
 
