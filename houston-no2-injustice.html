@@ -1633,36 +1633,36 @@ crossorigin=""></script>
     }
 
     function getColorRanked(rank, suggestedColor) {
-      if (!(rank == null)) {
+      /*if (!(rank == null)) {
         if (singleLayerOn != "") return suggestedColor;
         return rank <= 25  ? colors[18] :
                           suggestedColor;
       }
-      else return suggestedColor;
+      else */return suggestedColor;
     }
 
     function getOutlineColor(rank, suggestedColor) {
-      if (!(rank == null)) {
+      /*if (!(rank == null)) {
         return rank <= 25  ? colors[18] :
                           suggestedColor;
       }
-      else return suggestedColor;
+      else */return suggestedColor;
     }
     function getOutlineWeight(rank, suggestedWeight) {
-      if (!(rank == null)) {
+      /*if (!(rank == null)) {
         if (singleLayerOn != "") return suggestedWeight;
         return rank <= 25  ? suggestedWeight+3:
                              suggestedWeight;
       }
-      else return suggestedWeight;
+      else */return suggestedWeight;
     }
 
     function getOutlineOpacity(rank) {
-      if (!(rank == null)) {
+      /*if (!(rank == null)) {
         return rank <= 25  ? 1 :
                           0.5;
       }
-      else return 0.5;
+      else */return 0.5;
     }
 
     var fillOpacityVal;

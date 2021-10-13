@@ -1124,16 +1124,18 @@ document.addEventListener(
     function getColorRanked(rank, suggestedColor) {
       if (!(rank == null)) {
         if (singleLayerOn != "") return suggestedColor;
-        return rank <= 25  ? colors[18] :
-                          suggestedColor;
+        //return rank <= 25  ? colors[18] :
+        //                  suggestedColor;
+        return suggestedColor;
       }
       else return suggestedColor;
     }
 
     function getOutlineColor(rank, suggestedColor) {
       if (!(rank == null)) {
-        return rank <= 25  ? colors[18] :
-                          suggestedColor;
+        /*return rank <= 25  ? colors[18] :
+                          suggestedColor;*/
+        return suggestedColor;
       }
       else return suggestedColor;
     }
@@ -1144,8 +1146,9 @@ document.addEventListener(
       if (currentOpacity == "fill") {
         if (!(rank == null)) {
           if (singleLayerOn != "") return suggestedWeight;
-          return rank <= 25  ? suggestedWeight + 3 :
-                               suggestedWeight;
+          //return rank <= 25  ? suggestedWeight + 3 :
+          //                     suggestedWeight;
+          return suggestedWeight;
         }
         else return suggestedWeight;
       }
@@ -1153,8 +1156,9 @@ document.addEventListener(
 
     function getOutlineOpacity(rank) {
       if (!(rank == null)) {
-        return rank <= 25  ? 1 :
-                          0.5;
+        //return rank <= 25  ? 1 :
+        //                  0.5;
+        return 0.5;
       }
       else return 0.5;
     }
