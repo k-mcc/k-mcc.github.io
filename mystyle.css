@@ -1,46 +1,43 @@
-/*=======Button 6============= */
-.btn6{
-  border:1px solid transparent;
-   -webkit-transition: all 0.4s cubic-bezier(.5, .24, 0, 1);
-  transition: all 0.4s cubic-bezier(.5, .24, 0, 1);
+/* CSS */
+.button-28 {
+  appearance: none;
+  background-color: transparent;
+  border: 2px solid #1A1A1A;
+  border-radius: 15px;
+  box-sizing: border-box;
+  color: #3B3B3B;
+  cursor: pointer;
+  display: inline-block;
+  font-family: Roobert,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+  font-size: 16px;
+  font-weight: 600;
+  line-height: normal;
+  margin: 0;
+  min-height: 60px;
+  min-width: 0;
+  outline: none;
+  padding: 16px 24px;
+  text-align: center;
+  text-decoration: none;
+  transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  will-change: transform;
 }
 
-.btn6::before {
-  content: '';
-  position: absolute;
-  left: 0px;
-  bottom:0px;
-  z-index:-1;
-  width: 0%;
-  height:1px;
-  background: #6098FF;
-  box-shadow: inset 0px 0px 0px #6098FF;
-  display: block;
-  -webkit-transition: all 0.4s cubic-bezier(.5, .24, 0, 1);
-  transition: all 0.4s cubic-bezier(.5, .24, 0, 1)
+.button-28:disabled {
+  pointer-events: none;
 }
 
-.btn6:hover::before {
-  width:100%;
+.button-28:hover {
+  color: #fff;
+  background-color: #1A1A1A;
+  box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+  transform: translateY(-2px);
 }
 
-.btn6::after {
-  content: '';
-  position: absolute;
-  right: 0px;
-  top:0px;
-  z-index:-1;
-  width: 0%;
-  height:1px;
-  background: #6098FF;
-  -webkit-transition: all 0.4s cubic-bezier(.5, .24, 0, 1);
-  transition: all 0.4s cubic-bezier(.5, .24, 0, 1)
+.button-28:active {
+  box-shadow: none;
+  transform: translateY(0);
 }
-.btn6:hover::after {
-  width:100%;
-}
-.btn6:hover{
-  border-left:1px solid #6098FF;
-  border-right:1px solid #6098FF;
-}
-/* button7 */
