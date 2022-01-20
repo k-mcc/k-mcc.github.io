@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Basic Choropleth</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+   crossorigin=""/>
+   <!-- Make sure you put this AFTER Leaflet's CSS -->
+   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+  integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+  crossorigin=""></script>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <!--   <link href="https://api.mapbox.com/mapbox-gl-js/v2.3.0/mapbox-gl.css" rel="stylesheet">-->
+    <style>
+      body { margin: 0; padding: 0; }
+      #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+    </style>
+    <script src="/js/leaflet-0.7.2/leaflet.ajax.min.js"></script>
+    <script src="./KimS_matrix.json"></script>
+    <style>
+    .map {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 100%;
+    }
+    .info {
+        height: 320px;
+        width: 250px;
+        padding: 6px 8px;
+        font: 14px/16px 'Poppins', Helvetica, sans-serif;
+        /*font-family: 'Poppins', sans-serif;*/
+        background: white;
+        background: rgba(255,255,255,0.8);
+        box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        border-radius: 3px;
+    }
+    .info h2 {
+        margin: 0 0 5px;
+        color: #000000;
+    }
+    .info h5 {
+        margin: 0 0 5px;
+        color: #000000;
+        line-height: 10px;
+    }
+    .legend {
+        line-height: 20px;
+        color: #555;
+    }
+    .legend i {
+        width: 20px;
+        height: 20px;
+        float: left;
+        margin-right: 8px;
+        opacity: 0.7;
+    }
+    h2 {
+      text-align: center;
+      line-height: 30px;
+    }
+    h5 {
+      text-align: center;
+      line-height: 5px;
+    }
+    p {
+      font-size: 0.85em;
+      text-align: left;
+    }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+    	//mapboxgl.accessToken = 'pk.eyJ1Ijoia2F0ZW1hcCIsImEiOiJja3A0NWV0ZTkwNjBtMm5vdWxzcXR6dWxjIn0.7rYO_pPmtvwuWUb0cG3QXQ';
+    /*var map = new mapboxgl.Map({
+      container: 'map', // container ID
+      style: 'mapbox://styles/mapbox/satellite-v9', // style URL
+      zoom: 7, // starting zoom
+      center: [138.043, 35.201] // starting center
+    });*/
+
+    /*map.on('load', function () {
+    map.addSource('no2PercByTract', {
+      type: 'geojson',
+    // Use a URL for the value for the `data` property.
+      data: 'https://k-mcc.github.io/no2PercByCensusTract.geojson'
+    });*/
+
+    var mapboxAccessToken = 'pk.eyJ1Ijoia2F0ZW1hcCIsImEiOiJja3A0NWV0ZTkwNjBtMm5vdWxzcXR6dWxjIn0.7rYO_pPmtvwuWUb0cG3QXQ';
+    var map = L.map('map').setView([38.8950, -77.0], 12);
+
+    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + mapboxAccessToken, {
+        id: 'mapbox/light-v9',
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        tileSize: 512,
+        zoomOffset: -1
+    }).addTo(map);
+
+    L.geoJson(norfolkBGs).addTo(map);
+
+    /*var no2 = new L.geoJson();
+    no2.addTo(map);
+
+    $.ajax({
+    dataType: "json",
+    url: "https://k-mcc.github.io/no2PercByCensusTract.geojson",
+    success: function(data) {
+        $(data.features).each(function(key, data) {
+            no2.addData(data);
+        });
+    }
+  }).error(function() {});*/
+      function getColor(x) {
+        return x >= 90  ? '#4D004B' :
+               x >= 80  ? '#810F7C' :
+               x >= 70  ? '#88419D' :
+               x >= 60  ? '#8C6BB1' :
+               x >= 50  ? '#8C96C6' :
+               x >= 40   ? '#9EBCDA' :
+               x >= 30   ? '#BFD3E6' :
+               x >= 20   ? '#E0ECF4' :
+               x >= 10   ? '#F7FCFD' :
+               x > 0   ? '#FFFFFF' :
+                        '#FFFFFF';
+      }
+
+      function style(feature) {
+          return {
+              fillColor: getColor(feature.properties.BlackRenters),
+              weight: 0.5,
+              opacity: 1,
+              color: 'white',
+              dashArray: '0',
+              smoothFactor: 1,
+              fillOpacity: 0.5
+          };
+      }
+
+      L.geoJson(norfolkBGs, {style: style}).addTo(map);
+
+      function highlightFeature(e) {
+          var layer = e.target;
+
+          layer.setStyle({
+              weight: 5,
+              color: '#FFFFFF',
+              dashArray: '',
+              fillOpacity: 0.7
+          });
+
+          if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+              layer.bringToFront();
+          }
+
+          info.update(layer.feature.properties);
+      }
+
+      function resetHighlight(e) {
+          geojson.resetStyle(e.target);
+          info.update();
+      }
+
+      var geojson;
+      geojson = L.geoJson(norfolkBGs);
+
+      function zoomToFeature(e) {
+          map.fitBounds(e.target.getBounds());
+      }
+
+      function onEachFeature(feature, layer) {
+          layer.on({
+              mouseover: highlightFeature,
+              mouseout: resetHighlight,
+              click: zoomToFeature
+          });
+      }
+
+      geojson = L.geoJson(norfolkBGs, {
+          style: style,
+          onEachFeature: onEachFeature
+      }).addTo(map);
+
+      var info = L.control();
+
+      info.onAdd = function (map) {
+          this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+          this.update();
+          return this._div;
+      };
+
+      // method that we will use to update the control based on feature properties passed
+      info.update = function (props) {
+          //this._div.innerHTML = '<h2>NO<sub>2</sub> Equality Index</h2>' +  (props ?
+          //    '<h3>NO<sub>2</sub> Index: ' + props.no2Perc + '</h3><br /><h3>Demographic Index: ' + props.demographicIndex + '</h3><ul><li>' + props.percentMinority + '% Minority</li><li>' + props.percentLowIncome + '% Low Income</li></ul><br /><br /><h3>Tract #' + props.TRACT + '</h3>'
+          //    : 'Hover over a census tract');
+      };
+
+      info.addTo(map);
+
+      var legend = L.control({position: 'bottomright'});
+
+      legend.onAdd = function (map) {
+
+          var div = L.DomUtil.create('div', 'info legend'),
+              grades = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90],
+              labels = [];
+
+          //div.innerHTML += "<h2>Combined Equality Index</h2></br><h5>Expressed as a percentile</h5></br> "
+
+          // loop through our density intervals and generate a label with a colored square for each interval
+          for (var i = grades.length-1; i > 0; i--) {
+              div.innerHTML +=
+                  '<i style="background:' + getColor(grades[i] + 1) + '"></i>' +
+                  grades[i] + '</br>';
+          }
+
+          return div;
+      };
+
+      legend.addTo(map);
+
+    </script>
+
+  </body>
+</html>
