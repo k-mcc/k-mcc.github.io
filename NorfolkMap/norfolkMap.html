@@ -29,7 +29,7 @@
     }
     .info {
         height: 320px;
-        width: 250px;
+        width: 400px;
         padding: 6px 8px;
         font: 14px/16px 'Poppins', Helvetica, sans-serif;
         /*font-family: 'Poppins', sans-serif;*/
@@ -91,7 +91,7 @@
     });*/
 
     var mapboxAccessToken = 'pk.eyJ1Ijoia2F0ZW1hcCIsImEiOiJja3A0NWV0ZTkwNjBtMm5vdWxzcXR6dWxjIn0.7rYO_pPmtvwuWUb0cG3QXQ';
-    var map = L.map('map').setView([38.8950, -77.0], 12);
+    var map = L.map('map').setView([36.903853, -76.243643], 12);
 
     L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + mapboxAccessToken, {
         id: 'mapbox/light-v9',
@@ -100,7 +100,7 @@
         zoomOffset: -1
     }).addTo(map);
 
-    L.geoJson(norfolkBGs).addTo(map);
+    //L.geoJson(norfolkBGs).addTo(map);
 
     /*var no2 = new L.geoJson();
     no2.addTo(map);
@@ -130,7 +130,7 @@
 
       function style(feature) {
           return {
-              fillColor: getColor(feature.properties.BlackRenters),
+              fillColor: getColor(feature.properties.Elev_m_PCTL),
               weight: 0.5,
               opacity: 1,
               color: 'white',
@@ -140,7 +140,7 @@
           };
       }
 
-      L.geoJson(norfolkBGs, {style: style}).addTo(map);
+      //L.geoJson(norfolkBGs, {style: style}).addTo(map);
 
       function highlightFeature(e) {
           var layer = e.target;
@@ -194,6 +194,11 @@
 
       // method that we will use to update the control based on feature properties passed
       info.update = function (props) {
+        this._div.innerHTML = (props ? '<h3>Elevation (m): ' +  Math.round(props.Elev_m*100)/100 + '</h3><br /><h3>Rate of Change in Elevation: ' + Math.round(props.ElevROC*100)/100 + '</h3><br /><h3>Black/AA Residents: ' + props.BlackAAResidents + ' (' + Math.round(props.PercentResidentsBlackAA) + '%)' +
+        '</h3><br /><h3>Median Household Income: ' + addCommas(props.MedianHHIncome) + '</h3>'
+            : 'Hover over an area on the map');
+
+
           //this._div.innerHTML = '<h2>NO<sub>2</sub> Equality Index</h2>' +  (props ?
           //    '<h3>NO<sub>2</sub> Index: ' + props.no2Perc + '</h3><br /><h3>Demographic Index: ' + props.demographicIndex + '</h3><ul><li>' + props.percentMinority + '% Minority</li><li>' + props.percentLowIncome + '% Low Income</li></ul><br /><br /><h3>Tract #' + props.TRACT + '</h3>'
           //    : 'Hover over a census tract');
@@ -222,6 +227,10 @@
       };
 
       legend.addTo(map);
+
+      function addCommas(x) {
+          return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
 
     </script>
 
