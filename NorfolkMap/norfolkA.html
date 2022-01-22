@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <title>3D extrusions</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.6.1/mapbox-gl.css' rel='stylesheet' />
+
+
+    <!-- Load the `mapbox-gl-geocoder` plugin. -->
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.min.js"></script>
+    <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.0/mapbox-gl-geocoder.css" type="text/css">
+
+    <!-- Promise polyfill script is required -->
+    <!-- to use Mapbox GL Geocoder in IE 11. -->
+    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
+
+    <style>
+
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    h2,
+    h3 {
+      margin: 10px;
+      font-size: 18px;
+    }
+
+    h3 {
+      font-size: 16px;
+    }
+
+    h4 {
+      margin: 0px;
+    }
+    p {
+      margin-left: 10px;
+    }
+
+      #map {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+      }
+
+      #features {
+        top: 0;
+        resize: both;
+        overflow: auto;
+        height: 100px;
+        margin-top: 20px;
+        width: 300px;
+      }
+
+      .map-overlay {
+        /*resize: both;*/
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        background: #fff;
+        margin-left: 20px;
+        overflow: auto;
+        font-family: Arial, sans-serif;
+        border-radius: 3px;
+      }
+
+      #legend {
+        padding: 10px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        line-height: 18px;
+        height: 100px;
+        margin-bottom: 40px;
+        width: 100px;
+      }
+
+      .legend-key {
+        display: inline-block;
+        border-radius: 20%;
+        width: 10px;
+        height: 10px;
+        margin-right: 5px;
+      }
+
+    </style>
+
+  </head>
+  <body>
+    <!-- Add a #map element to the page, to serve as the map's container -->
+    <div id='map'></div>
+    <div class='map-overlay' id='features'><h2>Norfolk Topography & Tenure</h2><div id='pd'><p>Click an area</p></div></div>
+    <div class='map-overlay' id='legend'></div>
+
+
+    <script>
+
+    // Set an access t`oken to allow the browser to load the map from our account
+    mapboxgl.accessToken = 'pk.eyJ1Ijoia2F0ZW1hcCIsImEiOiJja3A0NWV0ZTkwNjBtMm5vdWxzcXR6dWxjIn0.7rYO_pPmtvwuWUb0cG3QXQ';
+
+    // Instantiate a new Map object to load the map itself
+    const map = new mapboxgl.Map({
+      style: 'mapbox://styles/katemap/ckynoq17n14dn14tekdgt4swo', // This tells the map which style to use
+      container: 'map', // id of the container div we created above
+      center: [-76.243643, 36.903853], // the location to display when the map first loads
+      zoom: 11.5 // the zoom level to display when the map first loads
+    });
+
+    map.on('load', () => {
+      const layers = [
+        '0',
+        '25',
+        '50',
+        '75',
+        '100'
+      ];
+      const colors = [
+        '#edf8fb',
+        '#b3cde3',
+        '#8c96c6',
+        '#8856a7',
+        '#810f7c'
+      ];
+
+      // create legend
+      const legend = document.getElementById('legend');
+
+      layers.forEach((layer, i) => {
+        const color = colors[i];
+        const item = document.createElement('div');
+        const key = document.createElement('span');
+        key.className = 'legend-key';
+        key.style.backgroundColor = color;
+
+        const value = document.createElement('span');
+        value.innerHTML = `${layer}`;
+        item.appendChild(key);
+        item.appendChild(value);
+        legend.appendChild(item);
+      });
+
+      // change info window on hover
+      /*map.on('mousemove', (event) => {
+        const clickedFeatures = map.queryRenderedFeatures(event.point, {
+          layers: ['extrusions']
+        });
+        // TOPOGRAPHIC
+        clicked.Elev_m = clickedFeatures[0].properties.Elev_m;
+        clicked.Elev_m_PCTL = clickedFeatures[0].properties.Elev_m_PCTL;
+        clicked.ElevROC = Math.round(clickedFeatures[0].properties.ElevROC*100)/100;
+        clicked.ElevROC_PCTL = clickedFeatures[0].properties.ElevROC_PCTL;
+
+        // RESIDENTIAL
+        clicked.BlackAAResidents = clickedFeatures[0].properties.BlackAAResidents;
+        clicked.PercentResidentsBlackAA = clickedFeatures[0].properties.PercentResidentsBlackAA;
+        clicked.BlackHomeOwners = clickedFeatures[0].properties.BlackHomeOwners;
+        clicked.BlackRenters = clickedFeatures[0].properties.BlackRenters;
+        clicked.BlackTenuresTotal = clickedFeatures[0].properties.BlackTenuresTotal;
+
+        // ECONOMIC
+        clicked.MedianHHIncome = addCommas(clickedFeatures[0].properties.MedianHHIncome);
+        clicked.PopBelowPovLine = addCommas(clickedFeatures[0].properties.PopBelowPovLine);
+        clicked.PercentBelowPovLine = addCommas(clickedFeatures[0].properties.PercentBelowPovLine);
+
+        // BLOCK GROUP ID (FOR REFERENCE)
+        clicked.TractNum = addCommas(clickedFeatures[0].properties.TractNum);
+        clicked.BGNum = addCommas(clickedFeatures[0].properties.BGNum);
+
+        document.getElementById('pd').innerHTML = clickedFeatures.length
+        ? `<h3>Topographic</h3><p>Elevation: ${clicked.Elev_m}m (%ile: ${clicked.Elev_m_PCTL})</p><p>Elevation Rate of Change: ${clicked.ElevROC} (%ile: ${clicked.Elev_m_PCTL})</p>`
+        : `<p>Hover over an area</p>`;
+      });*/
+
+    });
+
+    map.on('click', (event) => {
+      const clickedPoint = [event.lngLat.lng, event.lngLat.lat];
+
+      const location = {
+        center: clickedPoint,
+        zoom: map.getZoom(),
+        pitch: map.getPitch(),
+        bearing: map.getBearing(),
+      };
+
+      //map.flyTo(location);
+
+      const clicked = {
+        location: location
+      };
+
+      const clickedFeatures = map.queryRenderedFeatures(event.point, { layers: [ '3D-extrusions']});
+
+      if (clickedFeatures.length > 0) {
+
+        // TOPOGRAPHIC
+        clicked.Elev_m = Math.round(clickedFeatures[0].properties.Elev_m*100)/100;
+        clicked.Elev_m_PCTL = Math.round(clickedFeatures[0].properties.Elev_m_PCTL);
+        clicked.ElevROC = Math.round(clickedFeatures[0].properties.ElevROC*100)/100;
+        clicked.ElevROC_PCTL = Math.round(clickedFeatures[0].properties.ElevROC_PCTL);
+
+        // RESIDENTIAL
+        clicked.BlackAAResidents = clickedFeatures[0].properties.BlackAAResidents;
+        clicked.PercentResidentsBlackAA = Math.round(clickedFeatures[0].properties.PercentResidentsBlackAA);
+        clicked.BlackHomeOwners = clickedFeatures[0].properties.BlackHomeOwners;
+        clicked.BlackRenters = clickedFeatures[0].properties.BlackRenters;
+        clicked.BlackTenuresTotal = clickedFeatures[0].properties.BlackTenuresTotal;
+
+        // ECONOMIC
+        clicked.MedianHHIncome = addCommas(clickedFeatures[0].properties.MedianHHIncome);
+        clicked.PopBelowPovLine = clickedFeatures[0].properties.PopBelowPovLine;
+        clicked.PercentBelowPovLine = Math.round(clickedFeatures[0].properties.PercentBelowPovLine);
+
+        // HOLC
+        clicked.HOLCMean = clickedFeatures[0].properties.HOLCMean;
+        clicked.HOLCMedian = clickedFeatures[0].properties.HOLCMedian;
+
+        // BLOCK GROUP ID (FOR REFERENCE)
+        clicked.TractNum = clickedFeatures[0].properties.TractNum;
+        clicked.BGNum = clickedFeatures[0].properties.BGNum;
+
+        if (clicked.HOLCMean != "NaN" && clicked.HOLCMedian != "NaN") {//holc grade exists, put it in str
+          holcStr = `<h3>HOLC</h3><p>HOLC Mean: ${clicked.HOLCMean}</p><p>HOLC Median: ${clicked.HOLCMedian}</p>`;
+        }
+
+        const popup = new mapboxgl.Popup() // create the popup
+          .setLngLat(clicked.location.center) // position it at the clicked point
+          .setHTML('<p>Elevation: ' +  clicked.Elev_m + 'm ' +
+                   '<br />Elevation Rate of Change: ' + clicked.ElevROC +
+                   '<br />Black/African American Residents: ' + clicked.BlackAAResidents +
+                   '<br />Black Tenures Total: ' + clicked.BlackTenuresTotal
+                   + '</p>'
+                  )
+          .addTo(map); // place the popup on the map
+
+          //TO SHOW INFO IN SIDEBAR INSTEAD:
+          document.getElementById('pd').innerHTML = clickedFeatures.length
+          ? `<h3>Topographic</h3><p>Elevation: ${clicked.Elev_m}m (%ile: ${clicked.Elev_m_PCTL})</p><p>Elevation Rate of Change: ${clicked.ElevROC} (%ile: ${clicked.ElevROC_PCTL})</p>
+             <h3>Residential</h3><p>Black/African American Residents: ${clicked.BlackAAResidents} (${clicked.PercentResidentsBlackAA}%)</p><p>Black Home Owners: ${clicked.BlackHomeOwners}</p><p>Black Renters: ${clicked.BlackRenters}</p><p>Black Tenures Total: ${clicked.BlackTenuresTotal}</p>
+             <h3>Economic</h3><p>Population Below Poverty Line: ${clicked.PopBelowPovLine} (${clicked.PercentBelowPovLine}%)</p><p>Median Household Income: $${clicked.MedianHHIncome}
+             ${holcStr}
+             <h3>Block Group Information</h3><p>Census Tract Number: ${clicked.TractNum}</p><p>Block Group Number: ${clicked.BGNum}`
+          : `<p>Click an area</p>`;
+      }
+
+
+      // + '</h3><br /><h3>Rate of Change in Elevation: ' + Math.round(clicked.ElevROC*100)/100 + '</h3><br /><h3>Black/AA Residents: ' + clicked.BlackAAResidents + ' (' + Math.round(clicked.PercentResidentsBlackAA) + '%)' +
+      //'</h3><br /><h3>Median Household Income: ' + addCommas(clicked.MedianHHIncome) + '</h3>'
+
+
+      console.log(JSON.stringify(clicked, null, 2));
+    });
+
+    map.addControl(
+    new MapboxGeocoder({
+    accessToken: mapboxgl.accessToken,
+    mapboxgl: mapboxgl
+    })
+    );
+    map.addControl(new mapboxgl.NavigationControl());
+
+    setTimeout(function() {
+      map.flyTo({
+        // These options control the ending camera position: centered at
+        // the target, at zoom level 9, and north up.
+        zoom: 11,
+        pitch: 80,
+        bearing: 60,
+        // These options control the flight curve, making it move
+        // slowly and zoom out almost completely before starting
+        // to pan.
+        speed: 0.1, // make the flying slow
+        curve: 1, // change the speed at which it zooms out
+
+        // This can be any easing function: it takes a number between
+        // 0 and 1 and returns another number between 0 and 1.
+        easing: function (t) {
+        return t;
+        },
+
+        // this animation is considered essential with respect to prefers-reduced-motion
+        essential: false
+      });
+    }, 2000);
+
+    function addCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    </script>
+  </body>
+</html>
