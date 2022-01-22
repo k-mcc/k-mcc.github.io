@@ -38,6 +38,9 @@
     h4 {
       margin: 0px;
     }
+    h5 {
+      margin-top:0px;
+    }
     p {
       margin-left: 10px;
     }
@@ -74,9 +77,9 @@
         padding: 10px;
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
         line-height: 18px;
-        height: 100px;
+        height: 200px;
         margin-bottom: 40px;
-        width: 100px;
+        width: 250px;
       }
 
       .legend-key {
@@ -90,6 +93,7 @@
     </style>
 
   </head>
+
   <body>
     <!-- Add a #map element to the page, to serve as the map's container -->
     <div id='map'></div>
@@ -128,6 +132,10 @@
 
       // create legend
       const legend = document.getElementById('legend');
+
+      const axes = document.createElement('div');
+      axes.innerHTML = '<p><b>Tower Height:</b> Elevation (m)<br /><b>Color:</b> Percent Black/African American Residents</p>';
+      legend.appendChild(axes);
 
       layers.forEach((layer, i) => {
         const color = colors[i];
