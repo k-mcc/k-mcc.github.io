@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+
+    <meta charset="utf-8">
+    <title>Side by Side</title>
+    <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.3.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.3.0/mapbox-gl.js"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+    <style>
+      body { margin: 0; padding: 0; }
+      #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+    </style>
+
+  </head>
+  <body>
+    <style>
+      body {
+        overflow: hidden;
+      }
+
+      body * {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      .map {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+      }
+
+    /*h2,
+      h3 {
+        margin: 10px;
+        font-size: 1.2em;
+      }*/
+      h2 {
+        text-align: center;
+        line-height: 30px;
+      }
+      h5 {
+        text-align: center;
+        line-height: 5px;
+      }
+      p {
+        font-size: 0.85em;
+        margin: 10px;
+        text-align: left;
+      }
+      /*p {
+        font-size: 0.85em;
+        margin: 10px;
+        text-align: left;
+      }*/
+      .before-map-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        background: rgba(255, 255, 255, 0.8);
+        margin-left: 20px;
+        font-family: 'Poppins', Helvetica, sans-serif;
+        overflow: auto;
+        border-radius: 3px;
+      }
+      .after-map-overlay {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        font-family: 'Poppins', Helvetica, sans-serif;
+        background: rgba(255, 255, 255, 0.8);
+        margin-right: 20px;
+        overflow: auto;
+        border-radius: 3px;
+      }
+
+      #beforeLegend {
+        padding: 10px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        line-height: 18px;
+        height: 270px;
+        margin-bottom: 40px;
+        width: 480px;
+      }
+      #afterLegend {
+        padding: 10px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        line-height: 18px;
+        height: 270px;
+        margin-bottom: 40px;
+        width: 480px;
+      }
+      .legend-key {
+        display: inline-block;
+        border-radius: 20%;
+        width: 20px;
+        height: 20px;
+        margin-right: 5px;
+        opacity: 0.8;
+      }
+
+      #features {
+        top: 0;
+        resize: both;
+        overflow: auto;
+        height: 300px;
+        margin-top: 20px;
+        width: 350px;
+      }
+      .map-overlay {
+        /*resize: both;*/
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        background: #fff;
+        margin-left: 20px;
+        overflow: auto;
+        font-family: Arial, sans-serif;
+        border-radius: 3px;
+      }
+
+    </style>
+
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-compare/v0.4.0/mapbox-gl-compare.js"></script>
+
+    <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-compare/v0.4.0/mapbox-gl-compare.css" type="text/css">
+
+    <div id="comparison-container">
+      <div id="before" class="map"></div>
+      <div id="after" class="map"></div>
+    </div>
+
+    <div class="before-map-overlay" id="beforeLegend"></div>
+    <div class="after-map-overlay" id="afterLegend"></div>
+
+    <div class='map-overlay' id='features'><h2>Norfolk Elevation & Residency</h2><div id='pd'><p>Hover over an area</p></div></div>
+
+    <script>
+
+      mapboxgl.accessToken = 'pk.eyJ1Ijoia2F0ZW1hcCIsImEiOiJja3A0NWV0ZTkwNjBtMm5vdWxzcXR6dWxjIn0.7rYO_pPmtvwuWUb0cG3QXQ';
+
+      var beforeMap = new mapboxgl.Map({
+        container: 'before',
+        style: 'mapbox://styles/katemap/ckyq1cgfu2bcx14qhx3slerpp',
+        center: [-76.243643, 36.903853],
+        zoom: 11
+      });
+
+      var afterMap = new mapboxgl.Map({
+        container: 'after',
+        style: 'mapbox://styles/katemap/ckyq2nn8n177m14phcrllrr7g',
+        center: [-76.243643, 36.903853],
+        zoom: 11
+      });
+
+        // A selector or reference to HTML element
+      var container = '#comparison-container';
+
+      var map = new mapboxgl.Compare(beforeMap, afterMap, container, {
+        // Set this to enable comparing two maps by mouse movement:
+        // mousemove: true
+      });
+
+      afterMap.addControl(new mapboxgl.NavigationControl());
+      beforeMap.addControl(new mapboxgl.NavigationControl());
+
+      //additional segment-------
+
+      // define layer names
+      var layers = [
+        '0',
+        '25',
+        '50',
+        '75',
+        '100'
+      ];
+      var colors = [
+        '#ffffb2',
+        '#fecc5c',
+        '#fd8d3c',
+        '#f03b20',
+        '#bd0026'
+      ];
+
+
+      var item = document.createElement('div');
+      var value = document.createElement('span');
+      value.innerHTML = "<h2>% Residents Black/African American</br></h2>";
+      item.appendChild(value);
+      beforeLegend.appendChild(item);
+      //create legend
+      for (i = layers.length-1; i > -1; i--) {
+        var layer = layers[i];
+        var color = colors[i];
+        var item = document.createElement('div');
+        var key = document.createElement('span');
+        key.className = 'legend-key';
+        key.style.backgroundColor = color;
+
+        var value = document.createElement('span');
+        value.innerHTML = layer;
+        item.appendChild(key);
+        item.appendChild(value);
+        beforeLegend.appendChild(item);
+      }
+
+      var afterLayers = [
+        '0',
+        '25',
+        '50',
+        '75',
+        '100'
+      ];
+      var afterColors = [
+        '#eff3ff',
+        '#bdd7e7',
+        '#6baed6',
+        '#3182bd',
+        '#08519c'
+      ];
+
+    beforeMap.on('mousemove', (event) => {
+        const clickedPoint = [event.lngLat.lng, event.lngLat.lat];
+
+        const location = {
+          center: clickedPoint,
+          zoom: beforeMap.getZoom(),
+          pitch: beforeMap.getPitch(),
+          bearing: beforeMap.getBearing(),
+        };
+
+      const clicked = {
+        location: location
+      };
+
+      const clickedFeatures = afterMap.queryRenderedFeatures(event.point, { layers: ['choropleth-fill']});
+
+      if (clickedFeatures.length > 0) {
+
+        // TOPOGRAPHIC
+        clicked.Elev_m = Math.round(clickedFeatures[0].properties.Elev_m*100)/100;
+        clicked.Elev_m_PCTL = Math.round(clickedFeatures[0].properties.Elev_m_PCTL);
+        clicked.ElevROC = Math.round(clickedFeatures[0].properties.ElevROC*100)/100;
+        clicked.ElevROC_PCTL = Math.round(clickedFeatures[0].properties.ElevROC_PCTL);
+
+        // RESIDENTIAL
+        clicked.BlackAAResidents = clickedFeatures[0].properties.BlackAAResidents;
+        clicked.PercentResidentsBlackAA = Math.round(clickedFeatures[0].properties.PercentResidentsBlackAA);
+        clicked.BlackHomeOwners = clickedFeatures[0].properties.BlackHomeOwners;
+        clicked.BlackRenters = clickedFeatures[0].properties.BlackRenters;
+        clicked.BlackTenuresTotal = clickedFeatures[0].properties.BlackTenuresTotal;
+
+        // ECONOMIC
+        clicked.MedianHHIncome = addCommas(clickedFeatures[0].properties.MedianHHIncome);
+        clicked.PopBelowPovLine = clickedFeatures[0].properties.PopBelowPovLine;
+        clicked.PercentBelowPovLine = Math.round(clickedFeatures[0].properties.PercentBelowPovLine);
+
+        // HOLC
+        clicked.HOLCMean = clickedFeatures[0].properties.HOLCMean;
+        clicked.HOLCMedian = clickedFeatures[0].properties.HOLCMedian;
+
+        // BLOCK GROUP ID (FOR REFERENCE)
+        clicked.TractNum = clickedFeatures[0].properties.TractNum;
+        clicked.BGNum = clickedFeatures[0].properties.BGNum;
+
+        if (clicked.HOLCMean != "NaN" && clicked.HOLCMedian != "NaN") {//holc grade exists, put it in str
+          holcStr = `<h3>HOLC</h3><p>HOLC Mean: ${clicked.HOLCMean}</p><p>HOLC Median: ${clicked.HOLCMedian}</p>`;
+        }
+
+          //TO SHOW INFO IN SIDEBAR INSTEAD:
+          document.getElementById('pd').innerHTML = clickedFeatures.length
+          ? `<h3>Topographic</h3><p>Elevation: ${clicked.Elev_m}m (%ile: ${clicked.Elev_m_PCTL})</p><p>Elevation Rate of Change: ${clicked.ElevROC} (%ile: ${clicked.ElevROC_PCTL})</p>
+             <h3>Residential</h3><p>Black/African American Residents: ${clicked.BlackAAResidents} (${clicked.PercentResidentsBlackAA}%)</p><p>Black Home Owners: ${clicked.BlackHomeOwners}</p><p>Black Renters: ${clicked.BlackRenters}</p><p>Black Tenures Total: ${clicked.BlackTenuresTotal}</p>
+             <h3>Economic</h3><p>Population Below Poverty Line: ${clicked.PopBelowPovLine} (${clicked.PercentBelowPovLine}%)</p><p>Median Household Income: $${clicked.MedianHHIncome}
+             ${holcStr}
+             <h3>Block Group Information</h3><p>Census Tract Number: ${clicked.TractNum}</p><p>Block Group Number: ${clicked.BGNum}`
+          : `<p>Hover over an area</p>`;
+      }
+
+      console.log(JSON.stringify(clicked, null, 2));
+
+    });
+
+
+    afterMap.on('mousemove', (event) => {
+        const clickedPoint = [event.lngLat.lng, event.lngLat.lat];
+
+        const location = {
+          center: clickedPoint,
+          zoom: beforeMap.getZoom(),
+          pitch: beforeMap.getPitch(),
+          bearing: beforeMap.getBearing(),
+        };
+
+      const clicked = {
+        location: location
+      };
+
+      const clickedFeatures = afterMap.queryRenderedFeatures(event.point, { layers: ['choropleth-fill']});
+
+      if (clickedFeatures.length > 0) {
+
+        // TOPOGRAPHIC
+        clicked.Elev_m = Math.round(clickedFeatures[0].properties.Elev_m*100)/100;
+        clicked.Elev_m_PCTL = Math.round(clickedFeatures[0].properties.Elev_m_PCTL);
+        clicked.ElevROC = Math.round(clickedFeatures[0].properties.ElevROC*100)/100;
+        clicked.ElevROC_PCTL = Math.round(clickedFeatures[0].properties.ElevROC_PCTL);
+
+        // RESIDENTIAL
+        clicked.BlackAAResidents = clickedFeatures[0].properties.BlackAAResidents;
+        clicked.PercentResidentsBlackAA = Math.round(clickedFeatures[0].properties.PercentResidentsBlackAA);
+        clicked.BlackHomeOwners = clickedFeatures[0].properties.BlackHomeOwners;
+        clicked.BlackRenters = clickedFeatures[0].properties.BlackRenters;
+        clicked.BlackTenuresTotal = clickedFeatures[0].properties.BlackTenuresTotal;
+
+        // ECONOMIC
+        clicked.MedianHHIncome = addCommas(clickedFeatures[0].properties.MedianHHIncome);
+        clicked.PopBelowPovLine = clickedFeatures[0].properties.PopBelowPovLine;
+        clicked.PercentBelowPovLine = Math.round(clickedFeatures[0].properties.PercentBelowPovLine);
+
+        // HOLC
+        clicked.HOLCMean = clickedFeatures[0].properties.HOLCMean;
+        clicked.HOLCMedian = clickedFeatures[0].properties.HOLCMedian;
+
+        // BLOCK GROUP ID (FOR REFERENCE)
+        clicked.TractNum = clickedFeatures[0].properties.TractNum;
+        clicked.BGNum = clickedFeatures[0].properties.BGNum;
+
+        if (clicked.HOLCMean != "NaN" && clicked.HOLCMedian != "NaN") {//holc grade exists, put it in str
+          holcStr = `<h3>HOLC</h3><p>HOLC Mean: ${clicked.HOLCMean}</p><p>HOLC Median: ${clicked.HOLCMedian}</p>`;
+        }
+
+          //TO SHOW INFO IN SIDEBAR INSTEAD:
+          document.getElementById('pd').innerHTML = clickedFeatures.length
+          ? `<h3>Topographic</h3><p>Elevation: ${clicked.Elev_m}m (%ile: ${clicked.Elev_m_PCTL})</p><p>Elevation Rate of Change: ${clicked.ElevROC} (%ile: ${clicked.ElevROC_PCTL})</p>
+             <h3>Residential</h3><p>Black/African American Residents: ${clicked.BlackAAResidents} (${clicked.PercentResidentsBlackAA}%)</p><p>Black Home Owners: ${clicked.BlackHomeOwners}</p><p>Black Renters: ${clicked.BlackRenters}</p><p>Black Tenures Total: ${clicked.BlackTenuresTotal}</p>
+             <h3>Economic</h3><p>Population Below Poverty Line: ${clicked.PopBelowPovLine} (${clicked.PercentBelowPovLine}%)</p><p>Median Household Income: $${clicked.MedianHHIncome}
+             ${holcStr}
+             <h3>Block Group Information</h3><p>Census Tract Number: ${clicked.TractNum}</p><p>Block Group Number: ${clicked.BGNum}`
+          : `<p>Hover over an area</p>`;
+      }
+
+      console.log(JSON.stringify(clicked, null, 2));
+
+    });
+
+      var item = document.createElement('div');
+      var value = document.createElement('span');
+      value.innerHTML = "<h2>%ile Elevation (m)</br></h2>";
+      item.appendChild(value);
+      afterLegend.appendChild(item);
+      //create legend
+      for (i = afterLayers.length-1; i > -1; i--) {
+        var layer = afterLayers[i];
+        var color = afterColors[i];
+        var item = document.createElement('div');
+        var key = document.createElement('span');
+        key.className = 'legend-key';
+        key.style.backgroundColor = color;
+
+        var value = document.createElement('span');
+        value.innerHTML = layer;
+        item.appendChild(key);
+        item.appendChild(value);
+        afterLegend.appendChild(item);
+      }
+
+
+      function addCommas(x) {
+          return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      }
+
+
+    </script>
+
+  </body>
+
+</html>
