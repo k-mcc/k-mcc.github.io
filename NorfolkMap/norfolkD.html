@@ -177,8 +177,8 @@
       <input id="PercentResidentsBlackAA" name="L" type="radio" name="rtoggle" value="% Residents Black/African American" checked="checked">
       <label for="PercentResidentsBlackAA">% Residents Black/African American</label>
 
-      <input id="BlackTenuresTotal" name="L" type="radio" name="rtoggle" value="Total Black Tenures">
-      <label for="BlackTenuresTotal">Total Black Tenures</label>
+      <input id="PercentHomeowners" name="L" type="radio" name="rtoggle" value="% Homeowners Out of Total Black Tenures">
+      <label for="PercentHomeowners">% Homeowners Out of Total Black Tenuress</label>
 
       <input id="PercentBelowPovLine" name="L" type="radio" name="rtoggle" value="% Residents Below Poverty Line">
       <label for="PercentBelowPovLine">% Residents Below Poverty Line</label>
@@ -267,6 +267,7 @@
         if (xVar == "PercentResidentsBlackAA") x = feature.properties.PercentResidentsBlackAA;
         else if (xVar == "PercentBelowPovLine") x = feature.properties.PercentBelowPovLine;
         else if (xVar == "BlackTenuresTotal") x = feature.properties.BlackTenuresTotal;
+        else if (xVar == "PercentHomeowners") x = Math.round((feature.properties.BlackHomeOwners / feature.properties.BlackTenuresTotal)*100);
 
         if (yVar == "Elev_m_PCTL") y = feature.properties.Elev_m_PCTL;
         else if (yVar == "ElevROC_PCTL") y = feature.properties.ElevROC_PCTL;
@@ -361,7 +362,7 @@
       // method that we will use to update the control based on feature properties passed
       info.update = function (props) {
           this._div.innerHTML = '<h2>Norfolk Elevation & Residency</h2>' +  (props ? '<h3>Topographic</h3><p>Elevation: ' + Math.round(props.Elev_m*100)/100 + ' m (%ile:  ' + Math.round(props.Elev_m_PCTL) + ')</p><p>Elevation Rate of Change: ' +  Math.round(props.ElevROC*100)/100 + ' (%ile: ' +  Math.round(props.ElevROC_PCTL) + ')</p>'
-             + '<h3>Residential</h3><p>Black/African American Residents: ' + props.BlackAAResidents + ' (' +  Math.round(props.PercentResidentsBlackAA) + '%)</p><p>Black Home Owners: ' + props.BlackHomeOwners + '</p><p>Black Renters: ' + props.BlackRenters + '</p><p>Black Tenures Total: ' + props.BlackTenuresTotal + '</p>'
+             + '<h3>Residential</h3><p>Black/African American Residents: ' + props.BlackAAResidents + ' (' +  Math.round(props.PercentResidentsBlackAA) + '%)</p><p>Black Homeowners: ' + props.BlackHomeOwners + ' (' +  Math.round((props.BlackHomeOwners/props.BlackTenuresTotal)*100) + '%)</p><p>Black Renters: ' + props.BlackRenters + '</p><p>Black Tenures Total: ' + props.BlackTenuresTotal + '</p>'
              + '<h3>Economic</h3><p>Population Below Poverty Line: ' + props.PopBelowPovLine + ' (' +  Math.round(props.PercentBelowPovLine) + '%)</p><p>Median Household Income: $' + addCommas(props.MedianHHIncome) +
              //+ holcStr +
              '<h3>Block Group Information</h3><p>Census Tract Number: ' + props.TractNum + '</p><p>Block Group Number: ' + props.BGNum
