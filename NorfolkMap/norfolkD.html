@@ -125,8 +125,8 @@
     <script src="KimS_matrix.js"></script>
     <style>
       .info {
-          height: 250px;
-          width: 284px;
+          overflow: auto;
+          width: 350px;
           padding: 6px 8px;
           font: 14px/16px 'Poppins', Helvetica, sans-serif;
           /*font-family: 'Poppins', sans-serif;*/
@@ -360,11 +360,11 @@
 
       // method that we will use to update the control based on feature properties passed
       info.update = function (props) {
-          this._div.innerHTML = '<h2>Norfolk Elevation & Residency</h2>' +  (props ? '<h3>Topographic</h3><p>Elevation: ' + props.Elev_m + ' m (%ile:  ' + props.Elev_m_PCTL + ')</p><p>Elevation Rate of Change: ' + props.ElevROC + ' (%ile: ' + props.ElevROC_PCTL + ')</p>'
-             /*+ '<h3>Residential</h3><p>Black/African American Residents: ' + props.BlackAAResidents + ' (' + props.PercentResidentsBlackAA + '%)</p><p>Black Home Owners: ' + props.BlackHomeOwners + '</p><p>Black Renters: ' + props.BlackRenters + '</p><p>Black Tenures Total: ' + props.BlackTenuresTotal + '</p>'
-             + '<h3>Economic</h3><p>Population Below Poverty Line: ' + props.PopBelowPovLine + ' (' + props.PercentBelowPovLine + '%)</p><p>Median Household Income: $' + props.MedianHHIncome +
+          this._div.innerHTML = '<h2>Norfolk Elevation & Residency</h2>' +  (props ? '<h3>Topographic</h3><p>Elevation: ' + Math.round(props.Elev_m*100)/100 + ' m (%ile:  ' + Math.round(props.Elev_m_PCTL) + ')</p><p>Elevation Rate of Change: ' +  Math.round(props.ElevROC*100)/100 + ' (%ile: ' +  Math.round(props.ElevROC_PCTL) + ')</p>'
+             + '<h3>Residential</h3><p>Black/African American Residents: ' + props.BlackAAResidents + ' (' +  Math.round(props.PercentResidentsBlackAA) + '%)</p><p>Black Home Owners: ' + props.BlackHomeOwners + '</p><p>Black Renters: ' + props.BlackRenters + '</p><p>Black Tenures Total: ' + props.BlackTenuresTotal + '</p>'
+             + '<h3>Economic</h3><p>Population Below Poverty Line: ' + props.PopBelowPovLine + ' (' +  Math.round(props.PercentBelowPovLine) + '%)</p><p>Median Household Income: $' + addCommas(props.MedianHHIncome) +
              //+ holcStr +
-             '<h3>Block Group Information</h3><p>Census Tract Number: ' + props.TractNum + '</p><p>Block Group Number: ' + props.BGNum*/
+             '<h3>Block Group Information</h3><p>Census Tract Number: ' + props.TractNum + '</p><p>Block Group Number: ' + props.BGNum
           : 'Hover over an area');
       };
 
@@ -432,6 +432,10 @@
           geojson = layer;
 
         };
+      }
+
+      function addCommas(x) {
+          return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       }
 
 
