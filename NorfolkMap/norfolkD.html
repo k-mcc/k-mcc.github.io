@@ -54,7 +54,6 @@
         color: #000000;
         padding: 5px 10px;
         margin: 30px 0 15px 0;
-        line-height: 24px;
         position: absolute;
         top: 0;
         left: 0;
@@ -67,8 +66,7 @@
         font: 14px/16px 'Poppins', Helvetica, sans-serif;
         color: #000000;
         padding: 0 10px;
-        margin: 60px 10px 0 0;
-        line-height: 2px;
+        margin: 50px 10px 0 0;
         position: absolute;
         bottom: 0;
         top: 257px;
@@ -152,7 +150,7 @@
       }*/
 
       #menu {
-        top: 100px;
+        /*top: 100px;*/
         position: absolute;
         z-index: 600;
         background: #efefef;
@@ -176,21 +174,21 @@
     <div id="map"></div>
 
     <div id="menu">
-      <input id="PercentResidentsBlackAA" type="radio" name="rtoggle" value="% Residents Black/African American" checked="checked">
+      <input id="PercentResidentsBlackAA" name="L" type="radio" name="rtoggle" value="% Residents Black/African American" checked="checked">
       <label for="PercentResidentsBlackAA">% Residents Black/African American</label>
 
-      <!--<input id="ckyt1hbn40q5d14qudnghmym5" type="radio" name="rtoggle" value="Total Black Tenures">
-      <label for="ckyt1hbn40q5d14qudnghmym5">Total Black Tenures</label>-->
+      <input id="BlackTenuresTotal" name="L" type="radio" name="rtoggle" value="Total Black Tenures">
+      <label for="BlackTenuresTotal">Total Black Tenures</label>
 
-      <input id="PercentBelowPovLine" type="radio" name="rtoggle" value="% Residents Below Poverty Line">
+      <input id="PercentBelowPovLine" name="L" type="radio" name="rtoggle" value="% Residents Below Poverty Line">
       <label for="PercentBelowPovLine">% Residents Below Poverty Line</label>
     </div>
 
     <div id="rightMenu">
-      <input id="Elev_m_PCTL" type="radio" name="rtoggle" value="%ile Elevation (m)" checked="checked">
+      <input id="Elev_m_PCTL" name="R" type="radio" name="rtoggle" value="%ile Elevation (m)" checked="checked">
       <label for="Elev_m_PCTL">Elevation</label>
 
-      <input id="ElevROC_PCTL" type="radio" name="rtoggle" value="%ile Rate of Change in Elevation">
+      <input id="ElevROC_PCTL" name="R" type="radio" name="rtoggle" value="%ile Rate of Change in Elevation">
       <label for="ElevROC_PCTL">Rate of Change in Elevation</label>
     </div>
 
@@ -209,9 +207,11 @@
     //L.geoJson(norfolkBGs).addTo(map);
 
     var xVar = "PercentResidentsBlackAA";
+    var xTitle = "% Residents Black/African American";
     var yVar = "Elev_m_PCTL";
+    var yTitle = "%ile Elevation (m)";
 
-      function getColor(axisA, axisB) {
+      function getColor(axisA, axisB, opt) {
 
         var a1 = '#E8E8E8';
         var b1 = '#ACE4E4';
@@ -224,7 +224,10 @@
         var c3 = '#3B4994';
 
         var a = getRange(axisA);
-        var b = getRange(axisB);
+
+        var b;
+        if (opt == "BlackTenuresTotal") b = getRangeBlackTenuresTotal(axisB);
+        else b = getRange(axisB);
 
         if (a == 1) { //low axisA value
           if (b == 1) return a1; //low axisB value
@@ -252,18 +255,24 @@
                         1; //low
       }
 
+      function getRangeBlackTenuresTotal(x) {
+        return x >= 515.33  ? 3 : //high
+               x >= 257.66  ? 2 : //mid
+                        1; //low
+      }
+
       function style(feature) {
         var x, y;
 
         if (xVar == "PercentResidentsBlackAA") x = feature.properties.PercentResidentsBlackAA;
         else if (xVar == "PercentBelowPovLine") x = feature.properties.PercentBelowPovLine;
+        else if (xVar == "BlackTenuresTotal") x = feature.properties.BlackTenuresTotal;
 
         if (yVar == "Elev_m_PCTL") y = feature.properties.Elev_m_PCTL;
         else if (yVar == "ElevROC_PCTL") y = feature.properties.ElevROC_PCTL;
 
-
         return {
-            fillColor: getColor(feature.properties.Elev_m_PCTL, x),
+            fillColor: getColor(y, x, xVar),
             weight: 0.5,
             opacity: 1,
             color: 'white',
@@ -272,6 +281,8 @@
             fillOpacity: 0.7
         };
       }
+
+      map.zoomControl.setPosition('topright');
 
       //L.geoJson(norfolkBGs, {style: style}).addTo(map);
 
@@ -331,33 +342,15 @@
           return this._div;
       };
 
-      /*img.onAdd = function (map) {
-        var div = L.DomUtil.create('div', 'grid-container');
-        div.id = "griddy";
-        div.style.display = "inline-grid";
-        div.style.zIndex = 7100;
-        var grades = [1, 40, 99];
-
-        div.innerHTML += "<div><h2 style='top: -47px; left: -26px'>✕</h2></div><h3 class='yAxis'>Nitrogen Dioxide Percentile</h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0],"") + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1],"") + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2],"") + "\" id:\"c3\" ></div>";
-        div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[0],"") + "\" id:\"a2\"></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[1],"") + "\" id:\"b2\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[2],"") + "\" id:\"c2\" ></div>";
-        div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0],"") + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1],"") + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2],"") + "\" id:\"c1\" ></div><h2 class='xAxis' >Socio-Demographic Index</h2>";
-
-        var draggable = new L.Draggable(div);
-        draggable.enable();
-
-        return div;
-      }*/
-
       img.onAdd = function (map) {
         var div = L.DomUtil.create('div', 'grid-container');
         div.id = "griddy";
         div.style.display = "inline-grid";
         var grades = [1, 40, 99];
-        //<div class='popup' onclick='popItUp(\"no2AxisPopup\")' style='bottom:5px; left:5px;'><img src='images/info.png' style='width:30px;height:30px;'></img><span class='popuptext' id='no2AxisPopup'><p><strong>Title: </strong></br>Description</p></span></div>
-        //div.innerHTML += '<img src="images/no2dLegend.png" alt="Legend" style="width:300px;height:300px;">';
-        div.innerHTML += "<h3 class='axis'>Nitrogen Dioxide Percentile</h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0],"") + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1],"") + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2],"") + "\" id:\"c3\" ></div>";
+
+        div.innerHTML += "<h3 class='axis'>" + yTitle + "</h3><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0],"") + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1],"") + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2],"") + "\" id:\"c3\" ></div>";
         div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[0],"") + "\" id:\"a2\"></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[1],"") + "\" id:\"b2\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[2],"") + "\" id:\"c2\" ></div>";
-        div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0],"") + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1],"") + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2],"") + "\" id:\"c1\" ></div><h2 class='axis' >Socio-Demographic Index</h2>";
+        div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0],"") + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1],"") + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2],"") + "\" id:\"c1\" ></div><h2 class='axis' >" + xTitle + "</h2>";
 
         var draggable = new L.Draggable(div);
         draggable.enable();
@@ -368,26 +361,15 @@
       // method that we will use to update the control based on feature properties passed
       info.update = function (props) {
           this._div.innerHTML = '<h2>Norfolk Elevation & Residency</h2>' +  (props ? '<h3>Topographic</h3><p>Elevation: ' + props.Elev_m + ' m (%ile:  ' + props.Elev_m_PCTL + ')</p><p>Elevation Rate of Change: ' + props.ElevROC + ' (%ile: ' + props.ElevROC_PCTL + ')</p>'
-             //+ '<h3>Residential</h3><p>Black/African American Residents: ' + props.BlackAAResidents + ' (' + props.PercentResidentsBlackAA + '%)</p><p>Black Home Owners: ' + props.BlackHomeOwners + '</p><p>Black Renters: ' + props.BlackRenters + '</p><p>Black Tenures Total: ' + props.BlackTenuresTotal + '</p>'
-             //+ '<h3>Economic</h3><p>Population Below Poverty Line: ' + props.PopBelowPovLine + ' (' + props.PercentBelowPovLine + '%)</p><p>Median Household Income: $' + props.MedianHHIncome + '
+             /*+ '<h3>Residential</h3><p>Black/African American Residents: ' + props.BlackAAResidents + ' (' + props.PercentResidentsBlackAA + '%)</p><p>Black Home Owners: ' + props.BlackHomeOwners + '</p><p>Black Renters: ' + props.BlackRenters + '</p><p>Black Tenures Total: ' + props.BlackTenuresTotal + '</p>'
+             + '<h3>Economic</h3><p>Population Below Poverty Line: ' + props.PopBelowPovLine + ' (' + props.PercentBelowPovLine + '%)</p><p>Median Household Income: $' + props.MedianHHIncome +
              //+ holcStr +
-             //'<h3>Block Group Information</h3><p>Census Tract Number: ' + props.TractNum + '</p><p>Block Group Number: ' + props.BGNum
+             '<h3>Block Group Information</h3><p>Census Tract Number: ' + props.TractNum + '</p><p>Block Group Number: ' + props.BGNum*/
           : 'Hover over an area');
       };
 
       info.addTo(map);
       img.addTo(map);
-
-      /*img.onAdd = function (map) {
-
-        var div = L.DomUtil.create('div', 'img');
-
-        div.innerHTML += '<img src="images/legend.png" alt="Legend" style="width:300px;height:300px;">';
-
-        return div;
-      }//"#f3f3f3 url('img_tree.png') no-repeat right top";
-
-      img.addTo(map);*/
 
       const layerList = document.getElementById('menu');
       const inputs = layerList.getElementsByTagName('input');
@@ -397,19 +379,12 @@
           const layerId = layer.target.id;
 
           xVar = layerId;
+          xTitle = layer.target.value;
+
+          map.removeControl(img);
+          img.addTo(map);
 
           map.removeLayer(geojson);
-
-          /* OLD:
-
-          geojson = L.geoJson(norfolkBGs, {
-              style: style,
-              onEachFeature: onEachFeature
-          }).addTo(map);*/
-
-          //-------------------------------------
-
-          /*FROM TOGGLE TIPS:*/
 
           map.removeLayer(norfolk);
 
@@ -424,30 +399,40 @@
 
           geojson = layer;
 
-
         };
       }
 
+      //ENVIRONMENTAL VARIABLES: RESPONSE TO TOGGLES
+      const layerListR = document.getElementById('rightMenu');
+      const inputsR = layerListR.getElementsByTagName('input');
 
+      for (const inputR of inputsR) {
+        inputR.onclick = (layer) => {
+          const layerId = layer.target.id;
 
-//______________________________________________________________________________________________________________________________
-      /*img.onAdd = function (map) {
-        var div = L.DomUtil.create('div', 'grid-container');
-        div.id = gridContainerID;
-        div.style.display = "inline-grid";
-        div.style.zIndex = 700;
-        var grades = [1, 40, 99];
+          yVar = layerId;
+          yTitle = layer.target.value;
 
-        div.innerHTML += "<div class='xButton' onclick='xButton(\"gridContainer\", \"inline-grid\")' ><h2 style='top: -47px; left: -26px'>✕</h2></div><h3 class='yAxis'>Nitrogen Dioxide Percentile <span onclick='showInfoPop(\"infopop1\")'>&#9432;</span></h3><span id='infopop1' class='infopop' style='left: -20%; bottom: 5%; width: 200%;'><p>" + no2AxisPop + "</p><btn class='infopopX' onclick='hideInfoPop(\"infopop1\")'>&#x2715;</btn></span><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[0],"") + "\" id:\"a3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[1],"") + "\" id:\"b3\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[2],grades[2],"") + "\" id:\"c3\" ></div>";
-        div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[0],"") + "\" id:\"a2\"></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[1],"") + "\" id:\"b2\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[1],grades[2],"") + "\" id:\"c2\" ></div>";
-        div.innerHTML += "<div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[0],"") + "\" id:\"a1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[1],"") + "\" id:\"b1\" ></div><div class=\"grid-item\" style=\"background:" + getColor(grades[0],grades[2],"") + "\" id:\"c1\" ></div><h2 class='xAxis' >Socio-Demographic Index <span onclick='showInfoPop(\"infopop2\")'>&#9432;</span></h3><span id='infopop2' class='infopop' style='left: -20%; bottom: 5%; width: 200%;'><p>" + demAxisPop + "</p><btn class='infopopX' onclick='hideInfoPop(\"infopop2\")'>&#x2715;</btn></span></h2>";
+          map.removeControl(img);
+          img.addTo(map);
 
-        var draggable = new L.Draggable(div);
-        draggable.enable();
+          map.removeLayer(geojson);
 
-        return div;
-      }*/
+          map.removeLayer(norfolk);
 
+          geojson = L.geoJson(norfolkBGs);
+
+          norfolk = L.geoJson(norfolkBGs, {
+            style: style,
+            onEachFeature: onEachFeature
+          });
+
+          var layer = norfolk.addTo(map);
+
+          geojson = layer;
+
+        };
+      }
 
 
     </script>
