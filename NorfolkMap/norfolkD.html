@@ -270,7 +270,7 @@
         else if (xVar == "PercentHomeowners") x = Math.round((feature.properties.BlackHomeOwners / feature.properties.BlackTenuresTotal)*100);
 
         if (yVar == "Elev_m_PCTL") y = feature.properties.Elev_m_PCTL;
-        else if (yVar == "ElevROC_PCTL") y = feature.properties.ElevROC_PCTL;
+        else if (yVar == "ElevROC_PCTL") y = 100 - feature.properties.ElevROC_PCTL;
 
         return {
             fillColor: getColor(y, x, xVar),
