@@ -18,7 +18,7 @@ font-family: Helvetica, Arial, Sans-Serif;
 margin: 40px auto;
 text-align: center;
 border-radius: 4px;
-padding: 5%;
+padding: 1px;
 }
 .btn-linkedin:link, .btn-linkedin:visited {
   color: #fff;
