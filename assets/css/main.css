@@ -14,6 +14,9 @@
   border-width: 1px;
   border-style: solid;
   border-color: #084461;
+font-family: Helvetica, Arial, Sans-Serif;
+margin: 40px auto;
+text-align: center;
 }
 .btn-linkedin:link, .btn-linkedin:visited {
   color: #fff;
