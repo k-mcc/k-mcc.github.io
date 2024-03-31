@@ -1,10 +1,12 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
+		<!-- <link rel="stylesheet" href="assets/css/image_gallery_style.css" /> -->
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 		<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,200;9..40,700&family=Jost&family=Prata&display=swap" rel="stylesheet">
+
 		<style>
 
 			html {
@@ -100,7 +102,7 @@
 			    background-attachment: fixed;
 			    background-position: center; 
 			    height: 100vh; /* 100% of viewport height */
-			    margin: 0 auto; 
+			    margin: 0 auto;
 			    position: relative; 
 			    justify-content: center;
 			    align-items: center;
@@ -187,39 +189,6 @@
 			  }
 			}
 
-
-			.twenty-one {
-				font-family: 'DM Sans', sans-serif;
-			    background: rgb(0,0,0,0);
-			    color: #fff;
-			    border: 2px solid #fff;
-			    text-transform: uppercase;
-			    position: relative;
-			    z-index: 1;
-			    transition: color 400ms;
-			}
-
-			.twenty-one::before {
-			    content: '';
-			    position: absolute;
-			    top: 0;
-			    left: 0;
-			    right: 0;
-			    bottom: 0;
-			    background: rgb(255,255,255,0.5);
-			    z-index: -1;
-			    transition: transform 400ms ease-out;
-			    transform: scaleX(0);
-			    transform-origin: left;
-			}
-
-			.twenty-one:hover::before {
-			   transform: scaleX(1);
-			}
-
-			.twenty-one:hover {
-			    color: #000;
-			}
 			button {
 				font-family: 'DM Sans', sans-serif;
 			    width: 200px;
@@ -247,73 +216,115 @@
 			}
 
 			.pink:hover {
-				color: #9AE0D0;
+				color: #9AE0D0; /*#5259AA;*/
+				transition: 0.3s;
+				text-decoration: underline dotted;
 			}
+
+			.twenty-one {
+				font-family: 'DM Sans', sans-serif;
+			    background: rgb(0,0,0,0);
+			    color: #fff;
+			    border: 2px solid #fff;
+/*			    text-transform: uppercase;*/
+			    position: relative;
+			    z-index: 1;
+			    transition: color 400ms;
+			}
+
+			.twenty-one::before {
+			    content: '';
+			    position: absolute;
+			    top: 0;
+			    left: 0;
+			    right: 0;
+			    bottom: 0;
+			    background: rgb(255,255,255,0.6);
+			    z-index: -1;
+			    transition: transform 400ms ease-out;
+			    transform: scaleX(0);
+			    transform-origin: left;
+			}
+
+			.twenty-one:hover::before {
+			   transform: scaleX(1);
+			}
+
+			.twenty-one:hover {
+			    color: #000;
+/*			    text-transform: uppercase;*/
+			}
+
+			
 
 
 		</style>
 		<!-- <link rel="stylesheet" href="assets/css/gallery_style.css" /> -->
+		<meta name="viewport" content="width=device-width, user-scalable=no">
 	</head>
 	<body class="text-center">
 
-		<header class="masthead mb-auto" style="padding: 3%">
+		<header class="masthead mb-auto" style="padding: 3%; height: auto;">
 	    	<div class="inner">
 	         	<h3 class="masthead-brand">Kate McCarthy</h3>
 	         	<nav class="nav nav-masthead justify-content-center">
 	         		<a class="nav-link active" style="font-family: 'DM Sans', sans-serif; color: #fff; font-weight: 700; font-size: 20px; margin-right:1px; margin-top: 0px;  margin-bottom: 0px; padding: 0px;" href="#">Home</a>
-		            <a class="nav-link active" style="font-family: 'DM Sans', sans-serif; color: #fff; font-weight: 700; font-size: 20px; margin-right:1px; margin-top: 0px;  margin-bottom: 0px; padding: 0px;" href="#about">About</a>
-		            <a class="nav-link active" style="font-family: 'DM Sans', sans-serif; color: #fff; font-weight: 700; font-size: 20px; margin-right:1px; margin-top: 0px;  margin-bottom: 0px; padding: 0px;" href="image_gallery.html">Gallery</a>
+		            <a class="nav-link" style="font-family: 'DM Sans', sans-serif; color: #fff; font-weight: 700; font-size: 20px; margin-right:1px; margin-top: 0px;  margin-bottom: 0px; padding: 0px;" href="#about">About</a>
+		            <a class="nav-link" style="font-family: 'DM Sans', sans-serif; color: #fff; font-weight: 700; font-size: 20px; margin-right:1px; margin-top: 0px;  margin-bottom: 0px; padding: 0px;" href="image_gallery.html">Gallery</a>
 	         	</nav>
 	        </div>
 	    </header>
 
-		<section id="section1" data-speed="8" data-type="background">
-			<div class="strip">
-		    	<h1>Kate McCarthy</h1>
-		    	<span class="thin-text">Hi! I'm Kate. I like rocks, space, and rocks in space.</span>
-		    	<div class="button-box">
-                	<a href="#about"><button class="twenty-one"><span>About</span></button></a>
-                	<a href="image_gallery.html"><button class="twenty-one"><span>Gallery</span></button></a>
-                	<!-- <button class="twenty-one"><span>Contact</span></button> -->
-            	</div>
-			</div>
-		</section>
+	    <div style="width: 100%;">
 
-		<!-- Section 2 -->
-		<section id="section2" data-speed="4" data-type="background">
-			<a id="about"></a>
-		    <div class="container" style="height:auto; padding-bottom: 5%;">
-		    	<h2 style="padding-top: 3%">About Me</h2>
-		    	<p>
-		    		I study environmental sciences, computer science, and astronomy at the University of Virginia.
-		    		This past summer, I interned at <a class="pink" href="https://www.jpl.nasa.gov/">NASA's Jet Propulsion Laboratory</a> in the <a class="pink" href="https://science.jpl.nasa.gov/division/astrophysics-space-sciences/exoplanet-discovery-and-science/">Exoplanet Discovery Group</a> to algorithmically assess the quality and scientific utility of exoplanet transmission spectra. 
-		    		I am especially interested in using ice-penetrating radar and other remote sensing techniques to explore what we can't already see on Earth, Mars, and ocean worlds like <a class="pink" href="https://europa.nasa.gov/">Europa</a>. 
-		    		<br>
-		    		<br>
-		    		Last year, I processed 17 years of radar data from the Mars Express Orbiter's <a class="pink" href="https://mars.nasa.gov/express/mission/sc_science_marsis01.html">MARSIS</a> instrument. I delivered the <a class="pink" href="https://pds-geosciences.wustl.edu/missions/mars_express/marsis.htm">completed archive</a> to NASA's Planetary Data System, where it is now accessible to the public (titled "Optimized MARSIS Radargram Data").
-		    		From 2021 to 2022, in an <a class="pink" href="https://pusede.evsc.virginia.edu/">atmospheric chemistry lab</a> at UVA, I made a <a class="pink" href="https://k-mcc.github.io/houston-in-dev.html">prototype</a> for an air pollution injustice map of Houston, Texas. My research project focused on making satellite observations of air pollution more accessible.
-					<br>
-		    		<br>
-		    		In my free time, I love exploring new places, going on hikes, and taking photos. While on campus, I write for the <a class="pink" href="https://www.cavalierdaily.com/staff/kate-mccarthy">humor section of the Cavalier Daily</a>, UVA's student newspaper, and I lead weekly improv comedy sessions.</h3>
-		    	</p>
-		    </div>
-		</section>
-		<!-- Section 3 -->
-<!-- 		<section id="section3" data-speed="2" data-type="background">
-		    <div class="container" style="height:auto; padding-bottom: 5%;">
-		    	<h2 style="padding-top: 3%">Contact</h2>
-		    	<a href="mailto:kem6ur@virginia.edu">kem6ur@virginia.edu</a>
-		    	<a style="font-family: 'PT Sans', sans-serif;" class="pink" href="mailto:kem6ur@virginia.edu">kem6ur@virginia.edu</a>
-		    </div>
-		</section> -->
+			<section id="section1" data-speed="8" data-type="background">
+				<div class="strip">
+			    	<h1>Kate McCarthy</h1>
+			    	<span class="thin-text">Hi! I'm Kate. I like rocks, space, and rocks in space.</span>
+			    	<div class="button-box">
+	                	<a href="#about" class="button-link"><button class="twenty-one"><span>About</span></button></a>
+	                	<a href="image_gallery.html" class="button-link"><button class="twenty-one"><span>Gallery</span></button></a>
+	                	<!-- <button class="twenty-one"><span>Contact</span></button> -->
+	            	</div>
+				</div>
+			</section>
 
-		<!-- Section 4 -->
-		<section id="section4" data-speed="2" data-type="background">
-		    <div class="container">
-		        <p>&copy 2023 Kate McCarthy</p>
-		        <p><a href="mailto:kem6ur@virginia.edu">kem6ur@virginia.edu</a></p>
-		    </div>
-		</section>
+			<!-- Section 2 -->
+			<section id="section2" data-speed="4" data-type="background">
+				<a id="about"></a>
+			    <div class="container" style="height:auto; padding-bottom: 5%;">
+			    	<h2 style="padding-top: 3%">About Me</h2>
+			    	<p>
+			    		I study environmental sciences, computer science, and astronomy at the University of Virginia.
+			    		This past summer, I interned at <a class="pink" href="https://www.jpl.nasa.gov/">NASA's Jet Propulsion Laboratory</a> in the <a class="pink" href="https://science.jpl.nasa.gov/division/astrophysics-space-sciences/exoplanet-discovery-and-science/">Exoplanet Discovery Group</a> to algorithmically assess the quality and scientific utility of exoplanet transmission spectra. 
+			    		I am especially interested in using ice-penetrating radar and other remote sensing techniques to explore what we can't already see on Earth, Mars, and ocean worlds like <a class="pink" href="https://europa.nasa.gov/">Europa</a>. 
+			    		<br>
+			    		<br>
+			    		Last year, I processed 17 years of radar data from the Mars Express Orbiter's <a class="pink" href="https://mars.nasa.gov/express/mission/sc_science_marsis01.html">MARSIS</a> instrument. I delivered the <a class="pink" href="https://pds-geosciences.wustl.edu/missions/mars_express/marsis.htm">completed archive</a> to NASA's Planetary Data System, where it is now accessible to the public (titled "Optimized MARSIS Radargram Data").
+			    		From 2021 to 2022, in an <a class="pink" href="https://pusede.evsc.virginia.edu/">atmospheric chemistry lab</a> at UVA, I made a <a class="pink" href="https://k-mcc.github.io/houston-in-dev.html">prototype</a> for an air pollution injustice map of Houston, Texas. My research project focused on making satellite observations of air pollution more accessible.
+						<br>
+			    		<br>
+			    		In my free time, I love exploring new places, going on hikes, and taking photos. While on campus, I write for the <a class="pink" href="https://www.cavalierdaily.com/staff/kate-mccarthy">humor section of the Cavalier Daily</a>, UVA's student newspaper, and I lead weekly improv comedy sessions.
+			    	</p>
+			    </div>
+			</section>
+			<!-- Section 3 -->
+	<!-- 		<section id="section3" data-speed="2" data-type="background">
+			    <div class="container" style="height:auto; padding-bottom: 5%;">
+			    	<h2 style="padding-top: 3%">Contact</h2>
+			    	<a href="mailto:kem6ur@virginia.edu">kem6ur@virginia.edu</a>
+			    	<a style="font-family: 'PT Sans', sans-serif;" class="pink" href="mailto:kem6ur@virginia.edu">kem6ur@virginia.edu</a>
+			    </div>
+			</section> -->
+
+			<!-- Section 4 -->
+			<section id="section4" data-speed="2" data-type="background">
+			    <div class="container">
+			        <p>&copy 2023 Kate McCarthy</p>
+			        <p><a href="mailto:kem6ur@virginia.edu">kem6ur@virginia.edu</a></p>
+			    </div>
+			</section>
+		</div>
 
 		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
