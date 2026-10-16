@@ -1,0 +1,348 @@
+/* ---------- Theme ---------- */
+:root {
+  --bg: #05060f;
+  --surface: rgb(255 255 255 / 0.04);
+  --surface-hover: rgb(255 255 255 / 0.07);
+  --text: #f1f0fb;
+  --muted: #a6a7c4;
+  --border: rgb(255 255 255 / 0.1);
+  --accent: #a78bfa;        /* nebula violet — swap for any color you like */
+  --accent-2: #67e8f9;      /* starlight cyan, used in gradients */
+  --accent-contrast: #0b0820;
+  --radius: 14px;
+  --max: 1080px;
+  color-scheme: dark;
+}
+
+/* ---------- Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  overflow-x: clip;
+  color: var(--text);
+  font: 400 1.0625rem/1.65 "Inter", system-ui, sans-serif;
+  /* Faint nebula glow behind the stars */
+  background:
+    radial-gradient(ellipse 60% 45% at 85% 10%, rgb(124 58 237 / 0.18), transparent 70%),
+    radial-gradient(ellipse 50% 40% at 5% 60%, rgb(14 116 144 / 0.14), transparent 70%),
+    radial-gradient(ellipse 70% 50% at 60% 100%, rgb(190 24 93 / 0.10), transparent 70%),
+    var(--bg);
+  background-attachment: fixed;
+}
+h1, h2, h3 { font-family: "Space Grotesk", "Inter", sans-serif; line-height: 1.1; margin: 0; }
+a { color: inherit; }
+img { max-width: 100%; display: block; }
+::selection { background: var(--accent); color: var(--accent-contrast); }
+
+#sky {
+  position: fixed; inset: 0; z-index: -1;
+  width: 100%; height: 100%;
+  pointer-events: none;
+}
+
+/* ---------- Nav ---------- */
+.nav {
+  position: sticky; top: 0; z-index: 10;
+  display: flex; justify-content: space-between; align-items: center;
+  max-width: var(--max); margin: 0 auto; padding: 1rem 1.25rem;
+}
+.nav::before {
+  content: ""; position: absolute; inset: 0; left: 50%; width: 100vw; transform: translateX(-50%);
+  z-index: -1; background: rgb(5 6 15 / 0.6); backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-name { font-family: "Space Grotesk", sans-serif; font-weight: 700; text-decoration: none; white-space: nowrap; }
+.nav-short { display: none; }
+@media (max-width: 480px) {
+  .nav-full { display: none; }
+  .nav-short { display: inline; letter-spacing: 0.05em; }
+}
+.nav nav { display: flex; gap: 1.25rem; }
+.nav nav a { text-decoration: none; color: var(--muted); font-weight: 500; font-size: 0.95rem; }
+.nav nav a:hover { color: var(--accent); }
+
+/* ---------- Layout ---------- */
+main, .footer { max-width: var(--max); margin: 0 auto; padding: 0 1.25rem; }
+.section { padding: 4.5rem 0; border-top: 1px solid var(--border); }
+.section h2 { font-size: clamp(1.75rem, 4vw, 2.5rem); margin-bottom: 2rem; }
+.section h2::after {
+  content: ""; display: block; width: 3rem; height: 4px;
+  margin-top: 0.75rem; border-radius: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  box-shadow: 0 0 12px rgb(167 139 250 / 0.6);
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative; padding: 5rem 0 4.5rem; min-height: 65vh;
+  display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: 3rem; align-items: center;
+}
+.eyebrow {
+  text-transform: uppercase; letter-spacing: 0.2em;
+  font-size: 0.8rem; font-weight: 600; color: var(--accent-2); margin: 0 0 1.25rem;
+}
+.hero h1 {
+  font-family: "Inter", system-ui, sans-serif;
+  font-weight: 200;
+  font-size: clamp(2.5rem, 5.6vw, 4.5rem);
+  letter-spacing: 0.02em;
+  text-shadow: 0 0 24px rgb(196 181 253 / 0.35);
+}
+.tagline { font-size: clamp(1.15rem, 2.5vw, 1.5rem); color: var(--muted); max-width: 38ch; margin: 1.75rem 0 2.25rem; }
+.accent {
+  color: transparent;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text; background-clip: text;
+  font-weight: 600;
+}
+.hero-links { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+
+.btn {
+  display: inline-block; padding: 0.8rem 1.4rem; border-radius: 999px;
+  background: var(--accent); color: var(--accent-contrast);
+  font-weight: 600; text-decoration: none; border: 1px solid var(--accent);
+  box-shadow: 0 0 24px rgb(167 139 250 / 0.35);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.btn:hover { transform: translateY(-2px); box-shadow: 0 0 34px rgb(167 139 250 / 0.55); }
+.btn-ghost { background: rgb(255 255 255 / 0.03); color: var(--text); border-color: var(--border); box-shadow: none; }
+.btn-ghost:hover { border-color: var(--accent); box-shadow: 0 0 20px rgb(167 139 250 / 0.25); }
+
+/* ---------- About panel ---------- */
+.about-panel {
+  position: relative; padding: 1.5rem 1.6rem 1.6rem; border-radius: 18px;
+  background: linear-gradient(160deg, rgb(255 255 255 / 0.07), rgb(255 255 255 / 0.02) 60%);
+  border: 1px solid rgb(167 139 250 / 0.28);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 50px rgb(124 58 237 / 0.15), inset 0 1px 0 rgb(255 255 255 / 0.06);
+  scroll-margin-top: 90px;
+}
+/* Glowing corner brackets, like a spacecraft display */
+.about-panel::before, .about-panel::after {
+  content: ""; position: absolute; width: 22px; height: 22px; pointer-events: none;
+}
+.about-panel::before {
+  top: -1px; left: -1px; border-top-left-radius: 18px;
+  border-top: 2px solid var(--accent-2); border-left: 2px solid var(--accent-2);
+  filter: drop-shadow(0 0 4px var(--accent-2));
+}
+.about-panel::after {
+  bottom: -1px; right: -1px; border-bottom-right-radius: 18px;
+  border-bottom: 2px solid var(--accent); border-right: 2px solid var(--accent);
+  filter: drop-shadow(0 0 4px var(--accent));
+}
+.about-head { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 1.1rem; }
+.about-panel h2 {
+  display: flex; align-items: center; gap: 0.6rem;
+  font-family: "Inter", system-ui, sans-serif; font-size: 0.8rem; font-weight: 600;
+  letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent-2);
+}
+.signal {
+  width: 8px; height: 8px; border-radius: 50%; flex: none;
+  background: var(--accent-2);
+  animation: signal 2.4s ease-out infinite;
+}
+@keyframes signal {
+  0% { box-shadow: 0 0 0 0 rgb(103 232 249 / 0.6), 0 0 8px var(--accent-2); }
+  70%, 100% { box-shadow: 0 0 0 9px rgb(103 232 249 / 0), 0 0 8px var(--accent-2); }
+}
+
+/* Photo with an orbit ring; a small satellite goes around once on load */
+.portrait-orbit { position: relative; width: 96px; height: 96px; flex: none; margin: 10px; }
+.portrait {
+  width: 100%; height: 100%; object-fit: cover; border-radius: 50%;
+  border: 1px solid var(--border);
+  box-shadow: 0 0 30px rgb(167 139 250 / 0.3);
+  /* Discourage saving: no right-click "Save Image", no dragging, no long-press save on phones */
+  pointer-events: none; user-select: none;
+  -webkit-user-drag: none; -webkit-touch-callout: none;
+}
+/* Placeholder "planet" until you add images/portrait.jpg */
+.portrait-missing {
+  background:
+    radial-gradient(circle at 32% 30%, rgb(255 255 255 / 0.35), transparent 30%),
+    radial-gradient(circle at 50% 50%, #7c3aed, #312e81 55%, #0b0820 100%);
+}
+.portrait-ring, .portrait-sat { position: absolute; inset: -10px; border-radius: 50%; pointer-events: none; }
+.portrait-ring { border: 1px dashed rgb(255 255 255 / 0.25); }
+.portrait-sat { transform: rotate(45deg); animation: portrait-orbit 3.5s cubic-bezier(0.65, 0, 0.35, 1) 0.6s both; }
+.portrait-sat span {
+  position: absolute; top: -3px; left: 50%; width: 6px; height: 6px; margin-left: -3px;
+  border-radius: 50%; background: #fff;
+  box-shadow: 0 0 6px 2px var(--accent-2);
+}
+@keyframes portrait-orbit { from { transform: rotate(45deg); } to { transform: rotate(405deg); } }
+
+.about-text p { margin: 0 0 0.9rem; color: #d6d5ea; font-size: 0.98rem; line-height: 1.6; }
+.interests { list-style: none; padding: 0; margin: 1.25rem 0 0; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.interests li {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.35rem 0.85rem; border-radius: 999px; font-size: 0.9rem; font-weight: 500;
+  border: 1px solid var(--border); background: var(--surface);
+}
+.interests li::before {
+  content: ""; width: 6px; height: 6px; border-radius: 50%; flex: none;
+  background: #fff;
+  box-shadow: 0 0 4px 1px var(--accent), 0 0 10px 2px rgb(167 139 250 / 0.5);
+}
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; gap: 2.5rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .signal, .portrait-sat { animation: none; }
+}
+
+/* ---------- Research missions ---------- */
+.missions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; }
+.mission {
+  padding: 1rem 1.5rem 1.75rem; border-radius: var(--radius);
+  background: var(--surface); border: 1px solid var(--border);
+  overflow: hidden;   /* the flyby path runs off the edges of the card */
+}
+.mission-art { display: block; width: 100%; height: auto; overflow: visible; }
+.orbit-path { fill: none; stroke: rgb(255 255 255 / 0.25); stroke-width: 1; stroke-dasharray: 3 5; }
+.sat { filter: drop-shadow(0 0 3px rgb(255 255 255 / 0.7)); }
+.sat-panel { fill: #4f74d1; stroke: #a9c1ff; stroke-width: 0.6; }
+.sat-grid { stroke: #a9c1ff; stroke-width: 0.6; }
+.sat-strut { stroke: #c9c9d6; stroke-width: 1; }
+.sat-body { fill: #e8c46b; stroke: #fff2c4; stroke-width: 0.5; }
+.sat-antenna { fill: #d9d9e3; }
+.sat-dish { fill: #f2f2f7; stroke: #c9c9d6; stroke-width: 0.5; }
+.sat-label {
+  font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 18px;
+  letter-spacing: 0.04em; fill: var(--text);
+  opacity: 0; transform: translateX(-6px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+.mission.is-done .sat-label { opacity: 1; transform: none; }
+.mission-meta {
+  margin: 0.25rem 0 0.5rem; font-size: 0.75rem; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-2);
+}
+.mission-text p:not(.mission-meta) { margin: 0; color: var(--muted); }
+.mission-text a {
+  color: var(--text); font-weight: 500;
+  text-decoration: underline; text-decoration-color: rgb(167 139 250 / 0.6);
+  text-underline-offset: 3px; transition: color 0.15s ease, text-decoration-color 0.15s ease;
+}
+.mission-text a:hover { color: var(--accent); text-decoration-color: var(--accent); }
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
+}
+@media (max-width: 760px) {
+  .missions { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sat-label { transition: none; }
+}
+
+.card-link { font-weight: 600; color: var(--accent); text-decoration: none; }
+.card-link:hover { text-decoration: underline; }
+
+/* ---------- Journey wave ---------- */
+.section-intro { color: var(--muted); margin: -1rem 0 1rem; }
+.journey {
+  /* Scrolls sideways when the screen is too narrow for the whole wave */
+  overflow-x: auto; overflow-y: hidden;
+  margin: 0 -1.25rem; padding: 0 1.25rem;
+  scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+}
+.journey-track { position: relative; min-width: 920px; height: 560px; }
+.journey-wave { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.wave-line, .wave-glow {
+  fill: none; stroke: url(#wave-gradient); stroke-linecap: round;
+  stroke-dasharray: 1; stroke-dashoffset: 1;
+  transition: stroke-dashoffset 2.4s cubic-bezier(.6, .1, .3, 1);
+}
+.wave-line { stroke-width: 2; }
+.wave-glow { stroke-width: 8; opacity: 0.45; filter: url(#wave-blur); }
+.journey.is-visible .wave-line, .journey.is-visible .wave-glow { stroke-dashoffset: 0; }
+.wave-comet { fill: #fff; filter: drop-shadow(0 0 4px #fff) drop-shadow(0 0 8px var(--accent-2)); opacity: 0; transition: opacity 1s 2.4s; }
+.journey.is-visible .wave-comet { opacity: 1; }
+
+.journey-stops { list-style: none; margin: 0; padding: 0; }
+.stop { position: absolute; width: 0; height: 0; }   /* JS places each stop on the wave */
+.stop-dot {
+  position: absolute; left: 0; top: 0; transform: translate(-50%, -50%);
+  width: 22px; height: 22px; padding: 0; border-radius: 50%; cursor: pointer;
+  border: 1px solid rgb(255 255 255 / 0.5);
+  background: radial-gradient(circle, #fff 0 22%, var(--accent) 45%, rgb(167 139 250 / 0.25) 70%);
+  box-shadow: 0 0 14px rgb(167 139 250 / 0.7);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  opacity: 0;
+}
+.journey.is-visible .stop-dot { opacity: 1; transition: opacity 0.5s calc(0.4s + var(--i) * 0.35s), transform 0.2s ease, box-shadow 0.2s ease; }
+.stop-dot:hover, .stop-dot:focus-visible { transform: translate(-50%, -50%) scale(1.25); box-shadow: 0 0 22px rgb(167 139 250 / 0.9); }
+.stop-dot:focus-visible { outline: 2px solid var(--accent-2); outline-offset: 4px; }
+.stop.is-open .stop-dot {
+  transform: translate(-50%, -50%) scale(1.35);
+  box-shadow: 0 0 0 6px rgb(167 139 250 / 0.18), 0 0 28px rgb(103 232 249 / 0.9);
+}
+
+/* Year + label sit on the opposite side of the wave from the card */
+.stop-year, .stop-label {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  white-space: nowrap; pointer-events: none; text-align: center;
+}
+.stop-year { font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 0.95rem; color: var(--text); }
+.stop-label { font-size: 0.8rem; color: var(--muted); }
+.stop-up .stop-year { top: calc(100% + 12px); }
+.stop-up .stop-label { top: calc(100% + 32px); }
+.stop-down .stop-label { bottom: calc(100% + 12px); }
+.stop-down .stop-year { bottom: calc(100% + 30px); }
+.stop.is-open .stop-year { color: var(--accent-2); }
+
+.stop-card {
+  position: absolute; left: 0; width: 290px;
+  transform: translateX(calc(-50% + var(--shift, 0px)));
+  padding: 1.25rem 1.35rem; border-radius: var(--radius);
+  background: rgb(14 14 32 / 0.85); backdrop-filter: blur(10px);
+  border: 1px solid rgb(167 139 250 / 0.35);
+  box-shadow: 0 12px 40px rgb(0 0 0 / 0.4), 0 0 30px rgb(124 58 237 / 0.18);
+  visibility: hidden; opacity: 0;
+  transition: opacity 0.25s ease, translate 0.25s ease, visibility 0s 0.25s;
+}
+.stop-up .stop-card { bottom: 30px; translate: 0 8px; }
+.stop-down .stop-card { top: 30px; translate: 0 -8px; }
+.stop.is-open .stop-card { visibility: visible; opacity: 1; translate: 0 0; transition: opacity 0.25s ease, translate 0.25s ease; }
+.stop-meta { margin: 0 0 0.4rem; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-2); }
+.stop-card h3 { font-size: 1.2rem; margin-bottom: 0.5rem; }
+.stop-card p:not(.stop-meta) { margin: 0; color: var(--muted); font-size: 0.95rem; line-height: 1.55; }
+.stop-card .card-link { display: inline-block; margin-top: 0.75rem; font-size: 0.95rem; }
+
+.journey-hint { display: none; margin: 0.5rem 0 0; font-size: 0.85rem; color: var(--muted); }
+.journey.is-scrollable + .journey-hint { display: block; }
+
+@media (prefers-reduced-motion: reduce) {
+  .wave-line, .wave-glow, .stop-dot, .stop-card { transition: none !important; }
+  .wave-comet { display: none; }
+}
+
+/* ---------- Footer ---------- */
+.footer { padding: 4.5rem 1.25rem 3rem; border-top: 1px solid var(--border); }
+.footer h2 { font-size: clamp(1.75rem, 4vw, 2.5rem); margin-bottom: 1rem; }
+.footer-email {
+  font-family: "Space Grotesk", sans-serif; font-weight: 700;
+  font-size: clamp(1.25rem, 5vw, 2.25rem);
+  color: transparent; background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text; background-clip: text;
+  text-decoration: none; word-break: break-all;
+}
+.footer-email:hover { filter: brightness(1.2); }
+.footer-links { display: flex; flex-wrap: wrap; gap: 1.5rem; margin: 2rem 0; }
+.footer-links a { color: var(--muted); font-weight: 500; }
+.footer-links a:hover { color: var(--accent); }
+.footer-small { color: var(--muted); font-size: 0.85rem; margin: 0; }
+
+/* ---------- Mobile ---------- */
+@media (max-width: 680px) {
+  .nav nav { gap: 0.9rem; }
+  .hero { padding: 3.5rem 0 3rem; min-height: 70vh; }
+  .section { padding: 3.5rem 0; }
+}
+@media (max-width: 760px) {
+  .sat-label { font-size: 22px; }
+}
