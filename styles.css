@@ -204,12 +204,25 @@ main, .footer { max-width: var(--max); margin: 0 auto; padding: 0 1.25rem; }
 .mission-art { display: block; width: 100%; height: auto; overflow: visible; }
 .orbit-path { fill: none; stroke: rgb(255 255 255 / 0.25); stroke-width: 1; stroke-dasharray: 3 5; }
 .sat { filter: drop-shadow(0 0 3px rgb(255 255 255 / 0.7)); }
-.sat-panel { fill: #4f74d1; stroke: #a9c1ff; stroke-width: 0.6; }
-.sat-grid { stroke: #a9c1ff; stroke-width: 0.6; }
-.sat-strut { stroke: #c9c9d6; stroke-width: 1; }
-.sat-body { fill: #e8c46b; stroke: #fff2c4; stroke-width: 0.5; }
-.sat-antenna { fill: #d9d9e3; }
-.sat-dish { fill: #f2f2f7; stroke: #c9c9d6; stroke-width: 0.5; }
+/* VERITAS: gold-foil body, blue solar wings, dark VISAR radar antennas */
+.sat-veritas { filter: drop-shadow(0 0 3px rgb(255 214 120 / 0.7)); }
+.veritas-panel { fill: #2d56c4; stroke: #9fb8ff; stroke-width: 0.5; stroke-linejoin: round; }
+.veritas-cells { fill: none; stroke: #7f9cf0; stroke-width: 0.45; }
+.veritas-strut, .veritas-mast { stroke: #c9c9d6; stroke-width: 0.7; }
+.veritas-body { stroke: #fff2c4; stroke-width: 0.5; }
+.veritas-crease { fill: none; stroke: #8a5e14; stroke-width: 0.35; opacity: 0.7; }
+.veritas-sar { fill: #3a3f50; stroke: #b9bfcc; stroke-width: 0.45; }
+.veritas-sar-line { fill: none; stroke: #e0b25a; stroke-width: 0.35; opacity: 0.8; }
+.veritas-dish { fill: #f2f2f7; stroke: #b9bfcc; stroke-width: 0.5; }
+.veritas-feed { fill: #d9d9e3; }
+/* Europa Clipper: silver, so it reads as a different spacecraft from VERITAS */
+.sat-silver { filter: drop-shadow(0 0 3px rgb(220 228 240 / 0.8)); }
+.silver-panel { fill: #2f3647; stroke: #d7dbe3; stroke-width: 0.7; }
+.silver-cells { fill: none; stroke: #b8bfcb; stroke-width: 0.5; }
+.silver-strut, .silver-boom { stroke: #cfd4dc; stroke-width: 0.8; }
+.silver-body { stroke: #ffffff; stroke-width: 0.5; }
+.silver-dish { fill: #f4f6fa; stroke: #a9b0bc; stroke-width: 0.6; }
+.silver-tip { fill: #e6e9ef; }
 .sat-label {
   font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 18px;
   letter-spacing: 0.04em; fill: var(--text);
