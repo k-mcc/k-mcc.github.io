@@ -313,8 +313,8 @@ main, .footer { max-width: var(--max); margin: 0 auto; padding: 0 1.25rem; }
 .stop-card p:not(.stop-meta) { margin: 0; color: var(--muted); font-size: 0.95rem; line-height: 1.55; }
 .stop-card .card-link { display: inline-block; margin-top: 0.75rem; font-size: 0.95rem; }
 
-.journey-hint { display: none; margin: 0.5rem 0 0; font-size: 0.85rem; color: var(--muted); }
-.journey.is-scrollable + .journey-hint { display: block; }
+.journey-hint { margin: -0.5rem 0 1rem; font-size: 0.85rem; color: var(--muted); }
+.journey-hint[hidden] { display: none; }   /* shown by script.js only when the wave scrolls sideways */
 
 @media (prefers-reduced-motion: reduce) {
   .wave-line, .wave-glow, .stop-dot, .stop-card { transition: none !important; }

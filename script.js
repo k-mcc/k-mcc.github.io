@@ -134,7 +134,10 @@
       card.style.setProperty('--shift', `${clamped - left}px`);
     });
 
-    journey.classList.toggle('is-scrollable', journey.scrollWidth > journey.clientWidth + 1);
+    const scrollable = journey.scrollWidth > journey.clientWidth + 1;
+    journey.classList.toggle('is-scrollable', scrollable);
+    const hint = journey.parentElement.querySelector('.journey-hint');
+    if (hint) hint.hidden = !scrollable;
   }
 
   function open(i, { focus = false, scroll = true } = {}) {
