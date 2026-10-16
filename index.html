@@ -1,338 +1,311 @@
-<!DOCTYPE HTML>
-<html>
-	<head>
-		<!-- <link rel="stylesheet" href="assets/css/image_gallery_style.css" /> -->
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,200;9..40,700&family=Jost&family=Prata&display=swap" rel="stylesheet">
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kate McCarthy</title>
+  <meta name="description" content="Kate McCarthy — researcher at Stanford University.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@200;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <meta name="theme-color" content="#05060f">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <canvas id="sky" aria-hidden="true"></canvas>
 
-		<style>
+  <header class="nav">
+    <a class="nav-name" href="#top" aria-label="Kate McCarthy, back to top"><span class="nav-full">Kate McCarthy</span><span class="nav-short" aria-hidden="true">KM</span></a>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#journey">Backstory</a>
+      <a href="#research">Research</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
 
-			html {
-			  scroll-behavior: smooth;
-			}
+  <main id="top">
+    <!-- Hero: intro on the left, About panel on the right (stacks on phones) -->
+    <section class="hero">
+      <div class="hero-main">
+        <p class="eyebrow">PhD Candidate · Stanford University</p>
+        <h1 id="name">Kate McCarthy</h1>
+        <p class="tagline">I use <span class="accent">radar remote sensing</span> to investigate questions in <span class="accent">planetary science</span>.</p>
+        <div class="hero-links">
+          <a class="btn" href="#contact">Contact</a>
+        </div>
+      </div>
 
-			body {
-			  margin:0;
-			  padding:0;
-			  background-color: #000;
-			}
+      <!-- About -->
+      <aside id="about" class="about-panel" aria-labelledby="about-title">
+        <div class="about-head">
+          <div class="portrait-orbit">
+            <img class="portrait" src="images/portrait.jpg" alt="Portrait of Kate McCarthy" draggable="false"
+                 onerror="this.onerror = null; this.classList.add('portrait-missing'); this.alt = ''; this.src = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';">
+            <span class="portrait-ring" aria-hidden="true"></span>
+            <span class="portrait-sat" aria-hidden="true"><span></span></span>
+          </div>
+          <h2 id="about-title"><span class="signal" aria-hidden="true"></span>About</h2>
+        </div>
+        <div class="about-text">
+          <p>I am a PhD candidate in geophysics at Stanford University. In my research, I study 
+            (1) radar techniques we can use to better understand planetary bodies, and 
+            (2) the planetary bodies themselves using existing radar datasets.</p>
+          <p>Before pursuing my PhD, I graduated from the University of Virginia, where I majored in 
+            environmental sciences and computer science and minored in astronomy.</p>
+        </div>
+        <ul class="interests">
+          <li>Planetary science</li>
+          <li>Radar missions</li>
+        </ul>
+      </aside>
+    </section>
 
-			.strip {
-				position: absolute;
-				background-attachment: scroll;
-				height: 30vh;
-				padding: 2%;
-				margin-top: 3%;
-				margin-bottom:3%;
-/*				background-color: #fff;*/
-				min-width: 590px;
-			}
+    <!-- Journey: add, remove, or reorder <li class="stop"> blocks; the wave adjusts automatically -->
+    <section id="journey" class="section">
+      <h2>Backstory</h2>
+      <p class="section-intro">Click a point on the wave to read about it.</p>
+      <div class="journey" data-journey>
+        <div class="journey-track">
+          <svg class="journey-wave" aria-hidden="true">
+            <defs>
+              <linearGradient id="wave-gradient" x1="0" x2="1" y1="0" y2="0">
+                <stop offset="0" stop-color="#a78bfa" />
+                <stop offset="1" stop-color="#67e8f9" />
+              </linearGradient>
+              <filter id="wave-blur" x="-10%" y="-50%" width="120%" height="200%"><feGaussianBlur stdDeviation="5" /></filter>
+            </defs>
+            <path class="wave-glow" pathLength="1" />
+            <path class="wave-line" id="wave-path" pathLength="1" />
+            <circle class="wave-comet" r="3">
+              <animateMotion dur="16s" repeatCount="indefinite"><mpath href="#wave-path" /></animateMotion>
+            </circle>
+          </svg>
 
-			.strip-flex {
-				position: absolute;
-				background-attachment: scroll;
-				height: auto;
-				padding: 2%;
-				margin-top: 3%;
-				margin-bottom:3%;
-/*				background-color: #fff;*/
-			}
+          <ol class="journey-stops">
+            <li class="stop">
+              <button class="stop-dot" aria-expanded="false" aria-controls="chapter-1">
+                <span class="stop-year">Early years</span>
+                <span class="stop-label">Growing up</span>
+              </button>
+              <div class="stop-card" id="chapter-1">
+                <p class="stop-meta">Virginia</p>
+                <h3>Growing up</h3>
+                <p>As a kid, I was obsessed with astronomy. Some people say they "grew out" of a space phase. I never did (and never will).</p>
+              </div>
+            </li>
+            <li class="stop">
+              <button class="stop-dot" aria-expanded="false" aria-controls="chapter-2">
+                <span class="stop-year">2021</span>
+                <span class="stop-label">Remote sensing</span>
+              </button>
+              <div class="stop-card" id="chapter-2">
+                <p class="stop-meta">2021 · University of Virginia</p>
+                <h3>I learn about remote sensing</h3>
+                <p>During my first year of undergrad, I learn about the field of remote sensing. I ask a remote sensing group on campus if they could use any help on research projects. 
+                  I create interactive air pollution injustice maps to make satellite observations of air pollution more accessible.
+                </p>
+              </div>
+            </li>
+            <li class="stop">
+              <button class="stop-dot" aria-expanded="false" aria-controls="chapter-3">
+                <span class="stop-year">2022</span>
+                <span class="stop-label">Planetary remote sensing</span>
+              </button>
+              <div class="stop-card" id="chapter-3">
+                <p class="stop-meta">2022-2023 · NASA JPL</p>
+                <h3>I discover my passion for planetary remote sensing</h3>
+                <p>I intern at NASA's Jet Propulsion Lab (JPL) creating a new data archive for the 
+                  MARSIS mission. While working with the data, I discover my passion for planetary remote sensing.</p>
+              </div>
+            </li>
+            <li class="stop">
+              <button class="stop-dot" aria-expanded="false" aria-controls="chapter-4">
+                <span class="stop-year">2022</span>
+                <span class="stop-label">Small projects</span>
+              </button>
+              <div class="stop-card" id="chapter-4">
+                <p class="stop-meta">2022-2024 · University of Virginia</p>
+                <h3>Exploring through class projects</h3>
+                <p>Through class projects from 2022 up until graduating from UVA, I use planetary mission datasets to pursue my own 
+                  curiosities about Mars and Europa.</p>
+              </div>
+            </li>
+            <li class="stop">
+              <button class="stop-dot" aria-expanded="false" aria-controls="chapter-6">
+                <span class="stop-year">2023</span>
+                <span class="stop-label">Back at JPL</span>
+              </button>
+              <div class="stop-card" id="chapter-6">
+                <p class="stop-meta">2023 · NASA JPL</p>
+                <h3>Back at JPL</h3>
+                <p>I intern in JPL's Exoplanet Discovery Group algorithmically assessing the quality and 
+                  scientific utility of exoplanet transmission spectra, which broadens my view of both remote sensing 
+                  and planetary science.</p>
+              </div>
+            </li>
+            <li class="stop">
+              <button class="stop-dot" aria-expanded="false" aria-controls="chapter-5">
+                <span class="stop-year">Now</span>
+                <span class="stop-label">Pursuing PhD</span>
+              </button>
+              <div class="stop-card" id="chapter-5">
+                <p class="stop-meta">2024–present · Stanford University</p>
+                <h3>Where I am now</h3>
+                <p>I am now pursuing my PhD in Geophysics at Stanford, using radar 
+                  remote sensing to investigate questions in planetary science.</p>
+                <a class="card-link" href="#research">See my research →</a>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </div>
+      <p class="journey-hint" aria-hidden="true">Swipe to follow the wave →</p>
+    </section>
 
-			h1 {
-				font-family: 'DM Sans', sans-serif;
-				font-size: 5em;
-				color: #fff;
-				font-weight: 700;
-/*				animation: left_to_right 3s ease;*/
-				animation: fadeIn 4s ease;
-			}
+    <!-- Research: each satellite makes one orbit, then its mission name fades in -->
+    <section id="research" class="section">
+      <h2>Research</h2>
+      <div class="missions">
 
-			h2 {
-				font-family: 'DM Sans', sans-serif;
-				font-size: 3em;
-				color: #fff;
-				font-weight: 700;
-/*				animation: left_to_right 3s ease;*/
-				animation: fadeIn 3s ease;
-			}
+        <article class="mission" data-trajectory="polar">
+          <svg class="mission-art" viewBox="0 45 480 240" role="img" aria-label="Illustration of the VERITAS spacecraft in a near-polar orbit around Venus">
+            <defs>
+              <radialGradient id="venus-base" cx="0.4" cy="0.38" r="0.7">
+                <stop offset="0" stop-color="#fbe7b8" />
+                <stop offset="0.55" stop-color="#e0ad62" />
+                <stop offset="1" stop-color="#8a5523" />
+              </radialGradient>
+              <radialGradient id="venus-shade" cx="0.35" cy="0.3" r="0.85">
+                <stop offset="0.45" stop-color="#05060f" stop-opacity="0" />
+                <stop offset="1" stop-color="#05060f" stop-opacity="0.85" />
+              </radialGradient>
+              <radialGradient id="venus-glow">
+                <stop offset="0.6" stop-color="#f5c77e" stop-opacity="0.3" />
+                <stop offset="1" stop-color="#f5c77e" stop-opacity="0" />
+              </radialGradient>
+              <clipPath id="venus-clip"><circle cx="180" cy="165" r="85" /></clipPath>
+              <filter id="venus-soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="6" /></filter>
+            </defs>
+            <g transform="translate(-22 0)">
+            <g class="orbit-back"><path class="orbit-path" /><g class="sat-slot"></g></g>
+            <circle cx="180" cy="165" r="112" fill="url(#venus-glow)" />
+            <g clip-path="url(#venus-clip)">
+              <circle class="planet-disc" cx="180" cy="165" r="85" fill="url(#venus-base)" />
+              <!-- Cloud bands -->
+              <g filter="url(#venus-soft)" opacity="0.55" transform="rotate(-12 180 165)">
+                <ellipse cx="170" cy="118" rx="110" ry="10" fill="#fff3d6" />
+                <ellipse cx="200" cy="148" rx="120" ry="14" fill="#c98a45" />
+                <ellipse cx="160" cy="180" rx="100" ry="9" fill="#fff0cc" />
+                <ellipse cx="195" cy="212" rx="110" ry="13" fill="#b77837" />
+                <path d="M95 165 q 50 -40 100 -10 t 90 -5" stroke="#fff6dd" stroke-width="7" fill="none" />
+              </g>
+              <circle cx="180" cy="165" r="85" fill="url(#venus-shade)" />
+            </g>
+            <g class="orbit-front">
+              <path class="orbit-path" />
+              <g class="sat-slot">
+                <!-- VERITAS: compact body, two solar panels, radar antenna -->
+                <g class="sat">
+                  <rect x="-17" y="-3" width="11" height="6" rx="0.5" class="sat-panel" />
+                  <rect x="6" y="-3" width="11" height="6" rx="0.5" class="sat-panel" />
+                  <line x1="-6" y1="0" x2="6" y2="0" class="sat-strut" />
+                  <rect x="-4" y="-4.5" width="8" height="9" rx="1" class="sat-body" />
+                  <rect x="-2" y="4.5" width="4" height="7" class="sat-antenna" />
+                </g>
+              </g>
+            </g>
+            <text class="sat-label">VERITAS</text>
+            </g>
+          </svg>
+          <div class="mission-text">
+            <p class="mission-meta">Venus</p>
+            <h3 class="visually-hidden">VERITAS</h3>
+            <p>In my primary research project as part of <a href="https://web.stanford.edu/group/radar/index.html" target="_blank" rel="noopener">Stanford's Radar Interferometry Group</a>, I study how we can detect active surface deformation on Venus using Interferometric Synthetic Aperture Radar (InSAR) on NASA's upcoming <a href="https://science.nasa.gov/mission/veritas/" target="_blank" rel="noopener">VERITAS</a> mission.</p>
+          </div>
+        </article>
 
-			h3 {
-				font-family: 'DM Sans', sans-serif;
-				color: #fff;
-				font-weight: 700;
-				font-size: 24px;
-			}
+        <article class="mission" data-trajectory="flyby">
+          <svg class="mission-art" viewBox="0 45 480 240" role="img" aria-label="Illustration of the Europa Clipper spacecraft flying past Europa">
+            <defs>
+              <radialGradient id="europa-base" cx="0.4" cy="0.38" r="0.7">
+                <stop offset="0" stop-color="#fdfaf3" />
+                <stop offset="0.6" stop-color="#ddd0bd" />
+                <stop offset="1" stop-color="#7a6857" />
+              </radialGradient>
+              <radialGradient id="europa-shade" cx="0.35" cy="0.3" r="0.85">
+                <stop offset="0.45" stop-color="#05060f" stop-opacity="0" />
+                <stop offset="1" stop-color="#05060f" stop-opacity="0.85" />
+              </radialGradient>
+              <radialGradient id="europa-glow">
+                <stop offset="0.6" stop-color="#bcd7ff" stop-opacity="0.25" />
+                <stop offset="1" stop-color="#bcd7ff" stop-opacity="0" />
+              </radialGradient>
+              <clipPath id="europa-clip"><circle cx="180" cy="165" r="85" /></clipPath>
+              <filter id="europa-soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="7" /></filter>
+            </defs>
+            <g transform="translate(60 0)">
+            <g class="orbit-back"><path class="orbit-path" /><g class="sat-slot"></g></g>
+            <circle cx="180" cy="165" r="112" fill="url(#europa-glow)" />
+            <g clip-path="url(#europa-clip)">
+              <circle class="planet-disc" cx="180" cy="165" r="85" fill="url(#europa-base)" />
+              <!-- Mottled terrain -->
+              <g filter="url(#europa-soft)" fill="#b98d6b" opacity="0.4">
+                <ellipse cx="150" cy="140" rx="30" ry="18" />
+                <ellipse cx="215" cy="200" rx="35" ry="20" />
+                <ellipse cx="205" cy="110" rx="22" ry="14" />
+              </g>
+              <!-- Lineae (cracks in the ice) -->
+              <g fill="none" stroke="#94512f" stroke-linecap="round" opacity="0.7">
+                <path d="M95 120 C 150 135, 210 110, 270 140" stroke-width="1.8" />
+                <path d="M100 200 C 160 180, 220 215, 265 190" stroke-width="1.4" />
+                <path d="M130 85 C 150 150, 170 200, 215 250" stroke-width="2" />
+                <path d="M240 90 C 215 150, 205 190, 150 245" stroke-width="1.3" />
+                <path d="M95 165 C 140 160, 200 175, 265 160" stroke-width="1.1" />
+                <path d="M170 82 C 190 120, 250 150, 262 210" stroke-width="1.5" />
+              </g>
+              <circle cx="180" cy="165" r="85" fill="url(#europa-shade)" />
+            </g>
+            <g class="orbit-front">
+              <path class="orbit-path" />
+              <g class="sat-slot">
+                <!-- Europa Clipper: long solar arrays, big high-gain antenna -->
+                <g class="sat">
+                  <rect x="-27" y="-3" width="20" height="6" rx="0.5" class="sat-panel" />
+                  <rect x="7" y="-3" width="20" height="6" rx="0.5" class="sat-panel" />
+                  <line x1="-17" y1="-3" x2="-17" y2="3" class="sat-grid" />
+                  <line x1="17" y1="-3" x2="17" y2="3" class="sat-grid" />
+                  <line x1="-7" y1="0" x2="7" y2="0" class="sat-strut" />
+                  <rect x="-3.5" y="-5" width="7" height="10" rx="1" class="sat-body" />
+                  <ellipse cx="0" cy="-6" rx="5.5" ry="2" class="sat-dish" />
+                </g>
+              </g>
+            </g>
+            <text class="sat-label">Europa Clipper</text>
+            </g>
+          </svg>
+          <div class="mission-text">
+            <p class="mission-meta">Europa · Jupiter's moon</p>
+            <h3 class="visually-hidden">Europa Clipper</h3>
+            <p>In my secondary project with <a href="https://www.radioglaciology.com/" target="_blank" rel="noopener">Stanford's Radio Glaciology Lab</a>, I am studying strategies for REASON, <a href="https://science.nasa.gov/mission/europa-clipper/" target="_blank" rel="noopener">Europa Clipper</a>'s radar instrument, to observe 
+              certain geologically interesting interfaces in Europa's ice shell.
+            </p>
+          </div>
+        </article>
 
-			p {
-				color: #fff;
-				font-family: 'DM Sans', sans-serif;
-				font-weight: 200;
-				font-size: 2em;
+      </div>
+    </section>
+  </main>
 
-			}
-
-			@keyframes left_to_right {
-			  from {
-			    margin-left: -100%;
-			  }
-			  to {
-			    margin-left: 0;
-			  }
-			}
-
-			@keyframes fadeIn {
-			  0% { opacity: 0; }
-			  100% { opacity: 1; }
-			}
-
-			.thin-text {
-				font-family: 'DM Sans', sans-serif;
-				color: #fff;
-				font-weight: 200;
-				font-size: 2em;
-/*				animation: fadeIn 5s ease;*/
-			}
-
-			#section1 { 
-			    background: url("galleryPersonal/mountain_photo.jpeg"); /*url(https://blog.depositphotos.com/wp-content/uploads/2017/07/Soothing-nature-backgrounds-2.jpg.webp);*/
-				background-size: cover;
-				background-repeat: no-repeat;
-			    background-attachment: fixed;
-			    background-position: center; 
-			    height: 100vh; /* 100% of viewport height */
-			    margin: 0 auto;
-			    position: relative; 
-			    justify-content: center;
-			    align-items: center;
-			    display: flex;
-			    animation: fadeIn 3s ease;
-			}
-			#section2 { 
-			 /*background: url(https://cdn.britannica.com/34/231234-050-5B2280BB/volcanic-eruption-Antigua-Guatemala-volcano.jpg);*/
-			 	background: linear-gradient(#291F4A, #000);
-			    background-size: cover;
-			  background-repeat: no-repeat;
-			    background-attachment: fixed;
-			    background-position: center; 
-			    height: auto;
-			    margin: 0 auto; 
-			    position: relative; 
-			}
-			#section3 { 
-				background: url("galleryPersonal/mountain_photo.jpeg");
-			  	/*background: url(https://smd-cms.nasa.gov/wp-content/uploads/2023/04/272_MarsInSight_poster-jpg.webp);*/
-			   	background-size: cover;
-			  	background-repeat: no-repeat;
-			    background-attachment: fixed;
-			    background-position: center; 
-			    height: 100vh; /* 100% of viewport height */
-			    margin: 0 auto; 
-			    position: relative; 
-			}
-
-			#section4 { 
-			  	/*background: url(https://images.pexels.com/photos/6042679/pexels-photo-6042679.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1);*/
-			  	background-color: #000;
-			   	background-size: cover;
-			  	background-repeat: no-repeat;
-			    background-attachment: fixed;
-			    background-position: center; 
-			    height: auto; /* 100% of viewport height */
-			    margin: 5%; 
-			    position: relative; 
-			    text-align: left;
-			}
-
-
-			/*
-			 * Header
-			 */
-			.masthead {
-			  margin-bottom: 2rem;
-			  background-color: #000;
-			}
-
-			.masthead-brand {
-			  margin-bottom: 0;
-			}
-
-			.nav-masthead .nav-link {
-			  padding: .25rem 0;
-			  font-weight: 700;
-			  color: rgba(255, 255, 255, .5);
-			  background-color: transparent;
-			  border-bottom: .25rem solid transparent;
-			}
-
-			.nav-masthead .nav-link:hover,
-			.nav-masthead .nav-link:focus {
-			  border-bottom-color: rgba(255, 255, 255, .25);
-			}
-
-			.nav-masthead .nav-link + .nav-link {
-			  margin-left: 1rem;
-			}
-
-			.nav-masthead .active {
-			  color: #fff;
-			  border-bottom-color: #fff;
-			}
-
-			@media (min-width: 48em) {
-			  .masthead-brand {
-			    float: left;
-			  }
-			  .nav-masthead {
-			    float: right;
-			  }
-			}
-
-			button {
-				font-family: 'DM Sans', sans-serif;
-			    width: 200px;
-			    padding: 20px;
-			    margin-top:5%;
-			    font-size: 20px;
-			    font-weight: 700;
-			    cursor: pointer;
-			    border: none;
-			}
-
-			a { color: #fff; }
-			a:hover { text-decoration: none; color: #fff;}
-			a:link { text-decoration: none; }
-			a:visited { text-decoration: none; }
-			a:active { text-decoration: none; }
-
-			#about {
-			  scroll-behavior: smooth;
-			}
-
-			.pink {
-				color: #D974D0;
-				font-weight: 700;
-			}
-
-			.pink:hover {
-				color: #9AE0D0; /*#5259AA;*/
-				transition: 0.3s;
-				text-decoration: underline dotted;
-			}
-
-			.twenty-one {
-				font-family: 'DM Sans', sans-serif;
-			    background: rgb(0,0,0,0);
-			    color: #fff;
-			    border: 2px solid #fff;
-/*			    text-transform: uppercase;*/
-			    position: relative;
-			    z-index: 1;
-			    transition: color 400ms;
-			}
-
-			.twenty-one::before {
-			    content: '';
-			    position: absolute;
-			    top: 0;
-			    left: 0;
-			    right: 0;
-			    bottom: 0;
-			    background: rgb(255,255,255,0.6);
-			    z-index: -1;
-			    transition: transform 400ms ease-out;
-			    transform: scaleX(0);
-			    transform-origin: left;
-			}
-
-			.twenty-one:hover::before {
-			   transform: scaleX(1);
-			}
-
-			.twenty-one:hover {
-			    color: #000;
-/*			    text-transform: uppercase;*/
-			}
-
-			
-
-
-		</style>
-		<!-- <link rel="stylesheet" href="assets/css/gallery_style.css" /> -->
-		<!-- <meta name="viewport" content="width=device-width, user-scalable=no"> -->
-		<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
-
-	</head>
-	<body class="text-center">
-
-		<header class="masthead" style="padding: 3%; height: auto;">
-	    	<div class="inner">
-	         	<h3 class="masthead-brand">Kate McCarthy</h3>
-	         	<nav class="nav nav-masthead justify-content-center">
-	         		<a class="nav-link active" style="font-family: 'DM Sans', sans-serif; color: #fff; font-weight: 700; font-size: 20px; margin-right:1px; margin-top: 0px;  margin-bottom: 0px; padding: 0px;" href="#">Home</a>
-		            <a class="nav-link" style="font-family: 'DM Sans', sans-serif; color: #fff; font-weight: 700; font-size: 20px; margin-right:1px; margin-top: 0px;  margin-bottom: 0px; padding: 0px;" href="#about">About</a>
-		            <a class="nav-link" style="font-family: 'DM Sans', sans-serif; color: #fff; font-weight: 700; font-size: 20px; margin-right:1px; margin-top: 0px;  margin-bottom: 0px; padding: 0px;" href="image_gallery.html">Gallery</a>
-	         	</nav>
-	        </div>
-	    </header>
-
-	    <div style="width: 100%;">
-
-			<section id="section1" data-speed="8" data-type="background">
-				<div class="strip">
-			    	<h1>Kate McCarthy</h1>
-			    	<span class="thin-text">Hi! I'm Kate. I like rocks, space, and rocks in space.</span>
-			    	<div class="button-box">
-	                	<a href="#about" class="button-link"><button class="twenty-one"><span>About</span></button></a>
-	                	<a href="image_gallery.html" class="button-link"><button class="twenty-one"><span>Gallery</span></button></a>
-	                	<!-- <button class="twenty-one"><span>Contact</span></button> -->
-	            	</div>
-				</div>
-			</section>
-
-			<!-- Section 2 -->
-			<section id="section2" data-speed="4" data-type="background">
-				<a id="about"></a>
-			    <div class="container" style="height:auto; padding-bottom: 5%;">
-			    	<h2 style="padding-top: 3%">About Me</h2>
-			    	<p>
-			    		I am pursuing a PhD in planetary geophysics at Stanford University, where I am a member of the <a class="pink" href="https://web.stanford.edu/group/radar/index.html">Radar Remote Sensing Group</a>. As a collaborator on NASA's <a class="pink" href="https://science.nasa.gov/mission/veritas/">VERITAS</a> mission, I am investigating to what extent we will be able to use <a class="pink" href="https://www.youtube.com/watch?v=SLMWzQQv90s">Interferometric Synthetic Aperture Radar (InSAR)</a> to observe signs of active volcanism and tectonism on <a class="pink" href="https://science.nasa.gov/venus/">Venus</a>. 
-						In my secondary project with <a class="pink" href="https://www.radioglaciology.com/">Stanford's Radio Glaciology Lab</a>, I am investigating radar techniques for NASA's <a class="pink" href="https://science.nasa.gov/mission/europa-clipper/">Europa Clipper</a> mission to observe certain geologically interesting interfaces in <a class="pink" href="https://science.nasa.gov/jupiter/jupiter-moons/europa/">Europa's</a> ice shell.
-						<br>
-			    		<br>
-					In May 2024, I graduated from the University of Virginia, where I majored in environmental sciences and computer science and minored in astronomy. While on campus, I wrote for the <a class="pink" href="https://www.cavalierdaily.com/staff/kate-mccarthy">humor section of the Cavalier Daily</a>, UVA's student newspaper, and I led weekly improv comedy sessions.
-					In the summer of 2023, I interned at <a class="pink" href="https://www.jpl.nasa.gov/">NASA's Jet Propulsion Laboratory (JPL)</a> in the <a class="pink" href="https://science.jpl.nasa.gov/division/astrophysics-space-sciences/exoplanet-discovery-and-science/">Exoplanet Discovery Group</a> to algorithmically assess the quality and scientific utility of exoplanet transmission spectra. 
-			    		<br>
-			    		<br>
-			    		From 2022 to 2023, I processed 17 years of radar data from the Mars Express Orbiter's <a class="pink" href="https://mars.nasa.gov/express/mission/sc_science_marsis01.html">MARSIS</a> instrument at JPL. I delivered the <a class="pink" href="https://pds-geosciences.wustl.edu/missions/mars_express/marsis.htm">completed archive</a> to NASA's Planetary Data System, where it is now accessible to the public (titled "Optimized MARSIS Radargram Data").
-			    		From 2021 to 2022, in an <a class="pink" href="https://pusede.evsc.virginia.edu/">atmospheric chemistry lab</a> at UVA, I made a <a class="pink" href="https://k-mcc.github.io/houston-in-dev.html">prototype</a> for an air pollution injustice map of Houston, Texas. My research project focused on making satellite observations of air pollution more accessible.
-					<br>
-			    		<br>
-			    		In my free time, I love exploring new places, going on hikes, and taking photos.
-			    	</p>
-			    </div>
-			</section>
-			<!-- Section 3 -->
-	<!-- 		<section id="section3" data-speed="2" data-type="background">
-			    <div class="container" style="height:auto; padding-bottom: 5%;">
-			    	<h2 style="padding-top: 3%">Contact</h2>
-			    	<a href="mailto:kem6ur@virginia.edu">kem6ur@virginia.edu</a>
-			    	<a style="font-family: 'PT Sans', sans-serif;" class="pink" href="mailto:kem6ur@virginia.edu">kem6ur@virginia.edu</a>
-			    </div>
-			</section> -->
-
-			<!-- Section 4 -->
-			<section id="section4" data-speed="2" data-type="background">
-			    <div class="container">
-			        <p>&copy 2026 Kate McCarthy</p>
-			        <p><a href="mailto:kemccarthy6@gmail.com">kemccarthy6@gmail.com</a></p>
-			    </div>
-			</section>
-		</div>
-
-		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-	</body>
+  <footer id="contact" class="footer">
+    <h2>Contact</h2>
+    <a class="footer-email" href="mailto:katemcc@stanford.edu">katemcc@stanford.edu</a>
+    <div class="footer-links">
+      <!-- <a href="https://scholar.google.com/citations?user=99UqVf0AAAAJ">Google Scholar</a> -->
+      <a href="https://www.linkedin.com/in/katemccarthy0/">LinkedIn</a>
+    </div>
+    <p class="footer-small">© <span id="year">2026</span> Kate McCarthy</p>
+  </footer>
+</body>
 </html>
